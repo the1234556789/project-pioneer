@@ -1,94 +1,257 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="title">404 Not Found - Project Pioneer</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-    :root {
-      background-color: #111111;
-      color: #eeeeee;
-      font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans SC', 'Noto Sans', 'Microsoft YaHei UI', 'Segoe UI', sans-serif;
-      user-select: none;
-    }
-    :root, body {
-      height: 100%;
-      overflow: hidden;
-    }
-    .content-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      padding: 10px;
-    }
-    .content {
-      text-align: center;
-    }
-    h1 {
-      font-size: 2.5rem;
-    }
-    h2 {
-      font-size: 2rem;
-    }
-    .info {
-      margin-top: 10px;
-      color: #bbbbbb;
-    }
-    a {
-      text-decoration: none;
-      color: #2983cc;
-    }
-    a:hover {
-      color: #49a3ec;
-    }
-    .btn {
-      color: #3b91d8;
-      border: solid #3b91d8 1px;
-      border-radius: 67px;
-      padding: 8px 12px;
-      margin: 5px;
-    }
-    .btn:hover {
-      color: #a9c3ff;
-      border-color: #a9c3ff;
-    }
-    .blank {
-      height: 25px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 页面不存在 - Project Pioneer</title>
+<style>
+* { margin:0; padding:0; box-sizing: border-box; }
+body { font-family: Roboto, Arial, "PingFang SC", sans-serif; background: #0f0f0f; color: #f1f1f1; min-height: 100vh; }
+/* 顶栏 和首页完全一致 */
+header {
+  position: sticky; top: 0; z-index: 10;
+  height: 56px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 16px;
+  background: #0f0f0f; border-bottom: 1px solid #222;
+}
+.left, .right { display: flex; align-items: center; gap: 16px; }
+.logo { color: #ff0000; font-size: 20px; font-weight: 700; letter-spacing: -1px; text-decoration: none; }
+.search { display: flex; flex:1; max-width: 600px; margin: 0 24px; }
+.search input {
+  flex: 1; height: 40px; border: 1px solid #303030;
+  border-radius: 20px 0 0 20px; background: #121212;
+  color: #fff; padding: 0 16px; outline: none; font-size: 14px;
+}
+.search button {
+  width: 64px; border: 1px solid #303030; border-left: none;
+  border-radius: 0 20px 20px 0; background: #222; color: #fff; cursor: pointer; font-size: 16px;
+}
+.search button:hover { background: #333; }
+/* 登录按钮样式 */
+.btn-login { padding: 6px 14px; border: 1px solid #3ea6ff; background: none; color: #3ea6ff; border-radius 16px; cursor: pointer; font-size: 13px; }
+.btn-login:hover { background: #1a3a5c; }
+.btn-reg { padding: 6px 10px; border: none; background: none; color: #3ea6ff; cursor: pointer; font-size: 13px; }
+.btn-reg:hover { background: #222; border-radius: 12px; }
+.u-chip { display: flex; align-items: center; gap: 8px; }
+.u-chip a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
+.u-avatar { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; }
+.u-name { font-size: 14px; }
+.u-badge { font-size: 10px; background: #4a0000; color: #ff6b6b; padding: 1px 6px; border-radius: 8px; }
+.btn-out { padding: 4px 10px; border: 1px solid #444; background: none; color: #fff; border-radius: 12px; cursor: pointer; font-size: 12px; }
+.btn-out:hover { background: #222; }
+/* 404 居中主体 */
+.main-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 56px);
+  padding: 30px 20px;
+  text-align: center;
+}
+.code-text {
+  font-size: 130px;
+  font-weight: 900;
+  color: #202020;
+  line-height: 1;
+}
+.title { font-size: 28px; margin:10px 0; }
+.desc { color:#aaa; max-width:520px; line-height:1.7; margin-bottom:30px; }
+.back-home {
+  padding:12px 30px;
+  background:#3ea6ff;
+  color:#000;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:500;
+  font-size:15px;
+}
+.back-home:hover { background:#2d8fe6; }
+/* 登录弹窗 复用全站样式 */
+.mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; align-items: center; justify-content: center; }
+.mask.on { display: flex; }
+.pop { background: #1a1a1a; border-radius: 12px; padding: 24px; width: 90%; max-width: 360px; border: 1px solid #333; }
+.pop h2 { margin-bottom: 16px; font-size: 16px; color: #fff; }
+.tabs { display: flex; margin-bottom: 16px; border-bottom: 1px solid #333; }
+.tab { flex: 1; text-align: center; padding: 8px; cursor: pointer; color: #aaa; border-bottom: 2px solid transparent; font-size: 14px; }
+.tab.sel { color: #3ea6ff; border-bottom-color: #3ea6ff; font-weight: 500; }
+.pnl { display: none; }
+.pnl.on { display: block; }
+.pop input { width: 100%; padding: 10px 12px; margin-bottom: 12px; border: 1px solid #444; border-radius: 8px; font-size: 14px; outline: none; background: #121212; color: #fff; box-sizing: border-box; }
+.pop input:focus { border-color: #3ea6ff; }
+.pop .go { width: 100%; padding: 10px; background: #3ea6ff; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
+.pop .go:hover { background: #2d8fe6; }
+.err { color: #ff6b6b; font-size: 12px; margin-bottom: 8px; min-height: 14px; }
+.info { font-size: 12px; color: #3ea6ff; margin-bottom: 8px; padding: 8px; background: #1a2a3a; border-radius: 6px; }
+@media (max-width: 900px) {
+  .search { margin: 0 8px; }
+  .code-text { font-size:90px; }
+  .title { font-size:22px; }
+}
+</style>
 </head>
-<body class="dark">
-  <div class="content-wrapper">
-    <div class="content">
-      <h1>404</h1>
-      <h2>Not Found</h2>
-      <p class="info" id="info">We could not find the resource you requested.</p>
-      <div class="blank"></div>
-      <a class="btn" id="home" href="/">Back to homepage</a>
+<body>
+<!-- 登录注册弹窗（和首页完全通用） -->
+<div class="mask" id="pop">
+  <div class="pop">
+    <h2>登录</h2>
+    <div class="tabs">
+      <div class="tab sel" onclick="tab('login')">登录</div>
+      <div class="tab" onclick="tab('reg')">注册</div>
+    </div>
+    <div class="pnl on" id="p-login">
+      <div class="err" id="e-login"></div>
+      <input id="l-user" placeholder="用户名 / 邮箱">
+      <input id="l-pw" type="password" placeholder="密码">
+      <button class="go" onclick="doLogin()">登录</button>
+    </div>
+    <div class="pnl" id="p-reg">
+      <div class="err" id="e-reg"></div>
+      <input id="r-mail" placeholder="邮箱">
+      <input id="r-name" placeholder="昵称">
+      <input id="r-pw" type="password" placeholder="密码（至少6位）">
+      <button class="go" onclick="sendCode()">发送验证码</button>
+      <div class="info" id="v-tip" style="display:none"></div>
+      <input id="r-code" placeholder="6位验证码" style="display:none">
+      <button class="go" id="r-go" onclick="doReg()" style="display:none">完成注册</button>
     </div>
   </div>
-  <script>
-    // 非常简单的 i18n...
-    // 既然是 404 页面，就没必要引入那么多库了
-    const lang = navigator.language || navigator.userLanguage;
-    const i18n = {
-      'zh-CN': {
-        title: '404 Not Found - Project Pioneer 网页版',
-        info: '我们找不到您所请求的资源。',
-        home: '返回主页',
-      },
-    };
-    if (lang && i18n[lang]) {
-      for (const k in i18n[lang]) {
-        document.getElementById(k).innerText = i18n[lang][k];
-      }
+</div>
+
+<!-- 顶部导航：Logo + 搜索框 + 登录/用户栏 -->
+<header>
+  <div class="left">
+    <a href="index.html" class="logo">▶ Project Pioneer</a>
+  </div>
+  <div class="search">
+    <input id="searchInput" placeholder="搜索影片..." onkeydown="if(event.key==='Enter')doSearch()">
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <div class="right" id="abar"></div>
+</header>
+
+<!-- 404内容区域 -->
+<div class="main-wrap">
+  <div class="code-text">404</div>
+  <h1 class="title">页面找不到</h1>
+  <p class="desc">你访问的页面不存在、链接失效或路径错误。可以使用顶部搜索查找视频，或返回首页浏览全部内容。</p>
+  <a href="index.html" class="back-home">返回首页</a>
+</div>
+
+<script>
+// 存储key 和首页统一
+const SK = 'pp_user', UK = 'pp_users', VKEY = 'pp_videos';
+function $(id){return document.getElementById(id);}
+function safe(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+// 用户登录相关函数（完全复用首页逻辑）
+function getCur(){return JSON.parse(localStorage.getItem(SK)||'null');}
+function setCur(u){localStorage.setItem(SK,JSON.stringify(u));renderBar();}
+function rmCur(){localStorage.removeItem(SK);renderBar();}
+function allU(){return JSON.parse(localStorage.getItem(UK)||'[]');}
+// 渲染右上角登录/用户面板
+function renderBar(){
+  const u = getCur();
+  const abar = $('abar');
+  if(u){
+    abar.innerHTML = `<div class="u-chip">
+      <a href="./${u.name}/${u.name}.html">
+        <div class="u-avatar" style="background:${u.color}">${u.name[0]}</div>
+        <span class="u-name">${safe(u.name)}</span>
+        ${u.type==='creator'?'<span class="u-badge">创作者</span>':''}
+      </a>
+      <button class="btn-out" onclick="logout()">退出</button>
+    </div>`;
+  }else{
+    abar.innerHTML = `
+      <button class="btn-login" onclick="openPop()">登录</button>
+      <button class="btn-reg" onclick="openPop();tab('reg')">注册</button>
+    `;
+  }
+}
+// 弹窗控制
+function openPop(){ $('pop').classList.add('on'); tab('login'); }
+function closePop(){ $('pop').classList.remove('on'); }
+function tab(t){
+  document.querySelectorAll('.tab')[0].className='tab'+(t==='login'?' sel':'');
+  document.querySelectorAll('.tab')[1].className='tab'+(t==='reg'?' sel':'');
+  $('p-login').className='pnl'+(t==='login'?' on':'');
+  $('p-reg').className='pnl'+(t==='reg'?' on':'');
+  $('e-login').textContent=''; $('e-reg').textContent='';
+  $('l-user').value=''; $('l-pw').value='';
+  $('r-mail').value=''; $('r-name').value=''; $('r-pw').value=''; $('r-code').value='';
+  $('v-tip').style.display='none'; $('r-code').style.display='none'; $('r-go').style.display='none';
+}
+// 登录逻辑（兼容创作者密码文件夹）
+async function doLogin(){
+  const n = $('l-user').value.trim();
+  const p = $('l-pw').value;
+  const err = $('e-login');
+  err.textContent = '';
+  if(!n||!p){err.textContent='请填写账号密码';return;}
+  try{
+    const res = await fetch('./'+encodeURIComponent(n)+'/密码.txt',{cache:'no-store'});
+    if(res.ok){
+      const pwdFile = (await res.text()).trim();
+      if(pwd === p){
+        setCur({name:n,color:'#cc0000',type:'creator'});
+        closePop();
+        return;
+      }else err.textContent='密码错误';
+      return;
     }
-  </script>
+  }catch(e){}
+  const users = allU();
+  const target = users.find(x=> (x.name===n || x.email===n) && x.pw===p);
+  if(target){
+    setCur({name:target.name,color:target.color,type:'user'});
+    closePop();
+  }else err.textContent='账号或密码错误';
+}
+// 注册验证码
+let _vc='',_ve=0,_vn='',_vp='';
+function sendCode(){
+  const mail = $('r-mail').value.trim();
+  const name = $('r-name').value.trim();
+  const pwd = $('r-pw').value;
+  const err = $('e-reg');
+  err.textContent='';
+  if(!/^.+@.+\..+$/.test(mail)){err.textContent='邮箱格式错误';return;}
+  if(!name){err.textContent='填写昵称';return;}
+  if(pwd.length<6){err.textContent='密码至少6位';return;}
+  if(allU().some(x=>x.email===mail)){err.textContent='邮箱已注册';return;}
+  _vc = String(Math.floor(100000+Math.random()*900000));
+  _ve = Date.now()+300000;
+  _vn = name; _vp = pwd;
+  $('v-tip').style.display='block';
+  $('v-tip').textContent='验证码：'+_vc;
+  $('r-code').style.display='block';
+  $('r-go').style.display='block';
+}
+function doReg(){
+  const code = $('r-code').value.trim();
+  const err = $('e-reg');
+  if(!_vc || Date.now()>_ve){err.textContent='验证码过期';return;}
+  if(code !== _vc){err.textContent='验证码错误';return;}
+  const colors = ['#3ea6ff','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
+  const newUser = {email:$('r-mail').value.trim(), name:_vn, pw:_vp, color:colors[Math.floor(Math.random()*colors.length)]};
+  const userList = allU();
+  user.push(newUser);
+  localStorage.setItem(UK, JSON.stringify(userList));
+  setCur({name:_vn, color:newUser.color, type:'user'});
+  _vc=''; closePop();
+}
+function logout(){ rmCur(); renderBar(); }
+// 搜索功能：跳转首页带关键词
+function doSearch(){
+  const kw = $('searchInput').value.trim();
+  location.href = `index.html?kw=${encodeURIComponent(kw)}`;
+}
+// 遮罩点击关闭弹窗
+$('pop').addEventListener('click', e=>{
+  if(e.target === $('pop')) closePop();
+});
+// 页面初始化
+renderBar();
+</script>
 </body>
 </html>
