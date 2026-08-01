@@ -60,7 +60,7 @@ main { flex: 1; padding: 24px; }
 .channel-link{color:#58a6ff;text-decoration:none;}
 .channel-link:hover{text-decoration:underline;}
 /* 弹窗 */
-.mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; align-items: center; justify-content: center; }
+.mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; align-items: center; }
 .mask.on { display: flex; }
 .pop { background: #1a1a1a; border-radius: 12px; padding: 24px; width: 90%; max-width: 360px; border: 1px solid #333; }
 .pop h2 { margin-bottom: 16px; font-size: 16px; color: #fff; }
@@ -79,7 +79,7 @@ main { flex: 1; padding: 24px; }
 </style>
 </head>
 <body>
-<!-- 登录/注册弹窗 -->
+<!-- 登录弹窗 -->
 <div class="mask" id="pop">
   <div class="pop">
     <h2>登录</h2>
@@ -129,6 +129,9 @@ main { flex: 1; padding: 24px; }
     <div class="nav-item">⚙ 设置</div>
   </aside>
   <main>
+    <div style="margin-bottom:16px">
+      <a href="upload.html" style="background:#3ea6ff;padding:8px 16px;border-radius:8px;color:#000;text-decoration:none;">➕ 上传视频</a>
+    </div>
     <div class="chips">
       <div class="chip active" onclick="setCat('全部')">全部</div>
       <div class="chip" onclick="setCat('音乐')">音乐</div>
@@ -141,28 +144,24 @@ main { flex: 1; padding: 24px; }
   </main>
 </div>
 <script>
-// 全局存储key
-var SK = 'pp_user', UK = 'pp_users', VKEY = 'pp_videos';
-var currentCat = "全部";
-var originList = [];
-// 简易获取元素
+// 存储key
+const SK = 'pp_user', UK = 'pp_users', VKEY = 'pp_videos';
+let currentCat = "全部";
+let originList = [];
+// 工具
 function $(id){return document.getElementById(id);}
-// XSS过滤文本
 function safe(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-
-// 用户相关
 function getCur(){return JSON.parse(localStorage.getItem(SK)||'null');}
 function setCur(u){localStorage.setItem(SK,JSON.stringify(u));renderBar();}
-function rmCur(){localStorage.removeItem(SK);renderBar();}
+function rmCur(){localStorage.removeItem(SK);}
 function allU(){return JSON.parse(localStorage.getItem(UK)||'[]');}
 function getVideos(){return JSON.parse(localStorage.getItem(VKEY)||'[]');}
 
-// 右上角用户栏
+// 右上角登录栏
 function renderBar(){
   var u = getCur();
-  var abar = $('abar');
   if(u){
-    abar.innerHTML =
+    $('abar').innerHTML =
       '<div class="u-chip"><a href="./' + u.name + '/' + u.name + '.html">' +
         '<div class="u-avatar" style="background:' + u.color + '">' + u.name[0] + '</div>' +
         '<span class="u-name">' + safe(u.name) + '</span>' +
@@ -170,13 +169,13 @@ function renderBar(){
       '</a></div>' +
       '<button class="btn-out" onclick="logout()">退出</button>';
   } else {
-    abar.innerHTML =
+    $('abar').innerHTML =
       '<button class="btn-login" onclick="openPop()">登录</button>' +
       '<button class="btn-reg" onclick="openPop();tab(\'reg\')">注册</button>';
   }
 }
 
-// 弹窗控制
+// 弹窗
 function openPop(){ $('pop').classList.add('on'); tab('login'); }
 function closePop(){ $('pop').classList.remove('on'); }
 function tab(t){
@@ -190,195 +189,19 @@ function tab(t){
   $('v-tip').style.display='none'; $('r-code').style.display='none'; $('r-go').style.display='none';
 }
 
-// 【修复登录匹配】支持邮箱/用户名双匹配
+// 登录（用户名/邮箱双匹配）
 async function doLogin(){
   var inputVal = $('l-user').value.trim();
   var pwd = $('l-pw').value;
   var errBox = $('e-login');
   errBox.textContent = '';
-  if(!inputVal || !pwd){
-    errBox.textContent = '请填写账号与密码';
-    return;
-  }
-  // 兼容创作者本地密码文件登录
+  if(!inputVal || !pwd){errBox.textContent='请填写账号密码';return;}
+  // 创作者文件夹密码登录
   try{
     var res = await fetch('./'+encodeURIComponent(inputVal)+'/密码.txt',{cache:'no-store'});
     if(res.ok){
       var filePwd = (await res.text()).trim();
       if(filePwd === pwd){
         setCur({name:inputVal,color:'#cc0000',type:'creator'});
-        closePop();renderAll();
-        return;
-      }else{
-        errBox.textContent = '密码错误';
-        return;
-      }
-    }
-  }catch(e){}
-  // 普通用户：匹配用户名 OR 邮箱
-  var userList = allU();
-  var targetUser = null;
-  for(var i=0;i<userList.length;i++){
-    var u = userList[i];
-    if((u.name === inputVal || u.email === inputVal) && u.pw === pwd){
-      targetUser = u;
-      break;
-    }
-  }
-  if(targetUser){
-    setCur({name:target.name,color:target.color,type:'user'});
-    closePop();renderAll();
-  }else{
-    errBox.textContent = '账号或密码不正确';
-  }
-}
-
-// 注册验证码
-var _vc='',_ve=0,_vn='',_vp='';
-function sendCode(){
-  var mail = $('r-mail').value.trim();
-  var name = $('r-name').value.trim();
-  var pwd = $('r-pw').value;
-  var errBox = $('e-reg');
-  errBox.textContent = '';
-  if(!/^[^@]+@[^@]+\.[^@]+$/.test(mail)){
-    errBox.textContent = '邮箱格式错误';
-    return;
-  }
-  if(!name){
-    errBox.textContent = '请填写昵称';
-    return;
-  }
-  if(pwd.length < 6){
-    errBox.textContent = '密码至少6位';
-    return;
-  }
-  if(allU().some(x=>x.email === mail)){
-    errBox.textContent = '该邮箱已注册';
-    return;
-  }
-  _vc = String(Math.floor(100000 + Math.random() * 900000));
-  _ve = Date.now() + 300000;
-  _vn = name;
-  _vp = pwd;
-  $('v-tip').style.display = 'block';
-  $('v-tip').textContent = '验证码：'+_vc+'（演示）';
-  $('r-code').style.display = 'block';
-  $('r-go').style.display = 'block';
-}
-function doReg(){
-  var code = $('r-code').value.trim();
-  var errBox = $('e-reg');
-  if(!_vc) return;
-  if(Date.now() > _ve){
-    errBox.textContent = '验证码过期';
-    return;
-  }
-  if(code !== _vc){
-    errBox.textContent = '验证码错误';
-    return;
-  }
-  var colors = ['#3ea6ff','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
-  var newUser = {
-    email:$('r-mail').value.trim(),
-    name:_vn,
-    pw:_vp,
-    color:colors[Math.floor(Math.random()*colors.length)]
-  };
-  var list = allU();
-  list.push(newUser);
-  localStorage.setItem(UK, JSON.stringify(list));
-  setCur({name:_vn,color:newUser.color,type:'user'});
-  _vc = '';
-  closePop();
-  renderAll();
-}
-function logout(){
-  rmCur();
-  renderAll();
-}
-
-// 切换分类
-function setCat(catName){
-  currentCat = catName;
-  document.querySelectorAll('.chip').forEach(ch=>{
-    ch.classList.toggle('active', ch.innerText === catName);
-  });
-  renderCard(originList);
-}
-
-// 搜索功能
-function doSearch(){
-  var kw = $('searchInput').value.trim().toLowerCase();
-  var filterData = originList.filter(v=>
-    v.title.toLowerCase().includes(kw) || v.channelName.toLowerCase().includes(kw)
-  );
-  renderCard(filterData);
-}
-
-// 打开视频
-function openVideo(type,url){
-  if(type === "external") window.open(url,"_blank");
-  else location.href = url;
-}
-
-// 渲染卡片
-function renderCard(list){
-  var grid = $('grid');
-  if(list.length === 0){
-    grid.innerHTML = '<div style="padding:60px;text-align:center;color:#aaa;">暂无匹配视频</div>';
-    return;
-  }
-  var avColors = ['#3ea6ff','#137333','#e37400','#8e24aa'];
-  var html = '';
-  list.forEach((v,i)=>{
-    html += `
-    <div class="card" onclick="openVideo('${v.type}','${v.link}')">
-      <div class="thumb"><span class="dur">${v.dur}</span></div>
-      <div class="meta">
-        <div class="av" style="background:${avColors[i%4]}"></div>
-        <div>
-          <h4>${safe(v.title)}</h4>
-          <p>
-            <a class="channel-link" onclick="event.stopPropagation();window.open('${v.channelUrl}','_blank')">${safe(v.channelName)}</a>
-            <br>${safe(v.desc)}
-          </p>
-        </div>
-      </div>
-    </div>
-    `;
-  });
-  grid.innerHTML = html;
-}
-
-// 加载视频数据源
-function loadVideoData(){
-  var localData = getVideos();
-  if(localData.length === 0){
-    localData = [
-      {title:"开发者自制视频",desc:"项目完整演示短片",cat:"游戏",channelName:"the1234556789",channelUrl:"https://github.com/the1234556789",dur:"04:22",type:"local",link:"dQw4w9WgXcQ.html"},
-      {title:"10小时Lo-fi学习音乐",desc:"舒缓背景音乐",cat:"音乐",channelName:"CodeBeats",channelUrl:"https://www.youtube.com/@CodeBeats",dur:"3:42:10",type:"external",link:"https://www.youtube.com/watch?v=jfKfPfyJRdk"},
-      {title:"React 2026 全栈实战",desc:"前端开发教程",cat:"前端开发",channelName:"前端日记",channelUrl:"https://www.youtube.com/@xxx",dur:"18:24",type:"external",link:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
-      {title:"Rick Astley原版MV",desc:"经典外网视频",cat:"音乐",channelName:"Rick Astley",channelUrl:"https://www.youtube.com/@RickAstley",dur:"03:33",type:"external",link:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
-      {title:"B站演示素材",desc:"综合演示视频",cat:"全部",channelName:"B站UP示例",channelUrl:"https://space.bilibili.com/123456",dur:"04:12",type:"external",link:"https://www.bilibili.com/video/BV1xx411c7mZ/"},
-      {title:"NBA赛事集锦",desc:"体育新闻素材",cat:"新闻",channelName:"SportNow",channelUrl:"https://www.youtube.com/@SportNow",dur:"9:44",type:"external",link:"https://www.youtube.com/watch?v=1d9jXJvLE6E"},
-      {title:"游戏直播录屏",desc:"游戏实况直播回放",cat:"直播",channelName:"Game主播",channelUrl:"https://space.bilibili.com/123456",dur:"22:10",type:"external",link:"https://www.bilibili.com/video/BV1xx"}
-    ];
-    localStorage.setItem(VKEY, JSON.stringify(localData));
-  }
-  originList = localData;
-}
-
-// 统一初始化
-function renderAll(){
-  loadVideoData();
-  renderCard(originList);
-}
-
-// 页面启动
-renderBar();
-renderAll();
-$('pop').addEventListener('click',e=>{if(e.target === $('pop')) closePop();});
-</script>
-</body>
-</html>
+        closePop();renderAll();return;
+      }else{errB
