@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,6 @@
 <style>
 * { margin:0; padding:0; box-sizing: border-box; }
 body { font-family: Roboto, Arial, "PingFang SC", sans-serif; background: #0f0f0f; color: #f1f1f1; }
-
 /* 顶栏 */
 header {
   position: sticky; top: 0; z-index: 10;
@@ -28,7 +27,6 @@ header {
   border-radius: 0 20px 20px 0; background: #222; color: #fff; cursor: pointer; font-size: 16px;
 }
 .search button:hover { background: #333; }
-
 /* 顶栏按钮 */
 .btn-login { padding: 6px 14px; border: 1px solid #3ea6ff; background: none; color: #3ea6ff; border-radius: 16px; cursor: pointer; font-size: 13px; }
 .btn-login:hover { background: #1a3a5c; }
@@ -41,14 +39,12 @@ header {
 .u-badge { font-size: 10px; background: #4a0000; color: #ff6b6b; padding: 1px 6px; border-radius: 8px; }
 .btn-out { padding: 4px 10px; border: 1px solid #444; background: none; color: #fff; border-radius: 12px; cursor: pointer; font-size: 12px; }
 .btn-out:hover { background: #222; }
-
 /* 侧边栏 */
 .layout { display: flex; }
 aside { width: 240px; height: calc(100vh - 56px); padding: 12px; border-right: 1px solid #222; flex-shrink: 0; }
 .nav-item { display: flex; align-items: center; gap: 16px; padding: 10px 12px; border-radius: 10px; cursor: pointer; font-size: 14px; }
 .nav-item:hover { background: #222; }
 .nav-item.active { background: #272727; font-weight: 600; }
-
 /* 主区 */
 main { flex: 1; padding: 24px; }
 .chips { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
@@ -61,7 +57,8 @@ main { flex: 1; padding: 24px; }
 .meta .av { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; cursor: pointer; }
 .meta h4 { font-size: 14px; line-height: 1.3; color: #fff; }
 .meta p { font-size: 12px; color: #aaa; margin-top: 4px; }
-
+.channel-link{color:#58a6ff;text-decoration:none;}
+.channel-link:hover{text-decoration:underline;}
 /* 弹窗 */
 .mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; align-items: center; justify-content: center; }
 .mask.on { display: flex; }
@@ -78,12 +75,10 @@ main { flex: 1; padding: 24px; }
 .pop .go:hover { background: #2d8fe6; }
 .err { color: #ff6b6b; font-size: 12px; margin-bottom: 8px; min-height: 14px; }
 .info { font-size: 12px; color: #3ea6ff; margin-bottom: 8px; padding: 8px; background: #1a2a3a; border-radius: 6px; }
-
 @media (max-width: 900px) { aside { display: none; } .search { margin: 0 8px; } }
 </style>
 </head>
 <body>
-
 <!-- 登录/注册弹窗 -->
 <div class="mask" id="pop">
   <div class="pop">
@@ -110,7 +105,6 @@ main { flex: 1; padding: 24px; }
     </div>
   </div>
 </div>
-
 <!-- 顶栏 -->
 <header>
   <div class="left">
@@ -118,12 +112,11 @@ main { flex: 1; padding: 24px; }
     <a href="mc.html" class="logo">▶ Project Pioneer</a>
   </div>
   <div class="search">
-    <input placeholder="搜索影片...">
-    <button>🔍</button>
+    <input id="searchInput" placeholder="搜索影片..." onkeydown="if(event.key==='Enter')doSearch()">
+    <button onclick="doSearch()">🔍</button>
   </div>
   <div class="right" id="abar"></div>
 </header>
-
 <div class="layout">
   <aside>
     <div class="nav-item active">🏠 首页</div>
@@ -135,37 +128,41 @@ main { flex: 1; padding: 24px; }
     <div class="nav-item">🎵 Music</div>
     <div class="nav-item">⚙ 设置</div>
   </aside>
-
   <main>
     <div class="chips">
-      <div class="chip active">全部</div>
-      <div class="chip">音乐</div>
-      <div class="chip">游戏</div>
-      <div class="chip">前端开发</div>
-      <div class="chip">直播</div>
-      <div class="chip">新闻</div>
+      <div class="chip active" onclick="setCat('全部')">全部</div>
+      <div class="chip" onclick="setCat('音乐')">音乐</div>
+      <div class="chip" onclick="setCat('游戏')">游戏</div>
+      <div class="chip" onclick="setCat('前端开发')">前端开发</div>
+      <div class="chip" onclick="setCat('直播')">直播</div>
+      <div class="chip" onclick="setCat('新闻')">新闻</div>
     </div>
     <div class="grid" id="grid"></div>
   </main>
 </div>
-
 <script>
-// ===== 工具 =====
-var SK = 'pp_user', UK = 'pp_users';
+// 全局存储key
+var SK = 'pp_user', UK = 'pp_users', VKEY = 'pp_videos';
+var currentCat = "全部";
+var originList = [];
+// 简易获取元素
 function $(id){return document.getElementById(id);}
+// XSS过滤文本
 function safe(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 
-// ===== 用户 =====
+// 用户相关
 function getCur(){return JSON.parse(localStorage.getItem(SK)||'null');}
-function setCur(u){localStorage.setItem(SK,JSON.stringify(u));}
-function rmCur(){localStorage.removeItem(SK);}
+function setCur(u){localStorage.setItem(SK,JSON.stringify(u));renderBar();}
+function rmCur(){localStorage.removeItem(SK);renderBar();}
 function allU(){return JSON.parse(localStorage.getItem(UK)||'[]');}
+function getVideos(){return JSON.parse(localStorage.getItem(VKEY)||'[]');}
 
-// ===== 顶栏 =====
+// 右上角用户栏
 function renderBar(){
   var u = getCur();
+  var abar = $('abar');
   if(u){
-    $('abar').innerHTML =
+    abar.innerHTML =
       '<div class="u-chip"><a href="./' + u.name + '/' + u.name + '.html">' +
         '<div class="u-avatar" style="background:' + u.color + '">' + u.name[0] + '</div>' +
         '<span class="u-name">' + safe(u.name) + '</span>' +
@@ -173,15 +170,15 @@ function renderBar(){
       '</a></div>' +
       '<button class="btn-out" onclick="logout()">退出</button>';
   } else {
-    $('abar').innerHTML =
+    abar.innerHTML =
       '<button class="btn-login" onclick="openPop()">登录</button>' +
       '<button class="btn-reg" onclick="openPop();tab(\'reg\')">注册</button>';
   }
 }
 
+// 弹窗控制
 function openPop(){ $('pop').classList.add('on'); tab('login'); }
 function closePop(){ $('pop').classList.remove('on'); }
-
 function tab(t){
   document.querySelectorAll('.tab')[0].className='tab'+(t==='login'?' sel':'');
   document.querySelectorAll('.tab')[1].className='tab'+(t==='reg'?' sel':'');
@@ -193,78 +190,195 @@ function tab(t){
   $('v-tip').style.display='none'; $('r-code').style.display='none'; $('r-go').style.display='none';
 }
 
+// 【修复登录匹配】支持邮箱/用户名双匹配
 async function doLogin(){
-  var n=$('l-user').value.trim(), p=$('l-pw').value;
-  $('e-login').textContent='';
-  if(!n||!p){$('e-login').textContent='请填写完整';return;}
+  var inputVal = $('l-user').value.trim();
+  var pwd = $('l-pw').value;
+  var errBox = $('e-login');
+  errBox.textContent = '';
+  if(!inputVal || !pwd){
+    errBox.textContent = '请填写账号与密码';
+    return;
+  }
+  // 兼容创作者本地密码文件登录
   try{
-    var r=await fetch('./'+encodeURIComponent(n)+'/密码.txt',{cache:'no-store'});
-    if(r.ok){var t=(await r.text()).trim();if(t===p){setCur({name:n,color:'#cc0000',type:'creator'});closePop();renderBar();return;}else{$('e-login').textContent='密码错误';return;}}
+    var res = await fetch('./'+encodeURIComponent(inputVal)+'/密码.txt',{cache:'no-store'});
+    if(res.ok){
+      var filePwd = (await res.text()).trim();
+      if(filePwd === pwd){
+        setCur({name:inputVal,color:'#cc0000',type:'creator'});
+        closePop();renderAll();
+        return;
+      }else{
+        errBox.textContent = '密码错误';
+        return;
+      }
+    }
   }catch(e){}
-  var us=allU(),f=null;
-  for(var i=0;i<us.length;i++){if(us[i].email===n&&us[i].pw===p){f=us[i];break;}}
-  if(f){setCur({name:f.name,color:f.color,type:'user'});closePop();renderBar();}
-  else{$('e-login').textContent='账号不存在或密码错误';}
+  // 普通用户：匹配用户名 OR 邮箱
+  var userList = allU();
+  var targetUser = null;
+  for(var i=0;i<userList.length;i++){
+    var u = userList[i];
+    if((u.name === inputVal || u.email === inputVal) && u.pw === pwd){
+      targetUser = u;
+      break;
+    }
+  }
+  if(targetUser){
+    setCur({name:target.name,color:target.color,type:'user'});
+    closePop();renderAll();
+  }else{
+    errBox.textContent = '账号或密码不正确';
+  }
 }
 
+// 注册验证码
 var _vc='',_ve=0,_vn='',_vp='';
 function sendCode(){
-  var e=$('r-mail').value.trim(),n=$('r-name').value.trim(),p=$('r-pw').value;
-  $('e-reg').textContent='';
-  if(!/^[^@]+@[^@]+\.[^@]+$/.test(e)){$('e-reg').textContent='邮箱格式不对';return;}
-  if(!n){$('e-reg').textContent='填昵称';return;}
-  if(p.length<6){$('e-reg').textContent='密码至少6位';return;}
-  var us=allU();for(var i=0;i<us.length;i++){if(us[i].email===e){$('e-reg').textContent='已注册';return;}}
-  _vc=String(Math.floor(100000+Math.random()*900000));_ve=Date.now()+300000;_vn=n;_vp=p;
-  $('v-tip').style.display='block';$('v-tip').textContent='验证码：'+_vc+'（演示模式）';
-  $('r-code').style.display='block';$('r-go').style.display='block';
+  var mail = $('r-mail').value.trim();
+  var name = $('r-name').value.trim();
+  var pwd = $('r-pw').value;
+  var errBox = $('e-reg');
+  errBox.textContent = '';
+  if(!/^[^@]+@[^@]+\.[^@]+$/.test(mail)){
+    errBox.textContent = '邮箱格式错误';
+    return;
+  }
+  if(!name){
+    errBox.textContent = '请填写昵称';
+    return;
+  }
+  if(pwd.length < 6){
+    errBox.textContent = '密码至少6位';
+    return;
+  }
+  if(allU().some(x=>x.email === mail)){
+    errBox.textContent = '该邮箱已注册';
+    return;
+  }
+  _vc = String(Math.floor(100000 + Math.random() * 900000));
+  _ve = Date.now() + 300000;
+  _vn = name;
+  _vp = pwd;
+  $('v-tip').style.display = 'block';
+  $('v-tip').textContent = '验证码：'+_vc+'（演示）';
+  $('r-code').style.display = 'block';
+  $('r-go').style.display = 'block';
 }
-
 function doReg(){
-  var c=$('r-code').value.trim();
-  if(!_vc)return;if(Date.now()>_ve){$('e-reg').textContent='过期';return;}
-  if(c!==_vc){$('e-reg').textContent='验证码错';return;}
-  var cs=['#3ea6ff','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
-  var co=cs[Math.floor(Math.random()*cs.length)];
-  var us=allU();us.push({email:$('r-mail').value.trim(),name:_vn,pw:_vp,color:co});
-  localStorage.setItem(UK,JSON.stringify(us));
-  setCur({name:_vn,color:co,type:'user'});_vc='';closePop();renderBar();
+  var code = $('r-code').value.trim();
+  var errBox = $('e-reg');
+  if(!_vc) return;
+  if(Date.now() > _ve){
+    errBox.textContent = '验证码过期';
+    return;
+  }
+  if(code !== _vc){
+    errBox.textContent = '验证码错误';
+    return;
+  }
+  var colors = ['#3ea6ff','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
+  var newUser = {
+    email:$('r-mail').value.trim(),
+    name:_vn,
+    pw:_vp,
+    color:colors[Math.floor(Math.random()*colors.length)]
+  };
+  var list = allU();
+  list.push(newUser);
+  localStorage.setItem(UK, JSON.stringify(list));
+  setCur({name:_vn,color:newUser.color,type:'user'});
+  _vc = '';
+  closePop();
+  renderAll();
+}
+function logout(){
+  rmCur();
+  renderAll();
 }
 
-function logout(){rmCur();renderBar();}
+// 切换分类
+function setCat(catName){
+  currentCat = catName;
+  document.querySelectorAll('.chip').forEach(ch=>{
+    ch.classList.toggle('active', ch.innerText === catName);
+  });
+  renderCard(originList);
+}
 
-// ===== 视频数据 =====
-// 第1个是 index.html（本地播放页），其余跳 YouTube
-var videos = [
-  ["自制短片 - 项目完整演示", "the1234556789", "1000.9万次观看 · 今天", "04:22", "dQw4w9WgXcQ.html"],
-  ["10小时Lo-fi学习音乐", "CodeBeats", "12万次观看 · 2天前", "3:42:10", "https://www.youtube.com/watch?v=jfKfPfyJRdk"],
-  ["React 2026 全栈实战", "前端日记", "8.9万次观看 · 5小时前", "18:24", "https://www.youtube.com/watch?v=dQw4w9WgXcQ"],
-  ["泰山日出 4K 航拍", "TravelCN", "230万次观看 · 1周前", "6:08", "https://www.youtube.com/watch?v=ScMzIvxBSi4"],
-  ["Python 自动化办公", "DataLab", "45万次观看 · 3天前", "24:51", "https://www.youtube.com/watch?v=rfscVS0vtbw"],
-  ["猫咪合集 治愈向", "DailyPet", "67万次观看 · 1天前", "10:02", "https://www.youtube.com/watch?v=BQ9YtWSZdow"],
-  ["CSS Grid 终极指南", "UI Tips", "3.2万次观看 · 8小时前", "15:37", "https://www.youtube.com/watch?v=rg7Fvvl3taU"],
-  ["NBA 精彩集锦", "SportNow", "120万次观看 · 12小时前", "9:44", "https://www.youtube.com/watch?v=1d9jXJvLE6E"],
-];
+// 搜索功能
+function doSearch(){
+  var kw = $('searchInput').value.trim().toLowerCase();
+  var filterData = originList.filter(v=>
+    v.title.toLowerCase().includes(kw) || v.channelName.toLowerCase().includes(kw)
+  );
+  renderCard(filterData);
+}
 
-// ===== 渲染卡片 =====
-var avColors = ['#3ea6ff','#137333','#e37400','#8e24aa'];
+// 打开视频
+function openVideo(type,url){
+  if(type === "external") window.open(url,"_blank");
+  else location.href = url;
+}
 
-$('grid').innerHTML = videos.map(function(v, i) {
-  var isExt = v[4].indexOf('http') === 0;
-  var click = isExt
-    ? "window.open('" + v[4] + "', '_blank')"
-    : "location.href='" + v[4] + "'";
-  return '<div class="card" onclick="' + click + '">' +
-    '<div class="thumb"><span class="dur">' + v[3] + '</span></div>' +
-    '<div class="meta">' +
-      '<div class="av" style="background:' + avColors[i % 4] + '"></div>' +
-      '<div><h4>' + v[0] + '</h4><p>' + v[1] + '<br>' + v[2] + '</p></div>' +
-    '</div></div>';
-}).join('');
+// 渲染卡片
+function renderCard(list){
+  var grid = $('grid');
+  if(list.length === 0){
+    grid.innerHTML = '<div style="padding:60px;text-align:center;color:#aaa;">暂无匹配视频</div>';
+    return;
+  }
+  var avColors = ['#3ea6ff','#137333','#e37400','#8e24aa'];
+  var html = '';
+  list.forEach((v,i)=>{
+    html += `
+    <div class="card" onclick="openVideo('${v.type}','${v.link}')">
+      <div class="thumb"><span class="dur">${v.dur}</span></div>
+      <div class="meta">
+        <div class="av" style="background:${avColors[i%4]}"></div>
+        <div>
+          <h4>${safe(v.title)}</h4>
+          <p>
+            <a class="channel-link" onclick="event.stopPropagation();window.open('${v.channelUrl}','_blank')">${safe(v.channelName)}</a>
+            <br>${safe(v.desc)}
+          </p>
+        </div>
+      </div>
+    </div>
+    `;
+  });
+  grid.innerHTML = html;
+}
 
-// ===== 初始化 =====
+// 加载视频数据源
+function loadVideoData(){
+  var localData = getVideos();
+  if(localData.length === 0){
+    localData = [
+      {title:"开发者自制视频",desc:"项目完整演示短片",cat:"游戏",channelName:"the1234556789",channelUrl:"https://github.com/the1234556789",dur:"04:22",type:"local",link:"dQw4w9WgXcQ.html"},
+      {title:"10小时Lo-fi学习音乐",desc:"舒缓背景音乐",cat:"音乐",channelName:"CodeBeats",channelUrl:"https://www.youtube.com/@CodeBeats",dur:"3:42:10",type:"external",link:"https://www.youtube.com/watch?v=jfKfPfyJRdk"},
+      {title:"React 2026 全栈实战",desc:"前端开发教程",cat:"前端开发",channelName:"前端日记",channelUrl:"https://www.youtube.com/@xxx",dur:"18:24",type:"external",link:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+      {title:"Rick Astley原版MV",desc:"经典外网视频",cat:"音乐",channelName:"Rick Astley",channelUrl:"https://www.youtube.com/@RickAstley",dur:"03:33",type:"external",link:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+      {title:"B站演示素材",desc:"综合演示视频",cat:"全部",channelName:"B站UP示例",channelUrl:"https://space.bilibili.com/123456",dur:"04:12",type:"external",link:"https://www.bilibili.com/video/BV1xx411c7mZ/"},
+      {title:"NBA赛事集锦",desc:"体育新闻素材",cat:"新闻",channelName:"SportNow",channelUrl:"https://www.youtube.com/@SportNow",dur:"9:44",type:"external",link:"https://www.youtube.com/watch?v=1d9jXJvLE6E"},
+      {title:"游戏直播录屏",desc:"游戏实况直播回放",cat:"直播",channelName:"Game主播",channelUrl:"https://space.bilibili.com/123456",dur:"22:10",type:"external",link:"https://www.bilibili.com/video/BV1xx"}
+    ];
+    localStorage.setItem(VKEY, JSON.stringify(localData));
+  }
+  originList = localData;
+}
+
+// 统一初始化
+function renderAll(){
+  loadVideoData();
+  renderCard(originList);
+}
+
+// 页面启动
 renderBar();
-$('pop').addEventListener('click', function(e){ if(e.target===$('pop')) closePop(); });
+renderAll();
+$('pop').addEventListener('click',e=>{if(e.target === $('pop')) closePop();});
 </script>
 </body>
 </html>
