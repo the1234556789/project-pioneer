@@ -1,483 +1,859 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Project Pioneer</title>
+<title>Project Pioneer 播放页</title>
 <style>
 body { margin: 0; font-family: Arial, sans-serif; }
-
 /* 顶栏 */
-.topbar { height: 50px; border-bottom: 1px solid #ddd; display: flex; align-items: center; padding: 0 20px; gap: 15px; position: sticky; top: 0; background: white; z-index: 100; }
-.logo { font-size: 18px; font-weight: bold; text-decoration: none; color: black; }
+.topbar {
+    height: 50px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 15px;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 100;
+}
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
 .logo span { color: red; }
 .spacer { flex: 1; }
-.btn-login { padding: 6px 14px; border: 1px solid blue; background: white; color: blue; border-radius: 14px; cursor: pointer; }
-.btn-reg { padding: 6px 14px; border: none; background: white; color: blue; cursor: pointer; }
+.btn-login {
+    padding: 6px 14px;
+    border: 1px solid blue;
+    background: white;
+    color: blue;
+    border-radius: 14px;
+    cursor: pointer;
+}
+.btn-reg {
+    padding: 6px 14px;
+    border: none;
+    background: white;
+    color: blue;
+    cursor: pointer;
+}
 .user-area { display: flex; align-items: center; gap: 8px; }
-.u-avatar { width: 30px; height: 30px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; text-decoration: none; }
-.u-name { font-size: 14px; }
-.u-badge { font-size: 10px; background: #fee; color: red; padding: 1px 5px; border-radius: 6px; }
-.btn-out { padding: 4px 10px; border: 1px solid #ccc; background: white; border-radius: 12px; cursor: pointer; font-size: 12px; }
-
+.u-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+.u-name { font-size: 14px; cursor: pointer; }
+.u-badge {
+    font-size: 10px;
+    background: #fee;
+    color: red;
+    padding: 1px 5px;
+    border-radius: 6px;
+}
+.btn-out {
+    padding: 4px 10px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 12px;
+}
 /* 弹窗 */
-.cover { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+.cover {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+}
 .cover.show { display: flex; }
-.popup { background: white; border-radius: 10px; padding: 20px; width: 340px; }
+.popup {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 340px;
+}
 .popup h2 { margin: 0 0 15px 0; font-size: 16px; }
-.tabs { display: flex; margin-bottom: 15px; border-bottom: 1px solid #ddd; }
-.tab { flex: 1; text-align: center; padding: 8px; cursor: pointer; color: gray; border-bottom: 2px solid transparent; font-size: 14px; }
+.tabs {
+    display: flex;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 8px;
+    cursor: pointer;
+    color: gray;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+}
 .tab.on { color: blue; border-bottom-color: blue; font-weight: bold; }
 .page { display: none; }
 .page.on { display: block; }
-.popup input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-.popup button.go { width: 100%; padding: 9px; background: blue; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.popup input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+.popup button.go {
+    width: 100%;
+    padding: 9px;
+    background: blue;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
 .err { color: red; font-size: 12px; margin-bottom: 8px; min-height: 14px; }
-.tip { font-size: 12px; color: blue; background: #eef; padding: 8px; border-radius: 6px; margin-bottom: 8px; }
-
+.tip {
+    font-size: 12px;
+    color: blue;
+    background: #eef;
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
 /* 主体 */
-.container { display: flex; max-width: 1300px; margin: 0 auto; padding: 20px; gap: 20px; }
+.container {
+    display: flex;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 20px;
+}
 .left { flex: 1; }
 .right { width: 350px; }
-
 /* 视频 */
-.video-box { width: 100%; aspect-ratio: 16/9; background: black; border-radius: 10px; margin-bottom: 15px; }
+.video-box {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: black;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
 .video-box video { width: 100%; height: 100%; }
 .vtitle { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
 .vstats { color: gray; font-size: 13px; margin-bottom: 12px; }
-.channel-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; margin-bottom: 12px; }
-.c-ava { width: 38px; height: 38px; border-radius: 50%; background: red; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; }
-.c-name a { color: black; text-decoration: none; font-size: 14px; font-weight: 500; }
+.channel-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 12px;
+}
+.c-ava {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: red;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+.c-name a {
+    color: black;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
 .c-name a:hover { color: blue; }
-.desc { background: #f5f5f5; padding: 12px; border-radius: 10px; font-size: 13px; line-height: 1.6; margin-bottom: 12px; }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
-.tag { background: #f5f5f5; color: blue; padding: 4px 10px; border-radius: 12px; font-size: 12px; text-decoration: none; }
-
+.desc {
+    background: #f5f5f5;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+.tag {
+    background: #f5f5f5;
+    color: blue;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    text-decoration: none;
+}
 /* 评论 */
 .comm-hdr { font-size: 15px; font-weight: bold; margin-bottom: 15px; }
 .comm-form { display: flex; gap: 10px; margin-bottom: 20px; }
-.comm-ava { width: 34px; height: 34px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; flex-shrink: 0; }
-.comm-inp { flex: 1; border: none; border-bottom: 1px solid #ccc; padding: 6px 0; font-size: 14px; outline: none; resize: none; min-height: 24px; max-height: 120px; font-family: inherit; }
+.comm-ava {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+.comm-inp {
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 6px 0;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    min-height: 24px;
+    max-height: 120px;
+    font-family: inherit;
+}
 .comm-inp:focus { border-bottom-color: blue; }
-.comm-btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.comm-btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
 .comm-btns.show { opacity: 1; pointer-events: auto; }
-.comm-btns button { border: none; padding: 5px 14px; border-radius: 14px; cursor: pointer; font-size: 13px; }
+.comm-btns button {
+    border: none;
+    padding: 5px 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 13px;
+}
 .btn-canc { background: transparent; color: gray; }
 .btn-canc:hover { background: #f5f5f5; }
 .btn-subm { background: #ccc; color: white; }
 .btn-subm.ready { background: blue; }
-.no-login { text-align: center; padding: 20px; color: gray; font-size: 14px; background: #f9f9f9; border-radius: 10px; margin-bottom: 20px; }
+.no-login {
+    text-align: center;
+    padding: 20px;
+    color: gray;
+    font-size: 14px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
 .no-login a { color: blue; cursor: pointer; font-weight: bold; }
-
 .comm-item { display: flex; gap: 10px; margin-bottom: 15px; }
 .comm-item .comm-ava { width: 34px; height: 34px; }
 .comm-body { flex: 1; }
-.comm-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
+.comm-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 3px;
+}
 .comm-author { font-size: 13px; font-weight: bold; }
 .comm-time { font-size: 11px; color: gray; }
 .comm-text { font-size: 14px; line-height: 1.5; }
-.comm-tools { display: flex; gap: 14px; margin-top: 4px; font-size: 12px; color: gray; }
+.comm-tools {
+    display: flex;
+    gap: 14px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: gray;
+}
 .comm-tools span { cursor: pointer; }
 .comm-tools span:hover { color: blue; }
 .reply-box { margin-top: 8px; display: none; }
 .reply-box.open { display: block; }
-.reply-box textarea { width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 6px 8px; font-size: 13px; resize: vertical; min-height: 32px; box-sizing: border-box; }
-.reply-box .row { display: flex; justify-content: flex-end; gap: 6px; margin-top: 5px; }
-.replies { margin-top: 10px; padding-left: 10px; border-left: 2px solid #eee; }
-
-/* 侧栏 */
+.reply-box textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+    resize: vertical;
+    min-height: 32px;
+    box-sizing: border-box;
+}
+.reply-box .row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 5px;
+}
+.replies {
+    margin-top: 10px;
+    padding-left: 10px;
+    border-left: 2px solid #eee;
+}
+/* 侧栏推荐 */
 .rec-hdr { font-size: 14px; font-weight: bold; margin-bottom: 12px; }
-.rec-card { display: flex; gap: 8px; margin-bottom: 10px; padding: 4px; border-radius: 6px; text-decoration: none; color: black; }
+.rec-card {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 4px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: black;
+}
 .rec-card:hover { background: #f5f5f5; }
-.rec-img { width: 150px; aspect-ratio: 16/9; background: #333; border-radius: 6px; flex-shrink: 0; position: relative; }
-.rec-dur { position: absolute; bottom: 3px; right: 3px; background: rgba(0,0,0,0.85); color: white; font-size: 11px; padding: 1px 4px; border-radius: 3px; }
+.rec-img {
+    width: 150px;
+    aspect-ratio: 16/9;
+    background: #333;
+    border-radius: 6px;
+    flex-shrink: 0;
+    position: relative;
+}
+.rec-dur {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    background: rgba(0,0,0,0.85);
+    color: white;
+    font-size: 11px;
+    padding: 1px 4px;
+    border-radius: 3px;
+}
 .rec-info { flex: 1; }
 .rec-title { font-size: 13px; font-weight: 500; line-height: 1.3; }
 .rec-author { font-size: 12px; color: gray; margin-top: 4px; }
-
-.footer { text-align: center; padding: 20px; color: #aaa; font-size: 12px; border-top: 1px solid #ddd; margin-top: 30px; }
-
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #aaa;
+    font-size: 12px;
+    border-top: 1px solid #ddd;
+    margin-top: 30px;
+}
 @media (max-width: 900px) {
-  .container { flex-direction: column; padding: 15px; }
-  .right { width: 100%; }
-  .video-box { border-radius: 0; }
+    .container { flex-direction: column; padding: 15px; }
+    .right { width: 100%; }
+    .video-box { border-radius: 0; }
 }
 </style>
 </head>
 <body>
-
-<!-- 弹窗 -->
+<!-- 登录弹窗 -->
 <div class="cover" id="pop">
-  <div class="popup">
-    <h2>登录</h2>
-    <div class="tabs">
-      <div class="tab on" onclick="swTab('login')">登录</div>
-      <div class="tab" onclick="swTab('reg')">注册</div>
+    <div class="popup">
+        <h2>登录</h2>
+        <div class="tabs">
+            <div class="tab on" onclick="swTab('login')">登录</div>
+            <div class="tab" onclick="swTab('reg')">注册</div>
+        </div>
+        <div class="page on" id="pg-login">
+            <div class="err" id="e-login"></div>
+            <input id="l-user" placeholder="用户名 / 邮箱">
+            <input id="l-pw" type="password" placeholder="密码">
+            <button class="go" onclick="doLogin()">登录</button>
+        </div>
+        <div class="page" id="pg-reg">
+            <div class="err" id="e-reg"></div>
+            <input id="r-mail" placeholder="邮箱">
+            <input id="r-name" placeholder="昵称">
+            <input id="r-pw" type="password" placeholder="密码（至少6位）">
+            <button class="go" onclick="doSend()">发送验证码</button>
+            <div class="tip" id="v-tip" style="display:none"></div>
+            <input id="r-code" placeholder="6位验证码" style="display:none">
+            <button class="go" id="r-go" onclick="doReg()">完成注册</button>
+        </div>
     </div>
-    <!-- 登录页 -->
-    <div class="page on" id="pg-login">
-      <div class="err" id="e-login"></div>
-      <input id="l-user" placeholder="用户名 / 邮箱">
-      <input id="l-pw" type="password" placeholder="密码">
-      <button class="go" onclick="doLogin()">登录</button>
-    </div>
-    <!-- 注册页 -->
-    <div class="page" id="pg-reg">
-      <div class="err" id="e-reg"></div>
-      <input id="r-mail" placeholder="邮箱">
-      <input id="r-name" placeholder="昵称">
-      <input id="r-pw" type="password" placeholder="密码（至少6位）">
-      <button class="go" onclick="doSend()">发送验证码</button>
-      <div class="tip" id="v-tip" style="display:none"></div>
-      <input id="r-code" placeholder="6位验证码" style="display:none">
-      <button class="go" id="r-go" onclick="doReg()" style="display:none">完成注册</button>
-    </div>
-  </div>
 </div>
 
-<!-- 顶栏 -->
+<!-- 顶部导航 -->
 <div class="topbar">
-  <a href="#" class="logo">Project<span>Pioneer</span></a>
-  <div class="spacer"></div>
-  <div class="user-area" id="abar"></div>
+    <a class="logo" onclick="location.href='index.html'">Project<span>Pioneer</span></a>
+    <div class="spacer"></div>
+    <div class="user-area" id="abar"></div>
 </div>
 
-<!-- 主体 -->
+<!-- 主体内容 -->
 <div class="container">
-  <div class="left">
-    <div class="video-box">
-      <video id="myvideo" controls>
-        <source src="demo.mp4" type="video/mp4">
-      </video>
-    </div>
-    <div class="vtitle">自制短片 - 项目完整演示</div>
-    <div class="vstats"><span>1000.9万次播放</span> &nbsp; <span id="ptime"></span></div>
-    <div class="channel-row">
-      <div class="c-ava">the</div>
-      <div class="c-name"><a href="./the1234556789/the1234556789.html">the1234556789</a></div>
-    </div>
-    <div class="desc">开发mc启动器</div>
-    <div class="tags">
-      <a class="tag">#自制短片</a>
-      <a class="tag">#原创影片</a>
-      <a class="tag">#项目教程</a>
-      <a class="tag">#剧情短片</a>
-      <a class="tag">#新手制作</a>
-    </div>
-    <div class="comm-hdr" id="ccnt">评论 0</div>
-    <div id="carea"></div>
-  </div>
-
-  <div class="right">
-    <div class="rec-hdr">更多创作者影片</div>
-    <a class="rec-card" href="#">
-      <div class="rec-img"><span class="rec-dur">04:22</span></div>
-      <div class="rec-info"><div class="rec-title">短片入门拍摄完整教程</div><div class="rec-author">原创影片创作者</div></div>
-    </a>
-    <a class="rec-card" href="#">
-      <div class="rec-img"><span class="rec-dur">12:05</span></div>
-      <div class="rec-info"><div class="rec-title">项目场景搭建实操演示</div><div class="rec-author">原创影片创作者</div></div>
-    </a>
-    <a class="rec-card" href="#">
-      <div class="rec-img"><span class="rec-dur">08:10</span></div>
-      <div class="rec-info"><div class="rec-title">零基础短片剪辑教学</div><div class="rec-author">原创影片创作者</div></div>
-    </a>
-  </div>
+    <div class="left">
+        <div class="video-box">
+            <video id="myvideo" controls>
+                <source src="demo.mp4" type="video/mp4">
+            </video>
+        </div>
+        <h1 class="vtitle" id="videoTitle">自制短片 - 项目完整演示</h1>
+        <div class="vstats">
+            <span id="playCount">1000.9万次播放</span>
+            &nbsp;
+            <span id="ptime"></span>
+        </div>
+        <div class="channel-row">
+            <div class="c-ava" id="chanAvatar">the</div>
+            <div class="c-name">
+                <a id="chanLink">the1234556789</a>
+            </div>
+        </div>
+        <div class="desc" id="videoDesc">开发mc启动器</div>
+        <div class="tags" id="tagBox">
+            <a class="tag">#自制短片</a>
+            <a class="tag">#原创影片</a>
+            <a class="tag">#项目教程</a>
+            <a class="tag">#剧情短片</a>
+            <a class="tag">#新手制作</a>
+        </div>
+        <div class="comm-hdr" id="ccnt">评论 0</div>
+        <div style="background:#fff8dc; padding:8px 12px; border-radius:8px; font-size:12px; color:#915900; margin-bottom:12px;">
+⚠️ 演示提示：评论仅保存在当前浏览器本地，其他人无法看到；清除浏览器缓存后评论会丢失。
+<div style="margin-top:6px;display:flex;gap:8px;">
+  <button id="exportComms" style="font-size:12px;padding:3px 8px;cursor:pointer;">导出评论JSON</button>
+  <button id="importComms" style="font-size:12px;padding:3px 8px;cursor:pointer;">导入评论JSON</button>
+  <input type="file" id="commFileInput" accept=".json" style="display:none">
 </div>
-
+</div>
+        <div id="carea"></div>
+    </div>
+    <div class="right">
+        <div class="rec-hdr">更多创作者影片</div>
+        <a class="rec-card" href="index.html">
+            <div class="rec-img"><span class="rec-dur">04:22</span></div>
+            <div class="rec-info">
+                <div class="rec-title">短片入门拍摄完整教程</div>
+                <div class="rec-author">原创影片创作者</div>
+            </div>
+        </a>
+        <a class="rec-card" href="index.html">
+            <div class="rec-img"><span class="rec-dur">12:05</span></div>
+            <div class="rec-info">
+                <div class="rec-title">项目场景搭建实操演示</div>
+                <div class="rec-author">原创影片创作者</div>
+            </div>
+        </a>
+        <a class="rec-card" href="index.html">
+            <div class="rec-img"><span class="rec-dur">08:10</span></div>
+            <div class="rec-info">
+                <div class="rec-title">零基础短片剪辑教学</div>
+                <div class="rec-author">原创影片创作者</div>
+            </div>
+        </a>
+    </div>
+</div>
 <div class="footer">Project Pioneer 原创影片平台 · 自制影片发布分享</div>
 
 <script>
-// ===== 工具函数 =====
+// 统一存储常量（与index/profile/upload完全一致）
+const STORAGE_USER_KEY = "pp_user";
+const STORAGE_USERS_LIST = "pp_users";
+const STORAGE_VIDEOS = "pp_videos";
+const STORAGE_COMMS = "pp_comms";
+
+// 通用工具
 function gid(id){ return document.getElementById(id); }
-
 function safeStr(s){
-  var d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
 }
-
 function timeAgo(ts){
-  var d = Date.now() - ts;
-  var m = 60000, h = 3600000, day = 86400000;
-  if(d < m) return '刚刚';
-  if(d < h) return Math.floor(d/m) + '分钟前';
-  if(d < day) return Math.floor(d/h) + '小时前';
-  if(d < day*30) return Math.floor(d/day) + '天前';
-  var dt = new Date(ts);
-  return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日';
+    const d = Date.now() - ts;
+    const m = 60000, h = 3600000, day = 86400000;
+    if(d < m) return '刚刚';
+    if(d < h) return Math.floor(d/m) + '分钟前';
+    if(d < day) return Math.floor(d/h) + '小时前';
+    if(d < day * 30) return Math.floor(d/day) + '天前';
+    const dt = new Date(ts);
+    return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日';
 }
 
-// ===== 存储键名 =====
-var KEY_USER = 'pp_user';
-var KEY_USERS = 'pp_users';
-var KEY_COMMS = 'pp_comms';
+// 用户存储函数
+function getLoginUser(){
+    const raw = localStorage.getItem(STORAGE_USER_KEY);
+    return raw ? JSON.parse(raw) : null;
+}
+function saveLoginUser(u){
+    if(u) localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(u));
+    else localStorage.removeItem(STORAGE_USER_KEY);
+    renderBar();
+}
+function getUsers(){
+    const raw = localStorage.getItem(STORAGE_USERS_LIST);
+    return raw ? JSON.parse(raw) : [];
+}
+function saveUsers(list){
+    localStorage.setItem(STORAGE_USERS_LIST, JSON.stringify(list));
+}
+function getVideos(){
+    const raw = localStorage.getItem(STORAGE_VIDEOS);
+    return raw ? JSON.parse(raw) : [];
+}
 
-// ===== 用户相关 =====
-function getCur(){ return JSON.parse(localStorage.getItem(KEY_USER) || 'null'); }
-function setCur(u){ localStorage.setItem(KEY_USER, JSON.stringify(u)); }
-function rmCur(){ localStorage.removeItem(KEY_USER); }
-function getAllUsers(){ return JSON.parse(localStorage.getItem(KEY_USERS) || '[]'); }
-
-// 渲染右上角
+// 顶部用户栏渲染（头像、昵称跳转个人主页）
 function renderBar(){
-  var u = getCur();
-  if(u){
-    gid('abar').innerHTML =
-      '<a href="./' + u.name + '/' + u.name + '.html" class="u-avatar" style="background:' + u.color + '">' + u.name[0] + '</a>' +
-      '<span class="u-name">' + safeStr(u.name) + '</span>' +
-      (u.type==='creator' ? '<span class="u-badge">创作者</span>' : '') +
-      '<button class="btn-out" onclick="doLogout()">退出</button>';
-  } else {
-    gid('abar').innerHTML =
-      '<button class="btn-login" onclick="openPop()">登录</button>' +
-      '<button class="btn-reg" onclick="openPop();swTab(\'reg\')">注册</button>';
-  }
-}
-
-function openPop(){ gid('pop').classList.add('show'); swTab('login'); }
-
-function closePop(){ gid('pop').classList.remove('show'); }
-
-function swTab(t){
-  if(t==='login'){
-    gid('pg-login').classList.add('on');
-    gid('pg-reg').classList.remove('on');
-    gid('e-login').textContent = '';
-  } else {
-    gid('pg-login').classList.remove('on');
-    gid('pg-reg').classList.add('on');
-    gid('e-reg').textContent = '';
-  }
-  // tab 样式
-  var tabs = document.querySelectorAll('.tab');
-  tabs[0].className = 'tab' + (t==='login' ? ' on' : '');
-  tabs[1].className = 'tab' + (t==='reg' ? ' on' : '');
-  // 清空输入
-  gid('l-user').value = ''; gid('l-pw').value = '';
-  gid('r-mail').value = ''; gid('r-name').value = ''; gid('r-pw').value = ''; gid('r-code').value = '';
-  gid('v-tip').style.display = 'none';
-  gid('r-code').style.display = 'none';
-  gid('r-go').style.display = 'none';
-}
-
-// 登录
-async function doLogin(){
-  var name = gid('l-user').value.trim();
-  var pw = gid('l-pw').value;
-  gid('e-login').textContent = '';
-  if(!name || !pw){ gid('e-login').textContent = '请填写完整'; return; }
-
-  // 尝试创作者
-  try {
-    var resp = await fetch('./' + encodeURIComponent(name) + '/密码.txt', {cache:'no-store'});
-    if(resp.ok){
-      var txt = (await resp.text()).trim();
-      if(txt === pw){
-        setCur({name:name, color:'#cc0000', type:'creator'});
-        closePop(); renderBar(); renderComm();
-        return;
-      } else {
-        gid('e-login').textContent = '密码错误';
-        return;
-      }
-    }
-  } catch(e){}
-
-  // 普通用户
-  var all = getAllUsers();
-  var found = null;
-  for(var i=0; i<all.length; i++){
-    if(all[i].email === name && all[i].pw === pw){ found = all[i]; break; }
-  }
-  if(found){
-    setCur({name:found.name, color:found.color, type:'user'});
-    closePop(); renderBar(); renderComm();
-  } else {
-    gid('e-login').textContent = '账号不存在或密码错误';
-  }
-}
-
-// 注册
-var _vcode = '';
-var _vexp = 0;
-var _rname = '';
-var _rpw = '';
-
-function doSend(){
-  var mail = gid('r-mail').value.trim();
-  var name = gid('r-name').value.trim();
-  var pw = gid('r-pw').value;
-  gid('e-reg').textContent = '';
-  if(!mail || !name || !pw){ gid('e-reg').textContent = '请填写完整'; return; }
-  if(pw.length < 6){ gid('e-reg').textContent = '密码至少6位'; return; }
-  var all = getAllUsers();
-  for(var i=0; i<all.length; i++){
-    if(all[i].email === mail){ gid('e-reg').textContent = '邮箱已注册'; return; }
-  }
-  _vcode = String(Math.floor(100000 + Math.random()*900000));
-  _vexp = Date.now() + 300000;
-  _rname = name;
-  _rpw = pw;
-  gid('v-tip').style.display = 'block';
-  gid('v-tip').textContent = '验证码：' + _vcode + '（演示模式，请记下来）';
-  gid('r-code').style.display = 'block';
-  gid('r-go').style.display = 'block';
-}
-
-function doReg(){
-  var code = gid('r-code').value.trim();
-  if(!_vcode){ return; }
-  if(Date.now() > _vexp){ gid('e-reg').textContent = '验证码过期'; return; }
-  if(code !== _vcode){ gid('e-reg').textContent = '验证码错误'; return; }
-  var colors = ['#065fd4','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
-  var color = colors[Math.floor(Math.random()*colors.length)];
-  var all = getAllUsers();
-  all.push({email:gid('r-mail').value.trim(), name:_rname, pw:_rpw, color:color});
-  localStorage.setItem(KEY_USERS, JSON.stringify(all));
-  setCur({name:_rname, color:color, type:'user'});
-  closePop(); renderBar(); renderComm();
-}
-
-function doLogout(){ rmCur(); renderBar(); renderComm(); }
-
-// ===== 评论相关 =====
-var comments = JSON.parse(localStorage.getItem(KEY_COMMS) || 'null');
-if(!comments){
-  comments = [
-    {id:1, author:'MC玩家小柯', color:'#137333', text:'启动器界面好清爽，求开源～', time:Date.now()-18000000, likes:12, liked:false, replies:[
-      {id:11, author:'the1234556789', color:'#cc0000', text:'下期出教程～', time:Date.now()-14400000, likes:3, liked:false}
-    ]},
-    {id:2, author:'阿白', color:'#065fd4', text:'demo.mp4 放同目录就能播，已 star ⭐', time:Date.now()-7200000, likes:5, liked:false, replies:[]}
-  ];
-  localStorage.setItem(KEY_COMMS, JSON.stringify(comments));
-}
-function saveComms(){ localStorage.setItem(KEY_COMMS, JSON.stringify(comments)); }
-
-// 渲染评论区
-function renderComm(){
-  var u = getCur();
-  if(u){
-    gid('carea').innerHTML =
-      '<div class="comm-form"><div class="comm-ava" style="background:' + u.color + '">' + u.name[0] + '</div><div style="flex:1"><textarea class="comm-inp" id="ta" rows="1" placeholder="留下你的评论..."></textarea><div class="comm-btns" id="cbtns"><button class="btn-canc" onclick="cCancel()">取消</button><button class="btn-subm" id="csubm">评论</button></div></div></div><div id="clist"></div>';
-    var ta = gid('ta'), btns = gid('cbtns'), subm = gid('csubm');
-    ta.addEventListener('focus', function(){ btns.classList.add('show'); });
-    ta.addEventListener('input', function(){
-      ta.style.height = 'auto';
-      ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
-      if(ta.value.trim()){ subm.className = 'btn-subm ready'; }
-      else { subm.className = 'btn-subm'; }
-    });
-    subm.onclick = function(){
-      var t = ta.value.trim();
-      if(!t) return;
-      comments.unshift({id:Date.now(), author:u.name, color:u.color, text:t, time:Date.now(), likes:0, liked:false, replies:[]});
-      saveComms(); drawComms();
-      ta.value = ''; ta.style.height = 'auto';
-      subm.className = 'btn-subm'; btns.classList.remove('show');
-    };
-  } else {
-    gid('carea').innerHTML =
-      '<div class="no-login">想发言？<a onclick="openPop()">登录</a> / <a onclick="openPop();swTab(\'reg\')">注册</a> 后再评论～</div><div id="clist"></div>';
-  }
-  drawComms();
-}
-
-function cCancel(){
-  var ta = gid('ta');
-  ta.value = ''; ta.style.height = 'auto';
-  gid('csubm').className = 'btn-subm';
-  gid('cbtns').classList.remove('show');
-  ta.blur();
-}
-
-// 画一条回复
-function drawReply(c, r){
-  return '<div class="comm-item"><div class="comm-ava" style="background:' + r.color + '">' + r.author[0] + '</div><div class="comm-body"><div class="comm-meta"><span class="comm-author">' + safeStr(r.author) + '</span><span class="comm-time">' + timeAgo(r.time) + '</span></div><div class="comm-text">' + safeStr(r.text) + '</div><div class="comm-tools"><span onclick="likeR(' + c.id + ',' + r.id + ')">' + (r.liked?'❤️':'🤍') + ' ' + (r.likes||'') + '</span></div></div></div>';
-}
-
-// 画所有评论
-function drawComms(){
-  var total = 0;
-  for(var i=0; i<comments.length; i++){ total += 1 + (comments[i].replies?comments[i].replies.length:0); }
-  gid('ccnt').textContent = '评论 ' + total;
-  var list = gid('clist'); if(!list) return;
-  var u = getCur();
-  var html = '';
-  for(var i=0; i<comments.length; i++){
-    var c = comments[i];
-    html += '<div class="comm-item"><div class="comm-ava" style="background:' + c.color + '">' + c.author[0] + '</div><div class="comm-body"><div class="comm-meta"><span class="comm-author">' + safeStr(c.author) + '</span><span class="comm-time">' + timeAgo(c.time) + '</span></div><div class="comm-text">' + safeStr(c.text) + '</div><div class="comm-tools"><span onclick="likeC(' + c.id + ')">' + (c.liked?'❤️':'🤍') + ' ' + (c.likes||'') + '</span>';
-    if(u){ html += '<span onclick="openReply(' + c.id + ')">↩ 回复</span>'; }
-    if(u && u.name === c.author){ html += '<span onclick="delC(' + c.id + ')">🗑 删除</span>'; }
-    html += '</div>';
-    // 回复框
+    const u = getLoginUser();
+    const abar = gid('abar');
     if(u){
-      html += '<div class="reply-box" id="rb_' + c.id + '"><textarea rows="1" placeholder="回复 @' + safeStr(c.author) + '..."></textarea><div class="row"><button class="btn-canc" onclick="openReply(' + c.id + ')">取消</button><button class="btn-subm ready" onclick="sendR(' + c.id + ')">回复</button></div></div>';
+        abar.innerHTML = `
+            <a class="u-avatar" style="background:${u.color}" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">
+                ${u.name[0]}
+            </a>
+            <span class="u-name" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">
+                ${safeStr(u.name)}
+            </span>
+            ${u.type === 'creator' ? '<span class="u-badge">创作者</span>' : ''}
+            <button class="btn-out" onclick="doLogout()">退出</button>
+        `;
+    }else{
+        abar.innerHTML = `
+            <button class="btn-login" onclick="openPop()">登录</button>
+            <button class="btn-reg" onclick="openPop();swTab('reg')">注册</button>
+        `;
     }
-    // 回复列表
-    if(c.replies && c.replies.length){
-      html += '<div class="replies">';
-      for(var j=0; j<c.replies.length; j++){ html += drawReply(c, c.replies[j]); }
-      html += '</div>';
-    }
-    html += '</div></div>';
-  }
-  list.innerHTML = html;
 }
 
+// 登录弹窗控制
+function openPop(){ gid('pop').classList.add('show'); swTab('login'); }
+function closePop(){ gid('pop').classList.remove('show'); }
+function swTab(t){
+    const pgLogin = gid('pg-login');
+    const pgReg = gid('pg-reg');
+    const tabs = document.querySelectorAll('.tabs .tab');
+    tabs.forEach(tab=>tab.classList.remove('on'));
+    if(t === 'login'){
+        tabs[0].classList.add('on');
+        pgLogin.style.display = 'block'; pgReg.style.display = 'none';
+        gid('e-login').textContent = '';
+    }else{
+        tabs[1].classList.add('on');
+        pgReg.style.display = 'block'; pgLogin.style.display = 'none';
+        gid('e-reg').textContent = '';
+    }
+    // 清空输入框
+    gid('l-user').value = ''; gid('l-pw').value = '';
+    gid('r-mail').value = ''; gid('r-name').value = ''; gid('r-pw').value = '';
+    gid('r-code').value = '';
+    gid('v-tip').style.display = 'none';
+    gid('r-code').style.display = 'none';
+    gid('r-go').style.display = 'none';
+}
+
+// 登录逻辑
+async function doLogin(){
+    const name = gid('l-user').value.trim();
+    const pw = gid('l-pw').value;
+    const errDom = gid('e-login');
+    errDom.textContent = '';
+    if(!name || !pw){ errDom.textContent = '请填写完整'; return; }
+    // 兼容旧创作者密码文件（保留）
+    try{
+        const resp = await fetch('./' + encodeURIComponent(name) + '/密码.txt', {cache:'no-store'});
+        if(resp.ok){
+            const txt = (await resp.text()).trim();
+            if(txt === pw){
+                saveLoginUser({name, color:'#cc0000', type:'creator'});
+                closePop(); renderComm();
+                return;
+            }else{
+                errDom.textContent = '密码错误';
+                return;
+            }
+        }
+    }catch(e){}
+    // 匹配本地注册用户
+    const all = getUsers();
+    const found = all.find(x => (x.mail === name || x.name === name) && x.pw === pw);
+    if(found){
+        saveLoginUser({name:found.name, color:found.color, type:'user'});
+        closePop(); renderComm();
+    }else{
+        errDom.textContent = '账号不存在或密码错误';
+    }
+}
+
+// 注册逻辑
+let _vcode = '';
+let _vexp = 0;
+let _rname = '';
+let _rpw = '';
+function doSend(){
+    const mail = gid('r-mail').value.trim();
+    const name = gid('r-name').value.trim();
+    const pw = gid('r-pw').value;
+    const errDom = gid('e-reg');
+    errDom.textContent = '';
+    if(!mail || !name || !pw){ errDom.textContent = '请填写完整'; return; }
+    if(pw.length < 6){ errDom.textContent = '密码至少6位'; return; }
+    if(getUsers().some(x => x.mail === mail)){
+        errDom.textContent = '邮箱已注册';
+        return;
+    }
+    _vcode = String(Math.floor(100000 + Math.random() * 900000));
+    _vexp = Date.now() + 300000;
+    _rname = name; _rpw = pw;
+    gid('v-tip').style.display = 'block';
+    gid('v-tip').textContent = '验证码：' + _vcode + '（演示模式，请记下来）';
+    gid('r-code').style.display = 'block';
+    gid('r-go').style.display = 'block';
+}
+function doReg(){
+    const code = gid('r-code').value.trim();
+    const errDom = gid('e-reg');
+    if(!_vcode) return;
+    if(Date.now() > _vexp){ errDom.textContent = '验证码过期'; return; }
+    if(code !== _vcode){ errDom.textContent = '验证码错误'; return; }
+    const colors = ['#065fd4','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const all = getUsers();
+    all.push({mail:gid('r-mail').value.trim(), name:_rname, pw:_rpw, color});
+    saveUsers(all);
+    saveLoginUser({name:_rname, color, type:'user'});
+    closePop(); renderComm();
+}
+function doLogout(){
+    saveLoginUser(null);
+    renderComm();
+}
+
+// 评论模块（完全兼容全站评论存储）
+let comments = JSON.parse(localStorage.getItem(STORAGE_COMMS) || 'null');
+if(!comments){
+    comments = [
+        {id:1, author:'MC玩家小柯', color:'#137333', text:'启动器界面好清爽，求开源～', time:Date.now()-18000000, likes:12, liked:false, replies:[
+            {id:11, author:'the1234556789', color:'#cc0000', text:'下期出教程～', time:Date.now()-14400000, likes:3, liked:false}
+        ]},
+        {id:2, author:'阿白', color:'#065fd4', text:'demo.mp4 放同目录就能播，已 star ⭐', time:Date.now()-7200000, likes:5, liked:false, replies:[]}
+    ];
+    localStorage.setItem(STORAGE_COMMS, JSON.stringify(comments));
+}
+function saveComms(){
+    localStorage.setItem(STORAGE_COMMS, JSON.stringify(comments));
+}
+function renderComm(){
+    const u = getLoginUser();
+    const carea = gid('carea');
+    if(u){
+        carea.innerHTML = `
+            <div class="comm-form">
+                <div class="comm-ava" style="background:${u.color}">${u.name[0]}</div>
+                <div style="flex:1">
+                    <textarea class="comm-inp" id="ta" rows="1" placeholder="留下你的评论..."></textarea>
+                    <div class="comm-btns" id="cbtns">
+                        <button class="btn-canc" onclick="cCancel()">取消</button>
+                        <button class="btn-subm" id="csubm">评论</button>
+                    </div>
+                </div>
+            </div>
+            <div id="clist"></div>
+        `;
+        const ta = gid('ta');
+        const btns = gid('cbtns');
+        const subm = gid('csubm');
+        ta.addEventListener('focus', ()=> btns.classList.add('show'));
+        ta.addEventListener('input', ()=>{
+            ta.style.height = 'auto';
+            ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+            subm.className = ta.value.trim() ? 'btn-subm ready' : 'btn-subm';
+        });
+        subm.onclick = ()=>{
+            const t = ta.value.trim();
+            if(!t) return;
+            comments.unshift({
+                id:Date.now(), author:u.name, color:u.color, text:t,
+                time:Date.now(), likes:0, liked:false, replies:[]
+            });
+            saveComms(); drawComms();
+            ta.value = ''; ta.style.height = 'auto';
+            subm.className = 'btn-subm'; btns.classList.remove('show');
+        };
+    }else{
+        carea.innerHTML = `
+            <div class="no-login">
+                想发言？<a onclick="openPop()">登录</a> / <a onclick="openPop();swTab('reg')">注册</a> 后再评论～
+            </div>
+            <div id="clist"></div>
+        `;
+    }
+    drawComms();
+}
+function cCancel(){
+    const ta = gid('ta');
+    ta.value = ''; ta.style.height = 'auto';
+    gid('csubm').className = 'btn-subm';
+    gid('cbtns').classList.remove('show');
+    ta.blur();
+}
+function drawReply(c, r){
+    return `
+        <div class="comm-item">
+            <div class="comm-ava" style="background:${r.color}">${r.author[0]}</div>
+            <div class="comm-body">
+                <div class="comm-meta">
+                    <span class="comm-author">${safeStr(r.author)}</span>
+                    <span class="comm-time">${timeAgo(r.time)}</span>
+                </div>
+                <div class="comm-text">${safeStr(r.text)}</div>
+                <div class="comm-tools">
+                    <span onclick="likeR(${c.id},${r.id})">${r.liked?'❤️':'🤍'} ${r.likes}</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+function drawComms(){
+    let total = 0;
+    comments.forEach(c => total += 1 + (c.replies?.length||0));
+    gid('ccnt').textContent = '评论 ' + total;
+    const list = gid('clist');
+    if(!list) return;
+    const u = getLoginUser();
+    let html = '';
+    comments.forEach(c=>{
+        html += `
+            <div class="comm-item">
+                <div class="comm-ava" style="background:${c.color}">${c.author[0]}</div>
+                <div class="comm-body">
+                    <div class="comm-meta">
+                        <span class="comm-author">${safeStr(c.author)}</span>
+                        <span class="comm-time">${timeAgo(c.time)}</span>
+                    </div>
+                    <div class="comm-text">${safeStr(c.text)}</div>
+                    <div class="comm-tools">
+                        <span onclick="likeC(${c.id})">${c.liked?'❤️':'🤍'} ${c.likes}</span>
+                        ${u ? `<span onclick="openReply(${c.id})">↩ 回复</span>` : ''}
+                        ${u && u.name === c.author ? `<span onclick="delC(${c.id})">🗑 删除</span>` : ''}
+                    </div>
+                    ${u ? `
+                        <div class="reply-box" id="rb_${c.id}">
+                            <textarea rows="1" placeholder="回复 @${safeStr(c.author)}..."></textarea>
+                            <div class="row">
+                                <button class="btn-canc" onclick="openReply(${c.id})">取消</button>
+                                <button class="btn-subm ready" onclick="sendR(${c.id})">回复</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${c.replies?.length ? `<div class="replies">${c.replies.map(r=>drawReply(c,r)).join('')}</div>` : ''}
+                </div>
+            </div>
+        `;
+    });
+    list.innerHTML = html;
+}
 function likeC(id){
-  for(var i=0; i<comments.length; i++){
-    if(comments[i].id === id){ var c=comments[i]; c.liked=!c.liked; c.likes += c.liked?1:-1; break; }
-  }
-  saveComms(); drawComms();
+    const target = comments.find(x=>x.id === id);
+    if(!target) return;
+    target.liked = !target.liked;
+    target.likes += target.liked ? 1 : -1;
+    saveComms(); drawComms();
 }
-
 function likeR(cid, rid){
-  for(var i=0; i<comments.length; i++){
-    if(comments[i].id === cid){
-      for(var j=0; j<comments[i].replies.length; j++){
-        if(comments[i].replies[j].id === rid){ var r=comments[i].replies[j]; r.liked=!r.liked; r.likes+=r.liked?1:-1; break; }
-      }
-      break;
-    }
-  }
-  saveComms(); drawComms();
+    const c = comments.find(x=>x.id === cid);
+    if(!c) return;
+    const r = c.replies.find(x=>x.id === rid);
+    if(!r) return;
+    r.liked = !r.liked;
+    r.likes += r.liked ? 1 : -1;
+    saveComms(); drawComms();
 }
-
 function openReply(id){
-  var box = gid('rb_'+id);
-  if(box.classList.contains('open')){ box.classList.remove('open'); }
-  else { box.classList.add('open'); }
+    const box = gid('rb_'+id);
+    box.classList.toggle('open');
 }
-
 function sendR(id){
-  var u = getCur(); if(!u){ openPop(); return; }
-  var box = gid('rb_'+id), ta = box.querySelector('textarea'), t = ta.value.trim();
-  if(!t) return;
-  for(var i=0; i<comments.length; i++){
-    if(comments[i].id === id){
-      if(!comments[i].replies) comments[i].replies = [];
-      comments[i].replies.push({id:Date.now(), author:u.name, color:u.color, text:t, time:Date.now(), likes:0, liked:false});
-      break;
-    }
-  }
-  saveComms(); drawComms();
+    const u = getLoginUser();
+    if(!u){ openPop(); return; }
+    const box = gid('rb_'+id);
+    const ta = box.querySelector('textarea');
+    const text = ta.value.trim();
+    if(!text) return;
+    const c = comments.find(x=>x.id === id);
+    if(!c) return;
+    if(!c.replies) c.replies = [];
+    c.replies.push({
+        id:Date.now(), author:u.name, color:u.color, text,
+        time:Date.now(), likes:0, liked:false
+    });
+    saveComms(); drawComms();
 }
-
 function delC(id){
-  comments = comments.filter(function(x){ return x.id !== id; });
-  saveComms(); drawComms();
+    comments = comments.filter(x=>x.id !== id);
+    saveComms(); drawComms();
 }
 
-// ===== 初始化 =====
-gid('ptime').textContent = timeAgo(new Date("2026-07-31 17:25:00").getTime());
-gid('myvideo').load();
-renderBar();
-renderComm();
+// 评论导出导入
+function exportCommsFile(){
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(comments,null,2));
+  const dl = document.createElement('a');
+  dl.href = dataStr;
+  dl.download = "project-pioneer-comments.json";
+  dl.click();
+}
+function importCommsFile(file){
+  const reader = new FileReader();
+  reader.onload = e=>{
+    try{
+      const arr = JSON.parse(e.target.result);
+      if(!Array.isArray(arr)){ alert("文件格式错误！"); return; }
+      comments = arr;
+      saveComms();
+      drawComms();
+      alert("导入成功！");
+    }catch(err){
+      alert("解析失败："+err);
+    }
+  };
+  reader.readAsText(file);
+}
 
-gid('pop').addEventListener('click', function(e){
-  if(e.target === gid('pop')) closePop();
-});
+// 初始化页面
+function initPage(){
+    // 绑定导出导入按钮
+    const expBtn = document.getElementById("exportComms");
+    const impBtn = document.getElementById("importComms");
+    const fileInp = document.getElementById("commFileInput");
+    if(expBtn) expBtn.onclick = exportCommsFile;
+    if(impBtn) impBtn.onclick = ()=> fileInp.click();
+    if(fileInp){
+      fileInp.onchange = e=>{
+        if(e.target.files[0]) importCommsFile(e.target.files[0]);
+      }
+    }
+
+    // 固定演示视频作者（当前页面默认播放本地演示视频）
+    const uploaderName = "the1234556789";
+    gid('chanLink').innerText = uploaderName;
+    gid('chanLink').onclick = ()=> location.href = `profile.html?name=${encodeURIComponent(uploaderName)}`;
+    gid('chanAvatar').innerText = uploaderName[0];
+    // 发布时间
+    gid('ptime').textContent = timeAgo(new Date("2026-07-31 17:25").getTime());
+    // 初始化用户栏、评论区
+    renderBar();
+    renderComm();
+    // 遮罩点击关闭弹窗
+    gid('pop').addEventListener('click', e=>{
+        if(e.target === gid('pop')) closePop();
+    });
+}
+initPage();
 </script>
 </body>
 </html>
