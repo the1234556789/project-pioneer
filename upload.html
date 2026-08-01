@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上传视频 - Project Pioneer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f0f0f;color:#f1f1f1;font-family:Roboto,system-ui}
+header{
+    height:56px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 16px;border-bottom:1px solid #222;position:sticky;top:0;z-index:10
+}
+.logo{color:#ff0000;font-size:20px;font-weight:bold;text-decoration:none}
+.back{color:#3ea6ff;text-decoration:none}
+.main{max-width:700px;margin:40px auto;padding:0 20px}
+h1{margin-bottom:30px;font-size:22px}
+.form-item{margin-bottom:20px}
+label{display:block;margin-bottom:8px;color:#ddd}
+input,textarea,select{
+    width:100%;padding:12px;background:#121212;border:1px solid #333;
+    border-radius:8px;color:#fff;font-size:14px;outline:none
+}
+input:focus,textarea:focus,select:focus{border-color:#3ea6ff}
+textarea{min-height:90;resize:vertical}
+.sub-btn{
+    width:100%;padding:13px;background:#3ea6ff;color:#000;border:none;
+    border-radius:8px;font-weight:bold;font-size:15px;cursor-pointer
+}
+.sub-btn:hover{background:#2d8fe6}
+.tip{color:#aaa;font-size:12px;margin-top:6px}
+</style>
+</head>
+<body>
+<header>
+    <a href="index.html" class="logo">▶ Project Pioneer</a>
+    <a href="index.html" class="back">← 返回首页</a>
+</header>
+<div class="main">
+    <h1>发布新视频</h1>
+    <div class="form-item">
+        <label>视频标题</label>
+        <input id="title" placeholder="输入视频标题">
+    </div>
+    <div class="form-item">
+        <label>视频简介</label>
+        <textarea id="desc" placeholder="简单描述视频内容"></textarea>
+    </div>
+    <div class="form-item">
+        <label>时长（例：04:22）</label>
+        <input id="dur" placeholder="00:00">
+    </div>
+    <div class="form-item">
+        <label>分类</label>
+        <select id="cat">
+            <option value="全部">综合</option>
+            <option value="音乐">音乐</option>
+            <option value="游戏">游戏</option>
+            <option value="前端开发">前端开发</option>
+            <option value="直播">直播</option>
+            <option value="新闻">新闻</option>
+        </select>
+    </div>
+    <div class="form-item">
+        <label>作者名称（登录后自动填充）</label>
+        <input id="author" placeholder="你的昵称">
+        <div class="tip">未登录请手动填写，登录会自动覆盖</div>
+    </div>
+    <div class="form-item">
+        <label>作者主页链接（GitHub/B站/YouTube个人主页）</label>
+        <input id="channelUrl" placeholder="https://xxx">
+    </div>
+    <button class="sub-btn" onclick="submitVideo()">提交发布</button>
+</div>
+<script>
+const SK = 'pp_user';
+const VKEY = 'pp_videos';
+
+function $(id){return document.getElementById(id)}
+function getLoginUser(){
+    const raw = localStorage.getItem(SK);
+    return raw ? JSON.parse(raw) : null;
+}
+function getVideoList(){
+    const raw = localStorage.getItem(VKEY);
+    return raw ? JSON.parse(raw) : [];
+}
+
+// 页面加载自动填充登录用户名
+window.onload = function(){
+    const user = getLoginUser();
+    if(user){
+        $('author').value = user.name;
+    }
+}
+
+function submitVideo(){
+    const title = $('title').value.trim();
+    const desc = $('desc').value.trim();
+    const dur = $('dur').value.trim();
+    const cat = $('cat').value;
+    let author = $('author').value.trim();
+    const channelUrl = $('channelUrl').value.trim();
+    const user = getLoginUser();
+
+    // 登录优先使用登录昵称
+    if(user) author = user.name;
+
+    // 简单校验
+    if(!title){alert("请填写视频标题");return}
+    if(!dur){alert("请填写视频时长");return}
+    if(!author){alert("请填写作者名称");return}
+
+    const list = getVideoList();
+    // 新增视频数据结构，和首页演示格式完全统一
+    list.push({
+        title: title,
+        desc: desc,
+        cat: cat,
+        channelName: author,
+        channelUrl: channelUrl || "#",
+        dur: dur,
+        type: "local",
+        link: "dQw4w9WgXcQ.html",
+        create: Date.now()
+    });
+
+    localStorage.setItem(VKEY, JSON.stringify(list));
+    alert("发布成功！即将返回首页");
+    location.href = "index.html";
+}
+</script>
+</body>
+</html>
