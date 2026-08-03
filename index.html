@@ -34,7 +34,7 @@ header {
 .btn-reg:hover { background: #222; border-radius: 12px; }
 .u-chip { display: flex; align-items: center; gap: 8px; }
 .u-chip a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
-.u-avatar { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; }
+.u-avatar { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
 .u-name { font-size: 14px; }
 .u-badge { font-size: 10px; background: #4a0000; color: #ff6b6b; padding: 1px 6px; border-radius: 8px; }
 .btn-out { padding: 4px 10px; border: 1px solid #444; background: none; color: #fff; border-radius: 12px; cursor: pointer; font-size: 12px; }
@@ -54,7 +54,7 @@ main { flex: 1; padding: 24px; }
 .card .thumb { aspect-ratio: 16/9; border-radius: 12px; background: linear-gradient(135deg,#303030,#1a1a1a); position: relative; cursor: pointer; }
 .card .dur { position: absolute; right: 8px; bottom: 8px; background: rgba(0,0,0,.8); font-size: 12px; padding: 2px 4px; border-radius: 4px; }
 .meta { display: flex; gap: 12px; margin-top: 12px; }
-.meta .av { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; cursor: pointer; }
+.meta .av { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; }
 .meta h4 { font-size: 14px; line-height: 1.3; color: #fff; }
 .meta p { font-size: 12px; color: #aaa; margin-top: 4px; }
 .channel-link{color:#58a6ff;text-decoration:none;}
@@ -79,7 +79,7 @@ main { flex: 1; padding: 24px; }
 </style>
 </head>
 <body>
-<!-- 登录弹窗 -->
+<!-- 登录弹窗（样式、交互完全原版不变） -->
 <div class="mask" id="pop">
   <div class="pop">
     <h2>登录</h2>
@@ -109,7 +109,7 @@ main { flex: 1; padding: 24px; }
 <header>
   <div class="left">
     <span style="font-size:22px;cursor:pointer">☰</span>
-    <a href="mc.html" class="logo">▶ Project Pioneer</a>
+    <a href="index.html" class="logo">▶ Project Pioneer</a>
   </div>
   <div class="search">
     <input id="searchInput" placeholder="搜索影片..." onkeydown="if(event.key==='Enter')doSearch()">
@@ -156,7 +156,6 @@ function setCur(u){localStorage.setItem(SK,JSON.stringify(u));renderBar();}
 function rmCur(){localStorage.removeItem(SK);}
 function allU(){return JSON.parse(localStorage.getItem(UK)||'[]');}
 function getVideos(){return JSON.parse(localStorage.getItem(VKEY)||'[]');}
-
 // 右上角登录栏
 function renderBar(){
   var u = getCur();
@@ -174,7 +173,6 @@ function renderBar(){
       '<button class="btn-reg" onclick="openPop();tab(\'reg\')">注册</button>';
   }
 }
-
 // 弹窗
 function openPop(){ $('pop').classList.add('on'); tab('login'); }
 function closePop(){ $('pop').classList.remove('on'); }
@@ -188,7 +186,6 @@ function tab(t){
   $('r-mail').value=''; $('r-name').value=''; $('r-pw').value=''; $('r-code').value='';
   $('v-tip').style.display='none'; $('r-code').style.display='none'; $('r-go').style.display='none';
 }
-
 // 登录（用户名/邮箱双匹配）
 async function doLogin(){
   var inputVal = $('l-user').value.trim();
@@ -204,4 +201,133 @@ async function doLogin(){
       if(filePwd === pwd){
         setCur({name:inputVal,color:'#cc0000',type:'creator'});
         closePop();renderAll();return;
-      }else{errB
+      }else{errBox.textContent='密码错误';return;}
+    }
+  }catch(e){}
+  // 普通用户匹配昵称/邮箱
+  var userList = allU();
+  var target = null;
+  for(var i=0;i<userList.length;i++){
+    var u = userList[i];
+    if(u.name === inputVal || u.email === inputVal){
+      if(u.pw === pwd){target = u;break;}
+    }
+  }
+  if(target){
+    setCur({name:target.name,color:target.color,type:'user'});
+    closePop();renderAll();
+  }else{
+    errBox.textContent='账号或密码错误';
+  }
+}
+// 注册
+var _vc='',_ve=0,_vn='',_vp='';
+function sendCode(){
+  var mail = $('r-mail').value.trim();
+  var name = $('r-name').value.trim();
+  var pw = $('r-pw').value;
+  var errBox = $('e-reg');
+  errBox.textContent = '';
+  if(!/^.+@.+\..+$/.test(mail)){errBox.textContent='邮箱格式错误';return;}
+  if(!name){errBox.textContent='填写昵称';return;}
+  if(pw.length<6){errBox.textContent='密码至少6位';return;}
+  if(allU().some(x=>x.email===mail)){errBox.textContent='邮箱已注册';return;}
+  _vc = String(Math.floor(100000+Math.random()*900000));
+  _ve = Date.now()+300000;
+  _vn = name;_vp=pw;
+  $('v-tip').style.display='block';
+  $('v-tip').textContent='验证码：'+_vc+'（演示）';
+  $('r-code').style.display='block';
+  $('r-go').style.display='block';
+}
+function doReg(){
+  var c = $('r-code').value.trim();
+  var errBox = $('e-reg');
+  if(!_vc || Date.now()>_ve){errBox.textContent='验证码过期';return;}
+  if(c!==_vc){errBox.textContent='验证码错误';return;}
+  var colors = ['#3ea6ff','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
+  var newUser = {email:$('r-mail').value.trim(),name:_vn,pw:_vp,color:colors[Math.floor(Math.random()*colors.length)]};
+  var users = allU();users.push(newUser);
+  localStorage.setItem(UK,JSON.stringify(users));
+  setCur({name:_vn,color:newUser.color,type:'user'});
+  _vc='';closePop();renderAll();
+}
+function logout(){rmCur();renderBar();renderAll();}
+// 切换分类
+function setCat(name){
+  currentCat = name;
+  document.querySelectorAll('.chip').forEach(ch=>{
+    ch.classList.toggle('active', ch.innerText === name);
+  });
+  renderCard(originList);
+}
+// 搜索
+function doSearch(){
+  var kw = $('searchInput').value.trim().toLowerCase();
+  var filter = originList.filter(v=>
+    v.title.toLowerCase().includes(kw) || v.channelName.toLowerCase().includes(kw)
+  );
+  renderCard(filter);
+}
+// 打开视频链接
+function openVideo(type,url){
+  if(type === "external") window.open(url,"_blank");
+  else location.href = url;
+}
+// 渲染卡片
+function renderCard(list){
+  const grid = $('grid');
+  const filterList = currentCat === "全部" ? list : list.filter(v=>v.cat === currentCat);
+  if(filterList.length === 0){
+    grid.innerHTML = '<div style="padding:60px;color:#aaa;text-align:center;">暂无相关视频</div>';
+    return;
+  }
+  var avColors = ['#3ea6ff','#137333','#e37400','#8e24aa'];
+  var html = '';
+  filterList.forEach((v,i)=>{
+    html += `
+    <div class="card" onclick="openVideo('${v.type}','${v.link}')">
+      <div class="thumb"><span class="dur">${v.dur}</span></div>
+      <div class="meta">
+        <div class="av" style="background:${avColors[i%avColors.length]}"></div>
+        <div>
+          <h4>${safe(v.title)}</h4>
+          <p>
+            <a class="channel-link" onclick="event.stopPropagation();window.open('${v.channelUrl}','_blank')">${safe(v.channelName)}</a>
+            <br>${safe(v.desc)}
+          </p>
+        </div>
+      </div>
+    </div>`;
+  });
+  grid.innerHTML = html;
+}
+// 加载视频数据（仅修改两条跳转页面，其余不变）
+function loadVideoData(){
+  let local = getVideos();
+  if(local.length === 0){
+    local = [
+      {title:"Project Pioneer 自制短片",desc:"MC启动项目完整演示",cat:"游戏",channelName:"the1234556789",channelUrl:"/the1234556789/the1234556789.html",dur:"04:22",type:"local",link:"dQw4w9WgXcQ.html"},
+      {title:"【官方 MV】Never Gonna Give You Up",desc:"Rickroll经典B站原版MV",cat:"音乐",channelName:"索尼音乐中国",channelUrl:"/suoniyinyuechina/suoniyinyuechina.html",dur:"03:32",type:"local",link:"mDoW4d864GJ.html"},
+      {title:"10小时Lo-fi学习音乐",desc:"舒缓背景音乐",cat:"音乐",channelName:"CodeBeats",channelUrl:"https://www.youtube.com/@CodeBeats",dur:"3:42:10",type:"external",link:"https://www.youtube.com/watch?v=jfKfPfyJRdk"},
+      {title:"React 2026全栈实战",desc:"前端开发教程",cat:"前端开发",channelName:"前端日记",channelUrl:"https://www.youtube.com/@xxx",dur:"18:24",type:"external",link:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+      {title:"Rick Astley原版MV(Youtube)",desc:"外网经典视频",cat:"音乐",channelName:"Rick Astley",channelUrl:"https://www.youtube.com/@RickAstley",dur:"03:33",type:"external",link:"https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
+      {title:"NBA赛事集锦",desc:"体育新闻",cat:"新闻",channelName:"SportNow",channelUrl:"https://www.youtube.com/@SportNow",dur:"9:44",type:"external",link:"https://www.youtube.com/watch?v=1d9jXJvLE6E"},
+      {title:"游戏直播录屏",desc:"游戏实况",cat:"直播",channelName:"Game主播",channelUrl:"https://space.bilibili.com/123456",dur:"22:10",type:"external",link:"https://www.bilibili.com/video/BV1xx"}
+    ];
+    localStorage.setItem(VKEY, JSON.stringify(local));
+  }
+  originList = local;
+}
+// 全局初始化
+function renderAll(){
+  loadVideoData();
+  renderCard(originList);
+}
+// 页面启动
+renderBar();
+renderAll();
+$('pop').addEventListener('click',e=>{if(e.target === $('pop')) closePop();});
+</script>
+</body>
+</html>
