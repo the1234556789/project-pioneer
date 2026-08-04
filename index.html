@@ -47,7 +47,7 @@ button{padding:9px;border-radius:6px;border:none;cursor:pointer}
 </div>
 <div class="search-area">
 <input class="search-input" id="searchText" placeholder="搜索视频...">
-<button class="search-btn" onclick="doSearch()"> 搜索</button>
+<button class="search-btn" onclick="doSearch()">搜索</button>
 <button class="login-btn" onclick="openLogin()">登录 / 注册</button>
 </div>
 </header>
@@ -77,7 +77,23 @@ button{padding:9px;border-radius:6px;border:none;cursor:pointer}
 </div>
 
 <script>
-// 全局通用：读取URL搜索参数，所有页面共用
+function initDefaultVideo(){
+let videos=JSON.parse(localStorage.getItem("videos")||"[]");
+const exist=videos.find(v=>v.page==="dQw4w9WgXcQ.html");
+if(!exist){
+videos.push({
+title:"开发者演示视频",
+desc:"Project Pioneer官方演示",
+page:"dQw4w9WgXcQ.html",
+type:"local",
+author:"the1234556789",
+category:"all"
+});
+localStorage.setItem("videos",JSON.stringify(videos));
+}
+}
+initDefaultVideo();
+
 function getUrlParam(name){
   const params=new URLSearchParams(window.location.search);
   return params.get(name)||"";
@@ -111,22 +127,6 @@ alert("注册完成，请登录");
 
 function liveTip(){
 alert("此功能暂未开放，敬请期待！");
-}
-
-function initDefaultVideo(){
-let videos=JSON.parse(localStorage.getItem("videos")||"[]");
-const exist=videos.find(v=>v.page==="dQw4w9WgXcQ.html");
-if(!exist){
-videos.push({
-title:"开发者演示视频",
-desc:"Project Pioneer官方演示",
-page:"dQw4w9WgXcQ.html",
-type:"local",
-author:"the1234556789",
-category:"all"
-});
-localStorage.setItem("videos",JSON.stringify(videos));
-}
 }
 
 let nowCat="all";
@@ -167,7 +167,6 @@ html+=`
 document.getElementById("videoGrid").innerHTML=html||"<p>暂无视频内容</p>";
 }
 
-initDefaultVideo();
 keyword=getUrlParam("q").toLowerCase();
 document.getElementById("searchText").value=getUrlParam("q");
 renderVideo();
