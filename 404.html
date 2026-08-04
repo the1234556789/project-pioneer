@@ -3,255 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>404 页面不存在 - Project Pioneer</title>
+<title>404 页面不存在 | Project Pioneer</title>
 <style>
-* { margin:0; padding:0; box-sizing: border-box; }
-body { font-family: Roboto, Arial, "PingFang SC", sans-serif; background: #0f0f0f; color: #f1f1f1; min-height: 100vh; }
-/* 顶栏 和首页完全一致 */
-header {
-  position: sticky; top: 0; z-index: 10;
-  height: 56px; display: flex; align-items: center;
-  justify-content: space-between; padding: 0 16px;
-  background: #0f0f0f; border-bottom: 1px solid #222;
-}
-.left, .right { display: flex; align-items: center; gap: 16px; }
-.logo { color: #ff0000; font-size: 20px; font-weight: 700; letter-spacing: -1px; text-decoration: none; }
-.search { display: flex; flex:1; max-width: 600px; margin: 0 24px; }
-.search input {
-  flex: 1; height: 40px; border: 1px solid #303030;
-  border-radius: 20px 0 0 20px; background: #121212;
-  color: #fff; padding: 0 16px; outline: none; font-size: 14px;
-}
-.search button {
-  width: 64px; border: 1px solid #303030; border-left: none;
-  border-radius: 0 20px 20px 0; background: #222; color: #fff; cursor: pointer; font-size: 16px;
-}
-.search button:hover { background: #333; }
-/* 登录按钮样式 */
-.btn-login { padding: 6px 14px; border: 1px solid #3ea6ff; background: none; color: #3ea6ff; border-radius 16px; cursor: pointer; font-size: 13px; }
-.btn-login:hover { background: #1a3a5c; }
-.btn-reg { padding: 6px 10px; border: none; background: none; color: #3ea6ff; cursor: pointer; font-size: 13px; }
-.btn-reg:hover { background: #222; border-radius: 12px; }
-.u-chip { display: flex; align-items: center; gap: 8px; }
-.u-chip a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
-.u-avatar { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; }
-.u-name { font-size: 14px; }
-.u-badge { font-size: 10px; background: #4a0000; color: #ff6b6b; padding: 1px 6px; border-radius: 8px; }
-.btn-out { padding: 4px 10px; border: 1px solid #444; background: none; color: #fff; border-radius: 12px; cursor: pointer; font-size: 12px; }
-.btn-out:hover { background: #222; }
-/* 404 居中主体 */
-.main-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 56px);
-  padding: 30px 20px;
-  text-align: center;
-}
-.code-text {
-  font-size: 130px;
-  font-weight: 900;
-  color: #202020;
-  line-height: 1;
-}
-.title { font-size: 28px; margin:10px 0; }
-.desc { color:#aaa; max-width:520px; line-height:1.7; margin-bottom:30px; }
-.back-home {
-  padding:12px 30px;
-  background:#3ea6ff;
-  color:#000;
-  text-decoration:none;
-  border-radius:8px;
-  font-weight:500;
-  font-size:15px;
-}
-.back-home:hover { background:#2d8fe6; }
-/* 登录弹窗 复用全站样式 */
-.mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 200; align-items: center; justify-content: center; }
-.mask.on { display: flex; }
-.pop { background: #1a1a1a; border-radius: 12px; padding: 24px; width: 90%; max-width: 360px; border: 1px solid #333; }
-.pop h2 { margin-bottom: 16px; font-size: 16px; color: #fff; }
-.tabs { display: flex; margin-bottom: 16px; border-bottom: 1px solid #333; }
-.tab { flex: 1; text-align: center; padding: 8px; cursor: pointer; color: #aaa; border-bottom: 2px solid transparent; font-size: 14px; }
-.tab.sel { color: #3ea6ff; border-bottom-color: #3ea6ff; font-weight: 500; }
-.pnl { display: none; }
-.pnl.on { display: block; }
-.pop input { width: 100%; padding: 10px 12px; margin-bottom: 12px; border: 1px solid #444; border-radius: 8px; font-size: 14px; outline: none; background: #121212; color: #fff; box-sizing: border-box; }
-.pop input:focus { border-color: #3ea6ff; }
-.pop .go { width: 100%; padding: 10px; background: #3ea6ff; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; }
-.pop .go:hover { background: #2d8fe6; }
-.err { color: #ff6b6b; font-size: 12px; margin-bottom: 8px; min-height: 14px; }
-.info { font-size: 12px; color: #3ea6ff; margin-bottom: 8px; padding: 8px; background: #1a2a3a; border-radius: 6px; }
-@media (max-width: 900px) {
-  .search { margin: 0 8px; }
-  .code-text { font-size:90px; }
-  .title { font-size:22px; }
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;}
+body{background:#0f0f0f;color:#fff;}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#181818;position:sticky;top:0;z-index:99;gap:12px;flex-wrap:wrap;}
+.logo{font-size:22px;font-weight:bold;color:#fff;text-decoration:none}
+.nav a{color:#ddd;text-decoration:none;margin:0 10px;padding:6px 10px;border-radius:6px}
+.nav a:hover{background:#272727}
+.search-area{display:flex;gap:0px;align-items:center}
+.search-input{padding:10px 14px;border:none;border-radius:20px 0 0 20px;width:240px;background:#121212;color:#fff;border:1px solid #333;outline:none}
+.search-input:focus{border-color:#448aff}
+.search-btn{background:#272727;color:#fff;border:none;padding:10px 14px;border-radius:0 20px 20px 0;cursor:pointer;transition:0.2s}
+.search-btn:hover{background:#448aff}
+.login-btn{padding:8px 16px;border-radius:20px;border:1px solid #448aff;background:transparent;color:#448aff;cursor:pointer}
+.container{max-width:700px;margin:80px auto;text-align:center;padding:20px}
+.back-home{display:inline-block;margin-top:24px;padding:10px 22px;background:#448aff;border-radius:8px;color:#fff;text-decoration:none}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:1000}
+.modal-box{background:#181818;padding:26px;border-radius:10px;width:min(360px,90%)}
+.modal-box h3{margin-bottom:14px;}
+.modal-box input{width:100%;padding:10px;margin:8px 0;background:#111;border:1px solid #333;color:#fff;border-radius:6px}
+.btn-group{display:flex;gap:10px;margin-top:12px}
+button{padding:9px;border-radius:6px;border:none;cursor:pointer}
+.primary{background:#448aff;color:white}
 </style>
 </head>
 <body>
-<!-- 登录注册弹窗（和首页完全通用） -->
-<div class="mask" id="pop">
-  <div class="pop">
-    <h2>登录</h2>
-    <div class="tabs">
-      <div class="tab sel" onclick="tab('login')">登录</div>
-      <div class="tab" onclick="tab('reg')">注册</div>
-    </div>
-    <div class="pnl on" id="p-login">
-      <div class="err" id="e-login"></div>
-      <input id="l-user" placeholder="用户名 / 邮箱">
-      <input id="l-pw" type="password" placeholder="密码">
-      <button class="go" onclick="doLogin()">登录</button>
-    </div>
-    <div class="pnl" id="p-reg">
-      <div class="err" id="e-reg"></div>
-      <input id="r-mail" placeholder="邮箱">
-      <input id="r-name" placeholder="昵称">
-      <input id="r-pw" type="password" placeholder="密码（至少6位）">
-      <button class="go" onclick="sendCode()">发送验证码</button>
-      <div class="info" id="v-tip" style="display:none"></div>
-      <input id="r-code" placeholder="6位验证码" style="display:none">
-      <button class="go" id="r-go" onclick="doReg()" style="display:none">完成注册</button>
-    </div>
-  </div>
-</div>
-
-<!-- 顶部导航：Logo + 搜索框 + 登录/用户栏 -->
 <header>
-  <div class="left">
-    <a href="index.html" class="logo">▶ Project Pioneer</a>
-  </div>
-  <div class="search">
-    <input id="searchInput" placeholder="搜索影片..." onkeydown="if(event.key==='Enter')doSearch()">
-    <button onclick="doSearch()">🔍</button>
-  </div>
-  <div class="right" id="abar"></div>
+<a class="logo" href="index.html">Project Pioneer</a>
+<div class="nav">
+<a href="index.html">首页</a>
+<a href="upload.html">上传视频</a>
+</div>
+<div class="search-area">
+<input class="search-input" id="searchText" placeholder="搜索视频...">
+<button class="search-btn" onclick="doSearch()"> 搜索</button>
+<button class="login-btn" onclick="openLogin()">登录 / 注册</button>
+</div>
 </header>
 
-<!-- 404内容区域 -->
-<div class="main-wrap">
-  <div class="code-text">404</div>
-  <h1 class="title">页面找不到</h1>
-  <p class="desc">你访问的页面不存在、链接失效或路径错误。可以使用顶部搜索查找视频，或返回首页浏览全部内容。</p>
-  <a href="index.html" class="back-home">返回首页</a>
+<div class="container">
+<h1>404</h1>
+<p>您访问的页面不存在，链接可能失效或已被移除</p>
+<a class="back-home" href="index.html">返回首页</a>
+</div>
+
+<div class="modal" id="loginModal">
+<div class="modal-box">
+<h3>账号登录</h3>
+<input id="username" placeholder="用户名">
+<input id="pwd" type="password" placeholder="密码">
+<div class="btn-group">
+<button class="primary" onclick="login()">登录</button>
+<button onclick="register()">注册账号</button>
+<button onclick="closeLogin()">关闭</button>
+</div>
+</div>
 </div>
 
 <script>
-// 存储key 和首页统一
-const SK = 'pp_user', UK = 'pp_users', VKEY = 'pp_videos';
-function $(id){return document.getElementById(id);}
-function safe(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-// 用户登录相关函数（完全复用首页逻辑）
-function getCur(){return JSON.parse(localStorage.getItem(SK)||'null');}
-function setCur(u){localStorage.setItem(SK,JSON.stringify(u));renderBar();}
-function rmCur(){localStorage.removeItem(SK);renderBar();}
-function allU(){return JSON.parse(localStorage.getItem(UK)||'[]');}
-// 渲染右上角登录/用户面板
-function renderBar(){
-  const u = getCur();
-  const abar = $('abar');
-  if(u){
-    abar.innerHTML = `<div class="u-chip">
-      <a href="./${u.name}/${u.name}.html">
-        <div class="u-avatar" style="background:${u.color}">${u.name[0]}</div>
-        <span class="u-name">${safe(u.name)}</span>
-        ${u.type==='creator'?'<span class="u-badge">创作者</span>':''}
-      </a>
-      <button class="btn-out" onclick="logout()">退出</button>
-    </div>`;
-  }else{
-    abar.innerHTML = `
-      <button class="btn-login" onclick="openPop()">登录</button>
-      <button class="btn-reg" onclick="openPop();tab('reg')">注册</button>
-    `;
-  }
+function getUrlParam(name){
+  const params=new URLSearchParams(window.location.search);
+  return params.get(name)||"";
 }
-// 弹窗控制
-function openPop(){ $('pop').classList.add('on'); tab('login'); }
-function closePop(){ $('pop').classList.remove('on'); }
-function tab(t){
-  document.querySelectorAll('.tab')[0].className='tab'+(t==='login'?' sel':'');
-  document.querySelectorAll('.tab')[1].className='tab'+(t==='reg'?' sel':'');
-  $('p-login').className='pnl'+(t==='login'?' on':'');
-  $('p-reg').className='pnl'+(t==='reg'?' on':'');
-  $('e-login').textContent=''; $('e-reg').textContent='';
-  $('l-user').value=''; $('l-pw').value='';
-  $('r-mail').value=''; $('r-name').value=''; $('r-pw').value=''; $('r-code').value='';
-  $('v-tip').style.display='none'; $('r-code').style.display='none'; $('r-go').style.display='none';
-}
-// 登录逻辑（兼容创作者密码文件夹）
-async function doLogin(){
-  const n = $('l-user').value.trim();
-  const p = $('l-pw').value;
-  const err = $('e-login');
-  err.textContent = '';
-  if(!n||!p){err.textContent='请填写账号密码';return;}
-  try{
-    const res = await fetch('./'+encodeURIComponent(n)+'/密码.txt',{cache:'no-store'});
-    if(res.ok){
-      const pwdFile = (await res.text()).trim();
-      if(pwd === p){
-        setCur({name:n,color:'#cc0000',type:'creator'});
-        closePop();
-        return;
-      }else err.textContent='密码错误';
-      return;
-    }
-  }catch(e){}
-  const users = allU();
-  const target = users.find(x=> (x.name===n || x.email===n) && x.pw===p);
-  if(target){
-    setCur({name:target.name,color:target.color,type:'user'});
-    closePop();
-  }else err.textContent='账号或密码错误';
-}
-// 注册验证码
-let _vc='',_ve=0,_vn='',_vp='';
-function sendCode(){
-  const mail = $('r-mail').value.trim();
-  const name = $('r-name').value.trim();
-  const pwd = $('r-pw').value;
-  const err = $('e-reg');
-  err.textContent='';
-  if(!/^.+@.+\..+$/.test(mail)){err.textContent='邮箱格式错误';return;}
-  if(!name){err.textContent='填写昵称';return;}
-  if(pwd.length<6){err.textContent='密码至少6位';return;}
-  if(allU().some(x=>x.email===mail)){err.textContent='邮箱已注册';return;}
-  _vc = String(Math.floor(100000+Math.random()*900000));
-  _ve = Date.now()+300000;
-  _vn = name; _vp = pwd;
-  $('v-tip').style.display='block';
-  $('v-tip').textContent='验证码：'+_vc;
-  $('r-code').style.display='block';
-  $('r-go').style.display='block';
-}
-function doReg(){
-  const code = $('r-code').value.trim();
-  const err = $('e-reg');
-  if(!_vc || Date.now()>_ve){err.textContent='验证码过期';return;}
-  if(code !== _vc){err.textContent='验证码错误';return;}
-  const colors = ['#3ea6ff','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
-  const newUser = {email:$('r-mail').value.trim(), name:_vn, pw:_vp, color:colors[Math.floor(Math.random()*colors.length)]};
-  const userList = allU();
-  user.push(newUser);
-  localStorage.setItem(UK, JSON.stringify(userList));
-  setCur({name:_vn, color:newUser.color, type:'user'});
-  _vc=''; closePop();
-}
-function logout(){ rmCur(); renderBar(); }
-// 搜索功能：跳转首页带关键词
 function doSearch(){
-  const kw = $('searchInput').value.trim();
-  location.href = `index.html?kw=${encodeURIComponent(kw)}`;
+  let key=document.getElementById("searchText").value;
+  location.href="index.html?q="+encodeURIComponent(key);
 }
-// 遮罩点击关闭弹窗
-$('pop').addEventListener('click', e=>{
-  if(e.target === $('pop')) closePop();
-});
-// 页面初始化
-renderBar();
+function openLogin(){document.getElementById("loginModal").style.display="flex";}
+function closeLogin(){document.getElementById("loginModal").style.display="none";}
+function login(){
+const name=document.getElementById("username").value.trim();
+const pw=document.getElementById("pwd").value.trim();
+const userList=JSON.parse(localStorage.getItem("users")||"[]");
+const find=userList.find(u=>u.name===name&&u.pwd===pw);
+if(find){
+localStorage.setItem("nowUser",JSON.stringify(find));
+alert("登录成功！");
+closeLogin();
+}else{
+alert("用户名或密码错误");
+}
+}
+function register(){
+const name=document.getElementById("username").value.trim();
+const pw=document.getElementById("pwd").value.trim();
+if(!name||!pw){alert("用户名密码不能为空");return;}
+let users=JSON.parse(localStorage.getItem("users")||"[]");
+if(users.find(x=>x.name===name)){alert("用户名已存在");return;}
+users.push({name,pw});
+localStorage.setItem("users",JSON.stringify(users));
+alert("注册完成，请登录");
+}
+document.getElementById("searchText").value=getUrlParam("q");
 </script>
 </body>
 </html>
