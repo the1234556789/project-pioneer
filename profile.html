@@ -3,508 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>频道 - Project Pioneer</title>
+<title>个人主页 | Project Pioneer</title>
 <style>
-* { margin:0; padding:0; box-sizing: border-box; }
-body { font-family: Roboto, Arial, "PingFang SC", sans-serif; background: #0f0f0f; color: #f1f1f1; }
-/* 顶栏 */
-header {
-  position: sticky; top: 0; z-index: 10;
-  height: 56px; display: flex; align-items: center;
-  justify-content: space-between; padding: 0 16px;
-  background: #0f0f0f; border-bottom: 1px solid #222;
-}
-.left, .right { display: flex; align-items: center; gap: 16px; }
-.logo { color: #ff0000; font-size: 20px; font-weight: 700; letter-spacing: -1px; text-decoration: none; }
-.back { color: #aaa; text-decoration: none; font-size:14px; }
-.back:hover { color:#fff; }
-.search { display: flex; flex:1; max-width: 600px; margin: 0 24px; }
-.search input {
-  flex: 1; height: 40px; border: 1px solid #303030;
-  border-radius: 20px 0 0 20px; background: #121212;
-  color: #fff; padding: 0 16px; outline: none; font-size: 14px;
-}
-.search button {
-  width: 64px; border: 1px solid #303030; border-left: none;
-  border-radius: 0 20px 20px 0; background: #222; color: #fff; cursor: pointer; font-size: 16px;
-}
-.search button:hover { background: #333; }
-/* 顶栏登录按钮 */
-.btn-login { padding: 6px 14px; border: 1px solid #3ea6ff; background: none; color: #3ea6ff; border-radius: 16px; cursor: pointer; font-size: 13px; }
-.btn-login:hover { background: #1a3a5c; }
-.btn-reg { padding: 6px 10px; border: none; background: none; color: #3ea6ff; cursor: pointer; font-size: 13px; }
-.btn-reg:hover { background: #222; border-radius: 12px; }
-.u-chip { display: flex; align-items: center; gap: 8px; }
-.u-chip a { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
-.u-avatar { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; cursor: pointer; }
-.u-name { font-size: 14px; }
-.u-badge { font-size: 10px; background: #4a0000; color: #ff6b6b; padding: 1px 6px; border-radius: 8px; }
-.btn-out { padding: 4px 10px; border: 1px solid #444; background: none; color: #fff; border-radius: 12px; cursor: pointer; font-size: 12px; }
-.btn-out:hover { background: #222; }
-/* 频道横幅 */
-.banner {
-  width: 100%; height: 180px;
-  background: linear-gradient(135deg,#2563eb,#1e40af);
-  position: relative;
-}
-.channel-header {
-  max-width: 1100px; margin: 0 auto; padding: 0 24px;
-  position: relative; margin-top: -48px; margin-bottom: 24px;
-}
-.channel-avatar {
-  width: 96px; height: 96px; border-radius: 50%;
-  background: #2563eb; color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 40px; font-weight: 700;
-  border: 4px solid #0f0f0f; margin-bottom: 12px;
-}
-.channel-name { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-.channel-handle { font-size: 14px; color: #aaa; margin-bottom: 12px; }
-.channel-desc { font-size: 14px; line-height: 1.6; color: #ccc; max-width: 600px; margin-bottom: 12px; }
-.channel-stats { font-size: 13px; color: #aaa; margin-bottom: 16px; }
-.channel-actions { display: flex; gap: 12px; }
-.btn-sub {
-  padding: 10px 20px; background: #fff; color: #0f0f0f;
-  border: none; border-radius: 18px; font-weight: 500; cursor: pointer; font-size: 14px;
-}
-.btn-sub.subbed { background:#aaa; }
-.btn-sub:hover { background: #ddd; }
-.btn-share {
-  padding: 10px 20px; background: #272727; color: #fff;
-  border: none; border-radius: 18px; cursor: pointer; font-size: 14px;
-}
-.btn-share:hover { background: #333; }
-/* 标签栏 */
-.channel-tabs {
-  display: flex; gap: 0; border-bottom: 1px solid #222;
-  max-width: 1100px; margin: 0 auto; padding: 0 24px;
-}
-.channel-tab {
-  padding: 12px 24px; cursor: pointer; font-size: 14px; color: #aaa;
-  border-bottom: 2px solid transparent;
-}
-.channel-tab.active { color: #fff; border-bottom-color: #2563eb; font-weight: 500; }
-.channel-tab:hover { color: #fff; }
-/* 内容区 */
-.content {
-  max-width: 1100px; margin: 0 auto; padding: 24px;
-}
-.section-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
-/* 视频网格 */
-.video-grid {
-  display: grid; gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-}
-.video-card { cursor: pointer; text-decoration: none; color: inherit; }
-.video-card .thumb {
-  aspect-ratio: 16/9; border-radius: 12px;
-  background: linear-gradient(135deg, #303030, #1a1a1a);
-  position: relative; margin-bottom: 10px;
-}
-.video-card .dur {
-  position: absolute; right: 8px; bottom: 8px;
-  background: rgba(0,0,0,.85); font-size: 12px; padding: 2px 6px; border-radius: 4px;
-}
-.video-card h4 { font-size: 14px; line-height: 1.3; margin-bottom: 4px; }
-.video-card p { font-size: 12px; color: #aaa; }
-.empty-tip { padding:60px;text-align:center;color:#aaa;font-size:16px; }
-/* 评论 */
-.comment-item {
-  display: flex; gap: 12px; margin-bottom: 16px;
-  padding-bottom: 16px; border-bottom: 1px solid #222;
-}
-.comment-avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  color: #fff; display: flex; align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 600; flex-shrink: 0;
-}
-.comment-body { flex: 1; }
-.comment-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
-.comment-author { font-size: 13px; font-weight: 600; }
-.comment-time { font-size: 11px; color: #aaa; }
-.comment-text { font-size: 14px; line-height: 1.5; color: #ddd; }
-/* 关于 */
-.about-section { display: none; }
-.about-section.on { display: block; }
-.about-card {
-  background: #1a1a1a; border-radius: 12px; padding: 20px;
-  margin-bottom: 16px; border: 1px solid #333;
-}
-.about-card h3 { font-size: 16px; margin-bottom: 12px; }
-.about-card p { font-size: 14px; color: #ccc; line-height: 1.6; }
-.home-link {
-  display: inline-block; margin-top: 24px; color: #3ea6ff;
-  text-decoration: none; font-size: 14px;
-}
-.home-link:hover { text-decoration: underline; }
-/* 登录弹窗 */
-.mask { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index:200;align-items:center;justify-content:center; }
-.mask.on { display:flex; }
-.pop { background:#1a1a1a;border-radius:12px;padding:24px;width:90%;max-width:360px;border:1px solid #333; }
-.pop h2 { margin-bottom:16px;font-size:16px;color:#fff; }
-.tabs { display:flex;margin-bottom:16px;border-bottom:1px solid #333; }
-.tab { flex:1;text-align:center;padding:8px;cursor:pointer;color:#aaa;border-bottom:2px solid transparent;font-size:14px; }
-.tab.sel { color:#3ea6ff;border-bottom-color:#3ea6ff;font-weight:500; }
-.pnl { display:none; }
-.pnl.on { display:block; }
-.pop input { width:100%;padding:10px 12px;margin-bottom:12px;border:1px solid #444;border-radius:8px;font-size:14px;outline:none;background:#121212;color:#fff;box-sizing:border-box; }
-.pop input:focus { border-color:#3ea6ff; }
-.pop .go { width:100%;padding:10px;background:#3ea6ff;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer; }
-.pop .go:hover { background:#2d8fe6; }
-.err { color:#ff6b6b;font-size:12px;margin-bottom:8px;min-height:14px; }
-.info { font-size:12px;color:#3ea6ff;margin-bottom:8px;padding:8px;background:#1a2a3a;border-radius:6px; }
-@media (max-width: 768px) {
-  .banner { height: 120px; }
-  .channel-avatar { width: 72px; height: 72px; font-size: 28px; }
-  .channel-name { font-size: 18px; }
-  .search { margin:0 8px; }
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;}
+body{background:#0f0f0f;color:#fff;}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#181818;position:sticky;top:0;z-index:99;gap:12px;flex-wrap:wrap;}
+.logo{font-size:22px;font-weight:bold;color:#fff;text-decoration:none}
+.nav a{color:#ddd;text-decoration:none;margin:0 10px;padding:6px 10px;border-radius:6px}
+.nav a:hover{background:#272727}
+.search-input{padding:8px 12px;border:none;border-radius:4px;width:260px;background:#121212;color:#fff;border:1px solid #333}
+.login-btn{padding:8px 16px;border-radius:20px;border:1px solid #448aff;background:transparent;color:#448aff;cursor:pointer}
+.container{max-width:960px;margin:30px auto;padding:0 20px}
+.user-card{background:#181818;border-radius:12px;padding:24px;margin-bottom:24px}
+.username{font-size:26px;font-weight:bold;margin-bottom:8px}
+.desc{color:#aaa;margin-bottom:16px}
+.btn-share{padding:8px 16px;background:#448aff;border:none;color:#fff;border-radius:6px;cursor:pointer}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.video-card{background:#181818;border-radius:10px;overflow:hidden;cursor:pointer}
+.video-card .thumb{height:146px;background:#222}
+.video-card .info{padding:12px}
+.video-card h4{margin-bottom:4px}
+.video-card p{color:#aaa;font-size:13px}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:1000}
+.modal-box{background:#181818;padding:26px;border-radius:10px;width:min(360px,90%)}
+.modal-box h3{margin-bottom:14px;}
+.modal-box input{width:100%;padding:10px;margin:8px 0;background:#111;border:1px solid #333;color:#fff;border-radius:6px}
+.btn-group{display:flex;gap:10px;margin-top:12px}
+button{padding:9px;border-radius:6px;border:none;cursor:pointer}
+.primary{background:#448aff;color:white}
 </style>
 </head>
 <body>
-<!-- 登录弹窗 -->
-<div class="mask" id="pop">
-  <div class="pop">
-    <h2>登录</h2>
-    <div class="tabs">
-      <div class="tab sel" onclick="tab('login')">登录</div>
-      <div class="tab" onclick="tab('reg')">注册</div>
-    </div>
-    <div class="pnl on" id="p-login">
-      <div class="err" id="e-login"></div>
-      <input id="l-user" placeholder="用户名 / 邮箱">
-      <input id="l-pw" type="password" placeholder="密码">
-      <button class="go" onclick="doLogin()">登录</button>
-    </div>
-    <div class="pnl" id="p-reg">
-      <div class="err" id="e-reg"></div>
-      <input id="r-mail" placeholder="邮箱">
-      <input id="r-name" placeholder="昵称">
-      <input id="r-pw" type="password" placeholder="密码（至少6位）">
-      <button class="go" onclick="sendCode()">发送验证码</button>
-      <div class="info" id="v-tip" style="display:none"></div>
-      <input id="r-code" placeholder="6位验证码" style="display:none">
-      <button class="go" id="r-go" onclick="doReg()" style="display:none">完成注册</button>
-    </div>
-  </div>
-</div>
-<!-- 顶栏 -->
 <header>
-  <div class="left">
-    <a href="./index.html" class="back">← 返回</a>
-    <a href="./index.html" class="logo">▶ Project Pioneer</a>
-  </div>
-  <div class="search">
-    <input id="searchInput" placeholder="搜索影片..." onkeydown="if(event.key==='Enter')doSearch()">
-    <button onclick="doSearch()">🔍</button>
-  </div>
-  <div class="right" id="abar"></div>
+<a class="logo" href="index.html">Project Pioneer</a>
+<div class="nav">
+<a href="index.html">首页</a>
+<a href="upload.html">上传视频</a>
+<a href="about.html">关于我们</a>
+</div>
+<div>
+<input class="search-input" placeholder="搜索视频...">
+<button class="login-btn" onclick="openLogin()">登录 / 注册</button>
+</div>
 </header>
-<!-- 频道横幅 -->
-<div class="banner"></div>
-<div class="channel-header">
-  <div class="channel-avatar" id="chanAvatarChar">c</div>
-  <div class="channel-name" id="chanName">creator</div>
-  <div class="channel-handle" id="chanHandle">@creator</div>
-  <div class="channel-desc" id="chanDesc">创作者一号，各类原创视频制作者</div>
-  <div class="channel-stats" id="statText">加载中...</div>
-  <div class="channel-actions">
-    <button class="btn-sub" id="subBtn" onclick="toggleSub()">订阅</button>
-    <button class="btn-share" onclick="shareChannel()">分享频道</button>
-  </div>
+
+<div class="container">
+<div class="user-card">
+<div class="username" id="showName">加载中...</div>
+<div class="desc" id="showDesc">暂无简介</div>
+<button class="btn-share" onclick="shareChannel()">分享此频道</button>
 </div>
-<!-- 标签 -->
-<div class="channel-tabs">
-  <div class="channel-tab active" onclick="swTab('videos')">影片</div>
-  <div class="channel-tab" onclick="swTab('comments')">评论</div>
-  <div class="channel-tab" onclick="swTab('about')">关于</div>
+<h3 style="margin-bottom:16px;">作品列表</h3>
+<div class="video-grid" id="videoList"></div>
 </div>
-<div class="content">
-  <div id="tab-videos">
-    <div class="section-title">上传的视频</div>
-    <div class="video-grid" id="videoGrid"></div>
-  </div>
-  <div id="tab-comments" style="display:none">
-    <div class="section-title">该UP主公开评论</div>
-    <div id="my-comments"></div>
-  </div>
-  <div id="tab-about" class="about-section">
-    <div class="about-card">
-      <h3>频道简介</h3>
-      <p id="aboutText">入驻时间：2026年7月</p>
-    </div>
-    <div class="about-card" id="statCard">
-      <h3>频道统计</h3>
-      <p id="statDetail">加载中</p>
-    </div>
-    <a href="./index.html" class="home-link">← 返回首页</a>
-  </div>
+
+<div class="modal" id="loginModal">
+<div class="modal-box">
+<h3>账号登录</h3>
+<input id="username" placeholder="用户名">
+<input id="pwd" type="password" placeholder="密码">
+<div class="btn-group">
+<button class="primary" onclick="login()">登录</button>
+<button onclick="register()">注册账号</button>
+<button onclick="closeLogin()">关闭</button>
 </div>
+</div>
+</div>
+
 <script>
-// 存储常量（和播放页完全统一）
-const SK = 'pp_user', UK = 'pp_users', VKEY = 'pp_videos', SUB_KEY_PREFIX = 'sub_', CM_KEY = 'pp_cm';
-let CHANNEL_NAME = "";
-// 获取URL频道名
-function getUrlChan(){
-  const sp = new URLSearchParams(location.search);
-  return sp.get("name") || "creator";
+function openLogin(){document.getElementById("loginModal").style.display="flex";}
+function closeLogin(){document.getElementById("loginModal").style.display="none";}
+function login(){
+const name=document.getElementById("username").value.trim();
+const pw=document.getElementById("pwd").value.trim();
+const userList=JSON.parse(localStorage.getItem("users")||"[]");
+const find=userList.find(u=>u.name===name&&u.pwd===pw);
+if(find){
+localStorage.setItem("nowUser",JSON.stringify(find));
+alert("登录成功！");
+closeLogin();
+location.reload();
+}else{
+alert("用户名或密码错误");
 }
-function $(id){return document.getElementById(id);}
-function safe(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-// 用户工具
-function getCur(){return JSON.parse(localStorage.getItem(SK)||'null');}
-function setCur(u){localStorage.setItem(SK,JSON.stringify(u));renderBar();}
-function rmCur(){localStorage.removeItem(SK);renderBar();}
-function allU(){return JSON.parse(localStorage.getItem(UK)||'[]');}
-function getVideos(){return JSON.parse(localStorage.getItem(VKEY)||'[]');}
-// 右上角登录栏
-function renderBar(){
-  const u = getCur();
-  const abar = $('abar');
-  if(u){
-    abar.innerHTML = `<div class="u-chip">
-      <a href="./profile.html?name=${encodeURIComponent(u.name)}">
-        <div class="u-avatar" style="background:${u.color}">${u.name[0]}</div>
-        <span class="u-name">${safe(u.name)}</span>
-        ${u.type==='creator'?'<span class="u-badge">创作者</span>':''}
-      </a>
-      <button class="btn-out" onclick="logout()">退出</button>
-    </div>`;
-  }else{
-    abar.innerHTML = `
-      <button class="btn-login" onclick="openPop()">登录</button>
-      <button class="btn-reg" onclick="openPop();tab('reg')">注册</button>
-    `;
-  }
 }
-// 弹窗控制
-function openPop(){$('pop').classList.add('on');tab('login');}
-function closePop(){$('pop').classList.remove('on');}
-function tab(t){
-  const tabs = document.querySelectorAll('.tab');
-  tabs[0].className = 'tab'+(t==='login'?' sel':'');
-  tabs[1].className = 'tab'+(t==='reg'?' sel':'');
-  $('p-login').className = 'pnl'+(t==='login'?' on':'');
-  $('p-reg').className = 'pnl'+(t==='reg'?' on':'');
-  $('e-login').textContent='';$('e-reg').textContent='';
-  $('l-user').value=''; $('l-pw').value='';
-  $('r-mail').value=''; $('r-name').value=''; $('r-pw').value='';
-  $('r-code').value='';
-  $('v-tip').style.display='none';$('r-code').style.display='none';$('r-go').style.display='none';
+function register(){
+const name=document.getElementById("username").value.trim();
+const pw=document.getElementById("pwd").value.trim();
+if(!name||!pw){alert("用户名密码不能为空");return;}
+let users=JSON.parse(localStorage.getItem("users")||"[]");
+if(users.find(x=>x.name===name)){alert("用户名已存在");return;}
+users.push({name,pw});
+localStorage.setItem("users",JSON.stringify(users));
+alert("注册完成，请登录");
 }
-// 登录
-async function doLogin(){
-  const n = $('l-user').value.trim();
-  const p = $('l-pw').value;
-  const err = $('e-login');
-  err.textContent = '';
-  if(!n||!p){err.textContent='请填写账号密码';return;}
-  try{
-    const r = await fetch('./'+encodeURIComponent(n)+'/密码.txt',{cache:'no-store'});
-    if(r.ok){
-      const t = (await r.text()).trim();
-      if(t===p){setCur({name:n,color:'#2563eb',type:'creator'});closePop();renderAll();return;}
-      err.textContent='密码错误';return;
-    }
-  }catch(e){}
-  const us = allU();
-  const user = us.find(x=>x.name===n||x.email===n && x.pw===p);
-  if(user){setCur({name:user.name,color:user.color,type:'user'});closePop();renderAll();}
-  else err.textContent='账号不存在或密码错误';
+
+const urlParams=new URLSearchParams(location.search);
+let targetUser=urlParams.get("name");
+if(!targetUser){
+const currentLogin=JSON.parse(localStorage.getItem("nowUser")||"{}");
+targetUser=currentLogin.name||"访客";
 }
-// 注册
-let _vc='',_ve=0,_vn='',_vp='';
-function sendCode(){
-  const mail = $('r-mail').value.trim();
-  const name = $('r-name').value.trim();
-  const pw = $('r-pw').value;
-  const err = $('e-reg');
-  err.textContent='';
-  if(!/^.+@.+\..+$/.test(mail)){err.textContent='邮箱格式错误';return;}
-  if(!name){err.textContent='填写昵称';return;}
-  if(pw.length<6){err.textContent='密码至少6位';return;}
-  if(allU().some(x=>x.email===mail)){err.textContent='邮箱已注册';return;}
-  _vc = String(Math.floor(100000+Math.random()*900000));
-  _ve = Date.now()+300000;
-  _vn = name;_vp=pw;
-  $('v-tip').style.display='block';
-  $('v-tip').textContent='验证码：'+_vc;
-  $('r-code').style.display='block';
-  $('r-go').style.display='block';
-}
-function doReg(){
-  const c = $('r-code').value.trim();
-  const err = $('e-reg');
-  if(!_vc||Date.now()>_ve){err.textContent='验证码过期';return;}
-  if(c!==_vc){err.textContent='验证码错误';return;}
-  const colors = ['#3ea6ff','#137333','#e37400','#8e24aa','#0097a7','#cc0000','#2563eb'];
-  const newUser = {email:$('r-mail').value.trim(),name:_vn,pw:_vp,color:colors[Math.floor(Math.random()*colors.length)]};
-  const users = allU();
-  users.push(newUser);
-  localStorage.setItem(UK,JSON.stringify(users));
-  setCur({name:_vn,color:newUser.color,type:'user'});
-  _vc='';closePop();
-  renderAll();
-}
-function logout(){rmCur();renderAll();}
-// 订阅
-function getSubKey(){
-  return SUB_KEY_PREFIX + encodeURIComponent(CHANNEL_NAME);
-}
-function toggleSub(){
-  const subKey = getSubKey();
-  const sub = localStorage.getItem(subKey);
-  const btn = $('subBtn');
-  if(sub==='1'){
-    localStorage.removeItem(subKey);
-    btn.textContent='订阅';
-    btn.classList.remove('subbed');
-  }else{
-    localStorage.setItem(subKey,'1');
-    btn.textContent='已订阅';
-    btn.classList.add('subbed');
-  }
-}
-function initSubBtn(){
-  const subKey = getSubKey();
-  const btn = $('subBtn');
-  if(localStorage.getItem(subKey)==='1'){
-    btn.textContent='已订阅';
-    btn.classList.add('subbed');
-  }else{
-    btn.textContent='订阅';
-    btn.classList.remove('subbed');
-  }
-}
-// 分享
+document.getElementById("showName").innerText=targetUser;
+
 function shareChannel(){
-  const url = window.location.href;
-  const shareData = {
-    title: CHANNEL_NAME + " - Project Pioneer频道",
-    url: url,
-    text: "来看看"+CHANNEL_NAME+"的原创视频"
-  };
-  if(navigator.share && navigator.canShare(shareData)){
-    navigator.share(shareData).catch(()=>{
-      navigator.clipboard.writeText(url);
-      alert('分享弹窗打开失败，链接已复制！');
-    });
-  }else{
-    navigator.clipboard.writeText(url);
-    alert('当前环境不支持一键分享，链接已复制');
-  }
+const shareUrl=location.origin+location.pathname+"?name="+encodeURIComponent(targetUser);
+if(navigator.share){
+navigator.share({
+title:targetUser+" 的频道 | Project Pioneer",
+url:shareUrl
+});
+}else{
+navigator.clipboard.writeText(shareUrl);
+alert("频道链接已复制到剪贴板！");
 }
-// 搜索
-function doSearch(){
-  const kw = $('searchInput').value.trim();
-  location.href = `index.html?kw=${encodeURIComponent(kw)}`;
 }
-// 标签切换
-function swTab(t){
-  const tabs = document.querySelectorAll('.channel-tab');
-  tabs[0].classList.toggle('active',t==='videos');
-  tabs[1].classList.toggle('active',t==='comments');
-  tabs[2].classList.toggle('active',t==='about');
-  $('tab-videos').style.display = t==='videos'?'block':'none';
-  $('tab-comments').style.display = t==='comments'?'block':'none';
-  $('tab-about').className = 'about-section'+(t==='about'?' on':'');
-  if(t==='comments') loadComments();
+
+let videos=JSON.parse(localStorage.getItem("videos")||"[]");
+let html="";
+const userVideos=videos.filter(v=>v.author===targetUser);
+if(userVideos.length===0){
+html="<p>该用户暂时没有发布任何视频</p>";
+}else{
+userVideos.forEach(v=>{
+html+=`
+<div class="video-card" onclick="location.href='${v.page}'">
+<div class="thumb"></div>
+<div class="info">
+<h4>${v.title}</h4>
+<p>${v.author}</p>
+</div>
+</div>`;
+});
 }
-// 打开视频
-function openVideo(type,url){
-  if(type==='external') window.open(url,'_blank');
-  else location.href = url;
-}
-// 加载该UP主视频
-function loadMyVideos(){
-  const all = getVideos();
-  const mine = all.filter(v=>v.channelName === CHANNEL_NAME);
-  const grid = $('videoGrid');
-  if(mine.length===0){
-    grid.innerHTML = '<div class="empty-tip">该作者暂无上传视频</div>';
-    return mine;
-  }
-  let html = '';
-  mine.forEach(v=>{
-    html += `
-    <div class="video-card" onclick="openVideo('${v.type}','${v.link}')">
-      <div class="thumb"><span class="dur">${v.dur}</span></div>
-      <h4>${safe(v.title)}</h4>
-      <p>${safe(v.desc)}</p>
-    </div>`;
-  });
-  grid.innerHTML = html;
-  return mine;
-}
-// 统计
-function updateStats(videoList){
-  const count = videoList.length;
-  const fakeView = count * 10009000;
-  $('statText').textContent = `${count} 个视频 · ${fakeView.toLocaleString()}次观看`;
-  $('statDetail').innerHTML = `${count} 个视频<br>${fakeView.toLocaleString()}次总观看<br>12 条评论获赞`;
-}
-// 时间转换
-function timeAgo(ts){
-  const d = Date.now()-ts;
-  const m=60000,h=3600000,D=86400000;
-  if(d<m) return '刚刚';
-  if(d<h) return Math.floor(d/m)+'分钟前';
-  if(d<D) return Math.floor(d/h)+'小时前';
-  return Math.floor(d/D)+'天前';
-}
-// 加载仅该UP主评论
-function loadComments(){
-  const allCm = JSON.parse(localStorage.getItem(CM_KEY)||'[]');
-  const target = [];
-  allCm.forEach(top=>{
-    if(top.author===CHANNEL_NAME) target.push(top);
-    if(top.replies) top.replies.forEach(r=>{
-      if(r.author===CHANNEL_NAME) target.push(r);
-    });
-  });
-  const wrap = $('my-comments');
-  if(target.length===0){
-    wrap.innerHTML = '<p style="color:#aaa;font-size:14px">该UP主暂无公开评论</p>';
-    return;
-  }
-  let html = '';
-  target.forEach(c=>{
-    html += `
-    <div class="comment-item">
-      <div class="comment-avatar" style="background:#2563eb">${safe(c.author[0])}</div>
-      <div class="comment-body">
-        <div class="comment-meta">
-          <span class="comment-author">${safe(c.author)}</span>
-          <span class="comment-time">${timeAgo(c.time)}</span>
-        </div>
-        <div class="comment-text">${safe(c.text)}</div>
-      </div>
-    </div>`;
-  });
-  wrap.innerHTML = html;
-}
-// 初始化渲染全部频道信息
-function renderAll(){
-  CHANNEL_NAME = getUrlChan();
-  $('chanName').textContent = CHANNEL_NAME;
-  $('chanHandle').textContent = "@"+CHANNEL_NAME;
-  $('chanAvatarChar').textContent = CHANNEL_NAME[0];
-  // 适配索尼音乐中国简介
-  if(CHANNEL_NAME === "索尼音乐中国"){
-    $('chanDesc').textContent = "官方营业，经典欧美MV发布账号，代表作品Never Gonna Give You Up";
-    $('aboutText').innerText = "索尼音乐官方B站入驻账号\n入驻时间：2020年01月";
-  }else{
-    $('chanDesc').textContent = "创作者一号，各类原创视频制作者";
-    $('aboutText').innerText = "原创短视频创作者\n入驻时间：2026年7月";
-  }
-  renderBar();
-  initSubBtn();
-  const videos = loadMyVideos();
-  updateStats(videos);
-}
-renderAll();
-// 点击遮罩关闭弹窗
-$('pop').addEventListener('click',e=>{if(e.target === $('pop')) closePop();});
+document.getElementById("videoList").innerHTML=html;
 </script>
 </body>
 </html>
