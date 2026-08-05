@@ -63,7 +63,6 @@ Electron Desktop Client
 ## Client Info
 1. The installer supports Simplified Chinese and English.
 2. Please uninstall old versions before upgrading.
-3. "Huize Studio" is a virtual name for display only.
 
 ## Disclaimer
 This project is only a front-end technical demo for learning purposes.
