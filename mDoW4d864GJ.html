@@ -213,109 +213,7 @@ body { margin: 0; font-family: Arial, sans-serif; }
   font-size:12px;
   text-decoration:none;
 }
-/* 评论区域 */
-.comm-hdr { font-size:15px; font-weight:bold; margin-bottom:15px; }
-.comm-form { display:flex; gap:10px; margin-bottom:20px; }
-.comm-ava {
-  width:34px;
-  height:34px;
-  border-radius:50%;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:13px;
-  font-weight:bold;
-  flex-shrink:0;
-}
-.comm-inp {
-  flex:1;
-  border:none;
-  border-bottom:1px solid #ccc;
-  padding:6px 0;
-  font-size:14px;
-  outline:none;
-  resize:none;
-  min-height:24px;
-  max-height:120px;
-  font-family:inherit;
-}
-.comm-inp:focus { border-bottom-color:blue; }
-.comm-btns {
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  margin-top:6px;
-  opacity:0;
-  pointer-events:none;
-  transition:0.2s opacity;
-}
-.comm-btns.show { opacity:1; pointer-events:auto; }
-.comm-btns button {
-  border:none;
-  padding:5px 14px;
-  border-radius:14px;
-  cursor:pointer;
-  font-size:13px;
-}
-.btn-canc { background:transparent; color:#666; }
-.btn-canc:hover { background:#f5f5f5; }
-.btn-subm { background:#ccc; color:#fff; }
-.btn-subm.ready { background:blue; }
-.no-login {
-  text-align:center;
-  padding:20px;
-  color:#666;
-  font-size:14px;
-  background:#f9f9f9;
-  border-radius:10px;
-  margin-bottom:20px;
-}
-.no-login a { color:blue; font-weight:bold; cursor:pointer; }
-.comm-item { display:flex; gap:10px; margin-bottom:15px; }
-.comm-item .comm-ava { width:34px; height:34px; }
-.comm-body { flex:1; }
-.comm-meta {
-  display:flex;
-  align-items:baseline;
-  gap:8px;
-  margin-bottom:3px;
-}
-.comm-author { font-size:13px; font-weight:bold; }
-.comm-time { font-size:11px; color:#999; }
-.comm-text { font-size:14px; line-height:1.5; }
-.comm-tools {
-  display:flex;
-  gap:14px;
-  margin-top:4px;
-  font-size:12px;
-  color:#666;
-}
-.comm-tools span { cursor:pointer; }
-.comm-tools span:hover { color:blue; }
-.reply-box { margin-top:8px; display:none; }
-.reply-box.open { display:block; }
-.reply-box textarea {
-  width:100%;
-  border:1px solid #ccc;
-  border-radius:6px;
-  padding:6px 8px;
-  font-size:13px;
-  resize:vertical;
-  min-height:32px;
-  box-sizing:border-box;
-}
-.reply-box .row {
-  display:flex;
-  justify-content:flex-end;
-  gap:6px;
-  margin-top:5px;
-}
-.replies {
-  margin-top:10px;
-  padding-left:10px;
-  border-left:2px solid #eee;
-}
+
 /* 右侧推荐卡片 */
 .rec-hdr { font-size:14px; font-weight:bold; margin-bottom:12px; }
 .rec-card {
@@ -435,51 +333,41 @@ body { margin: 0; font-family: Arial, sans-serif; }
       <a class="tag">#索尼音乐</a>
     </div>
 
-    <div class="comm-hdr" id="ccnt">评论</div>
-    <div style="background:#fff8dc; padding:8px 12px; border-radius:8px; font-size:12px; color:#915900; margin-bottom:12px;">
-      ⚠️ 演示提示：评论仅保存在当前浏览器本地，清除缓存会丢失。
-      <div style="margin-top:6px;display:flex;gap:8px;">
-        <button id="exportComms" style="font-size:12px;padding:3px 8px;cursor:pointer;">导出评论JSON</button>
-        <button id="importComms" style="font-size:12px;padding:3px 8px;cursor:pointer;">导入评论JSON</button>
-        <input type="file" id="commFileInput" accept=".json" style="display:none">
-      </div>
-    </div>
 
-    <div id="carea"></div>
   </div>
 
-  <!-- 右侧相关推荐（搬运B站该视频下方推荐列表） -->
+  <!-- 右侧相关推荐（B站来源，点击在当前页播放器切换播放） -->
   <div class="right">
     <div class="rec-hdr">相关推荐视频</div>
-    <a class="rec-card" href="#">
+    <a class="rec-card" href="https://search.bilibili.com/all?keyword=Rickrocknroll" target="_blank" rel="noopener" data-bvid="BV1GJ411x7h7" data-title="大家好，我是Rick Astley,今天我入驻b站了！doge" data-author="Rickrocknroll" data-avatar="R" data-desc="官方MV Never Gonna Give You Up，Rick Astley入驻B站！" data-tags="Rick Astley,入驻,官方MV" data-plays="1.0亿次播放" data-date="2020-01-01" data-up="索尼音乐国际">
       <div class="rec-img"><span class="rec-dur">03:52</span></div>
       <div class="rec-info">
         <div class="rec-title">大家好，我是Rick Astley,今天我入驻b站了！doge</div>
         <div class="rec-author">Rickrocknroll</div>
       </div>
     </a>
-    <a class="rec-card" href="#">
+    <a class="rec-card" href="https://search.bilibili.com/all?keyword=KG-Area21" target="_blank" rel="noopener" data-bvid="BV1Pg411r7V5" data-title="【4K60帧】三十五年后Rickroll经典重现 AI修复版" data-author="KG-Area21" data-avatar="K" data-desc="AI修复补帧画质增强版 Rickroll 经典重现" data-tags="Rickroll,AI修复,4K" data-plays="520万次播放" data-date="2021-05-12" data-up="KG-Area21">
       <div class="rec-img"><span class="rec-dur">02:13</span></div>
       <div class="rec-info">
         <div class="rec-title">【4K60帧】三十五年后Rickroll经典重现 AI修复版</div>
         <div class="rec-author">KG-Area21</div>
       </div>
     </a>
-    <a class="rec-card" href="#">
+    <a class="rec-card" href="https://search.bilibili.com/all?keyword=SoulTorch" target="_blank" rel="noopener" data-bvid="" data-title="⚡你！被！骗！啦！⚡" data-author="SoulTorch" data-avatar="S" data-desc="经典 Rickroll 整活骗术合集" data-tags="Rickroll,整活,被骗" data-plays="86万次播放" data-date="2019-07-03" data-up="SoulTorch">
       <div class="rec-img"><span class="rec-dur">01:05</span></div>
       <div class="rec-info">
         <div class="rec-title">⚡你！被！骗！啦！⚡</div>
         <div class="rec-author">SoulTorch</div>
       </div>
     </a>
-    <a class="rec-card" href="#">
+    <a class="rec-card" href="https://search.bilibili.com/all?keyword=梗指南" target="_blank" rel="noopener" data-bvid="" data-title="rick roll是什么梗【梗指南】" data-author="梗指南" data-avatar="梗" data-desc="Rickroll 迷因科普：从永不放弃你到全网整活" data-tags="rick roll,梗,迷因,科普" data-plays="240万次播放" data-date="2020-11-20" data-up="梗指南">
       <div class="rec-img"><span class="rec-dur">01:16</span></div>
       <div class="rec-info">
         <div class="rec-title">rick roll是什么梗【梗指南】</div>
         <div class="rec-author">梗指南</div>
       </div>
     </a>
-    <a class="rec-card" href="#">
+    <a class="rec-card" href="https://search.bilibili.com/all?keyword=索尼音乐国际" target="_blank" rel="noopener" data-bvid="BV1GJ411x7h7" data-title="喜报，B站网友被这个视频诈骗一亿次了！" data-author="索尼音乐国际" data-avatar="索" data-desc="官方MV破亿播放纪念，互联网整活文化源头" data-tags="Rick Astley,破亿,整活神曲,索尼音乐" data-plays="1.0亿次播放" data-date="2020-01-01" data-up="索尼音乐国际">
       <div class="rec-img"><span class="rec-dur">00:32</span></div>
       <div class="rec-info">
         <div class="rec-title">喜报，B站网友被这个视频诈骗一亿次了！</div>
@@ -495,7 +383,50 @@ body { margin: 0; font-family: Arial, sans-serif; }
 // 本地存储键（全站统一）
 const STORAGE_USER_KEY = "pp_user";
 const STORAGE_USERS_LIST = "pp_users";
-const STORAGE_COMMS = "pp_comms";
+// 视频存储键（全站统一）
+const STORAGE_VIDEOS = "pp_videos";
+
+// 从推荐卡片 dataset 构造元数据
+function metaFromCard(c){
+  return {
+    title:c.dataset.title, author:c.dataset.author, avatar:c.dataset.avatar,
+    desc:c.dataset.desc, tags:c.dataset.tags, plays:c.dataset.plays,
+    date:c.dataset.date, up:c.dataset.up
+  };
+}
+
+// 切换 B站外链播放器 + 更新左侧信息区
+function playVideo(bvid, meta){
+  if(bvid){
+    const iframe = document.querySelector('.video-box iframe');
+    if(iframe) iframe.src = 'https://player.bilibili.com/player.html?bvid='+bvid+'&page=1&autoplay=1&danmaku=1&as_wide=1&high_quality=1';
+  }
+  if(!meta) return;
+  const t = document.getElementById('videoTitle'); if(t) t.textContent = meta.title;
+  const pc = document.getElementById('playCount'); if(pc) pc.textContent = (meta.plays||'') + (meta.plays?' · ':'') + 'B站来源';
+  const pt = document.getElementById('ptime'); if(pt) pt.textContent = (meta.date||'') + (meta.date?' 发布':'');
+  const ca = document.getElementById('chanAvatar'); if(ca){ ca.textContent = (meta.avatar||(meta.up||meta.author||'?')[0]); }
+  const cl = document.getElementById('chanLink'); if(cl){ cl.textContent = meta.up||meta.author; }
+  const vd = document.getElementById('videoDesc'); if(vd) vd.textContent = meta.desc||'';
+  const tb = document.getElementById('tagBox'); if(tb){
+    tb.innerHTML = '';
+    (meta.tags||'').split(',').forEach(function(tg){
+      tg=tg.trim(); if(!tg) return;
+      var a=document.createElement('a'); a.className='tag'; a.textContent='#'+tg; tb.appendChild(a);
+    });
+  }
+}
+
+// 初始化开发者演示视频（写入 pp_videos，保证"开发者发的视频"存在）
+function initDefaultVideo(){
+  var videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS)||"[]");
+  var SEED = {title:"开发者演示视频",desc:"Project Pioneer 官方演示 · Rickroll 经典原版MV",bvid:"BV1GJ411x7h7",page:"mDoW4d864GJ.html?bvid=BV1GJ411x7h7",type:"bilibili",author:"the1234556789",category:"all",plays:"1.0亿次播放",date:"2020-01-01",up:"索尼音乐国际"};
+  if(!videos.find(function(v){ return v.bvid===SEED.bvid; })){
+    videos.push(SEED);
+    localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
+  }
+}
+
 
 function gid(id){ return document.getElementById(id); }
 function safeStr(s){
@@ -598,7 +529,7 @@ async function doLogin(){
       const txt = (await resp.text()).trim();
       if(txt === pw){
         saveLoginUser({name, color:'#cc0000', type:'creator'});
-        closePop(); renderComm();
+        closePop();
         return;
       }else{
         errDom.textContent = '密码错误';
@@ -610,7 +541,7 @@ async function doLogin(){
   const found = all.find(x => (x.mail === name || x.name === name) && x.pw === pw);
   if(found){
     saveLoginUser({name:found.name, color:found.color, type:'user'});
-    closePop(); renderComm();
+    closePop();
   }else{
     errDom.textContent = '账号不存在或密码错误';
   }
@@ -654,248 +585,16 @@ function doReg(){
   all.push({mail:gid('r-mail').value.trim(), name:_rname, pw:_rpw, color});
   saveUsers(all);
   saveLoginUser({name:_rname, color, type:'user'});
-  closePop(); renderComm();
+  closePop();
 }
 function doLogout(){
   saveLoginUser(null);
-  renderComm();
 }
 
-// 评论初始化（B站该视频真实风格评论）
-let comments = JSON.parse(localStorage.getItem(STORAGE_COMMS) || 'null');
-if(!comments){
-  comments = [
-    {
-      id:1, author:"路人N-", color:"#065fd4",
-      text:"多少年了，每次点进来还是会被骗，Rickroll经典永不过时",
-      time:Date.now()-32000000, likes:12200, liked:false, replies:[
-        {id:11, author:"FF小黄人", color:"#e37400", text:"互联网新人必修课，看完再也不会上当", time:Date.now()-28000000, likes:3200, liked:false}
-      ]
-    },
-    {
-      id:2, author:"宫十五", color:"#137333",
-      text:"现在看到标题带MV、修复、教程四个字我直接警惕",
-      time:Date.now()-24000000, likes:8600, liked:false, replies:[]
-    },
-    {
-      id:3, author:"夜航信号灯", color:"#8e24aa",
-      text:"破亿播放！全球网友统一被骗记录诞生",
-      time:Date.now()-16000000, likes:5400, liked:false, replies:[
-        {id:31, author:"索尼音乐中国", color:"#cc0000", text:"感谢大家三十多年的喜爱~", time:Date.now()-12000000, likes:7800, liked:false}
-      ]
-    },
-    {
-      id:4, author:"Microsoft_Win11", color:"#0097a7",
-      text:"前奏一响，瞬间回到当年上网冲浪的日子",
-      time:Date.now()-9000000, likes:2100, liked:false, replies:[]
-    },
-    {
-      id:5, author:"゚゚初音ミク", color:"#e37400",
-      text:"三十多年前的老歌，居然活到了互联网整活圈天花板",
-      time:Date.now()-6000000, likes:1600, liked:false, replies:[]
-    }
-  ];
-  localStorage.setItem(STORAGE_COMMS, JSON.stringify(comments));
-}
-function saveComms(){
-  localStorage.setItem(STORAGE_COMMS, JSON.stringify(comments));
-}
-
-// 渲染评论输入区+评论列表
-function renderComm(){
-  const u = getLoginUser();
-  const carea = gid('carea');
-  if(u){
-    carea.innerHTML = `
-      <div class="comm-form">
-        <div class="comm-ava" style="background:${u.color}">${u.name[0]}</div>
-        <div style="flex:1">
-          <textarea class="comm-inp" id="ta" rows="1" placeholder="写下你的评论..."></textarea>
-          <div class="comm-btns" id="cbtns">
-            <button class="btn-canc" onclick="cCancel()">取消</button>
-            <button class="btn-subm" id="csubm">发送评论</button>
-          </div>
-        </div>
-      </div>
-      <div id="clist"></div>
-    `;
-    const ta = gid('ta');
-    const btns = gid('cbtns');
-    const subm = gid('csubm');
-    ta.addEventListener('focus', ()=> btns.classList.add('show'));
-    ta.addEventListener('input', ()=>{
-      ta.style.height = 'auto';
-      ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
-      subm.className = ta.value.trim() ? 'btn-subm ready' : 'btn-subm';
-    });
-    subm.onclick = ()=>{
-      const t = ta.value.trim();
-      if(!t) return;
-      comments.unshift({
-        id:Date.now(), author:u.name, color:u.color, text:t,
-        time:Date.now(), likes:0, liked:false, replies:[]
-      });
-      saveComms(); drawComms();
-      ta.value = ''; ta.style.height = 'auto';
-      subm.className = 'btn-subm';
-      btns.classList.remove('show');
-    };
-  }else{
-    carea.innerHTML = `
-      <div class="no-login">
-        想要发表评论？<a onclick="openPop()">登录</a> / <a onclick="openPop();swTab('reg')">注册</a>账号
-      </div>
-      <div id="clist"></div>
-    `;
-  }
-  drawComms();
-}
-function cCancel(){
-  const ta = gid('ta');
-  ta.value = ''; ta.style.height = 'auto';
-  gid('csubm').className = 'btn-subm';
-  gid('cbtns').classList.remove('show');
-  ta.blur();
-}
-// 渲染楼中楼回复
-function drawReply(c, r){
-  return `
-  <div class="comm-item">
-    <div class="comm-ava" style="background:${r.color}">${r.author[0]}</div>
-    <div class="comm-body">
-      <div class="comm-meta">
-        <span class="comm-author">${safeStr(r.author)}</span>
-        <span class="comm-time">${timeAgo(r.time)}</span>
-      </div>
-      <div class="comm-text">${safeStr(r.text)}</div>
-      <div class="comm-tools">
-        <span onclick="likeR(${c.id},${r.id})">${r.liked?'❤️':'🤍'} ${r.likes}</span>
-      </div>
-    </div>
-  </div>
-  `;
-}
-// 绘制全部评论
-function drawComms(){
-  let total = 0;
-  comments.forEach(c => total += 1 + (c.replies?.length||0));
-  gid('ccnt').textContent = '评论 ' + total;
-  const list = gid('clist');
-  if(!list) return;
-  const u = getLoginUser();
-  let html = '';
-  comments.forEach(c=>{
-    html += `
-    <div class="comm-item">
-      <div class="comm-ava" style="background:${c.color}">${c.author[0]}</div>
-      <div class="comm-body">
-        <div class="comm-meta">
-          <span class="comm-author">${safeStr(c.author)}</span>
-          <span class="comm-time">${timeAgo(c.time)}</span>
-        </div>
-        <div class="comm-text">${safeStr(c.text)}</div>
-        <div class="comm-tools">
-          <span onclick="likeC(${c.id})">${c.liked?'❤️':'🤍'} ${c.likes}</span>
-          ${u ? `<span onclick="openReply(${c.id})">↩ 回复</span>` : ''}
-          ${u && u.name === c.author ? `<span onclick="delC(${c.id})">🗑 删除</span>` : ''}
-        </div>
-        ${u ? `
-          <div class="reply-box" id="rb_${c.id}">
-            <textarea rows="1" placeholder="回复 @${safeStr(c.author)}..."></textarea>
-            <div class="row">
-              <button class="btn-canc" onclick="openReply(${c.id})">取消</button>
-              <button class="btn-subm ready" onclick="sendR(${c.id})">回复</button>
-            </div>
-          </div>
-        ` : ''}
-        ${c.replies?.length ? `<div class="replies">${c.replies.map(r=>drawReply(c,r)).join('')}</div>` : ''}
-      </div>
-    </div>
-    `;
-  });
-  list.innerHTML = html;
-}
-// 点赞主评论
-function likeC(id){
-  const target = comments.find(x=>x.id === id);
-  if(!target) return;
-  target.liked = !target.liked;
-  target.likes += target.liked ? 1 : -1;
-  saveComms(); drawComms();
-}
-// 点赞回复
-function likeR(cid, rid){
-  const c = comments.find(x=>x.id === cid);
-  if(!c) return;
-  const r = c.replies.find(x=>x.id === rid);
-  if(!r) return;
-  r.liked = !r.liked;
-  r.likes += r.liked ? 1 : -1;
-  saveComms(); drawComms();
-}
-// 展开/关闭回复框
-function openReply(id){
-  const box = gid('rb_'+id);
-  box.classList.toggle('open');
-}
-// 发送回复
-function sendR(id){
-  const u = getLoginUser();
-  if(!u){ openPop(); return; }
-  const box = gid('rb_'+id);
-  const ta = box.querySelector('textarea');
-  const text = ta.value.trim();
-  if(!text) return;
-  const c = comments.find(x=>x.id === id);
-  if(!c) return;
-  if(!c.replies) c.replies = [];
-  c.replies.push({
-    id:Date.now(), author:u.name, color:u.color, text,
-    time:Date.now(), likes:0, liked:false
-  });
-  saveComms(); drawComms();
-}
-// 删除自己的评论
-function delC(id){
-  comments = comments.filter(x=>x.id !== id);
-  saveComms(); drawComms();
-}
-// 评论导入导出功能
-function exportCommsFile(){
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(comments,null,2));
-  const dl = document.createElement('a');
-  dl.href = dataStr;
-  dl.download = "rickroll评论备份.json";
-  dl.click();
-}
-function importCommsFile(file){
-  const reader = new FileReader();
-  reader.onload = e=>{
-    try{
-      const arr = JSON.parse(e.target.result);
-      if(!Array.isArray(arr)){ alert("文件格式错误，必须是评论JSON"); return; }
-      comments = arr;
-      saveComms(); drawComms();
-      alert("评论导入成功！");
-    }catch(err){
-      alert("文件解析失败："+err);
-    }
-  };
-  reader.readAsText(file);
-}
 // 页面初始化
 function initPage(){
-  // 绑定导入导出按钮
-  const expBtn = document.getElementById("exportComms");
-  const impBtn = document.getElementById("importComms");
-  const fileInp = document.getElementById("commFileInput");
-  if(expBtn) expBtn.onclick = exportCommsFile;
-  if(impBtn) impBtn.onclick = ()=> fileInp.click();
-  if(fileInp){
-    fileInp.onchange = e=>{
-      if(e.target.files[0]) importCommsFile(e.target.files[0]);
-    }
-  }
+  // 保证开发者演示视频存在
+  initDefaultVideo();
   // UP主信息赋值
   const uploaderName = "索尼音乐中国";
   gid('chanLink').innerText = uploaderName;
@@ -905,7 +604,19 @@ function initPage(){
   gid('ptime').textContent = timeAgo(new Date("2020-01-01 07:43:23").getTime());
   // 渲染顶部用户栏+评论区
   renderBar();
-  renderComm();
+
+  // 绑定推荐卡片点击：站内切换播放器 + 更新左侧信息
+  document.querySelectorAll('.rec-card').forEach(function(card){
+    card.addEventListener('click', function(ev){
+      var bvid = card.dataset.bvid;
+      var meta = metaFromCard(card);
+      // 修饰键/中键/右键 -> 新标签页打开 B站原链接
+      if(ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.button===1 || ev.button===2){ return; }
+      ev.preventDefault();
+      if(bvid){ playVideo(bvid, meta); }
+      else { window.open(card.getAttribute('href'), '_blank', 'noopener'); }
+    });
+  });
   // 点击弹窗外部关闭弹窗
   gid('pop').addEventListener('click', e=>{
     if(e.target === gid('pop')) closePop();
