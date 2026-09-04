@@ -16,6 +16,9 @@ Project Pioneer 是一款复刻YouTube电脑端布局的网页视频平台。
 最新版本：v3.20.1
 [前往 Releases 下载](https://github.com/the1234556789/project-pioneer/releases/tag/v3.20.1)
 
+Pro版本:v4.0.0-pro
+[前往 Releases 下载](https://gitee.com/Wanderlust-Code/ProjectPioneer/releases/tag/v4.0.0-pro)
+
 ### 运行要求
 网页版
 任意现代浏览器（Chrome、Edge）
