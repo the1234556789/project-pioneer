@@ -13,11 +13,8 @@ Project Pioneer 是一款复刻YouTube电脑端布局的网页视频平台。
 本项目为独立视频网站，与我的世界启动器无任何关联。
 
 ## 📦 Windows 桌面客户端
-最新版本：v3.20.1
-[前往 Releases 下载](https://github.com/the1234556789/project-pioneer/releases/tag/v3.20.1)
-
-Pro版本:v4.0.0-pro
-[前往 Releases 下载](https://gitee.com/Wanderlust-Code/ProjectPioneer/releases/tag/v4.0.0-pro)
+最新版本：v4.0.0 and v4.0.0-pro
+[已经迁移至新网站](https://gitee.com/Wanderlust-Code/ProjectPioneer/releases#release-v4.0.0-pro-1)
 
 ### 运行要求
 网页版
