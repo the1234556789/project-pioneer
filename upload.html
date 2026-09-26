@@ -3,149 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>上传视频 | Project Pioneer</title>
+<title>发布视频 - Project Pioneer</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;}
-body{background:#0f0f0f;color:#fff;}
-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#181818;position:sticky;top:0;z-index:99;gap:12px;flex-wrap:wrap;}
-.logo{font-size:22px;font-weight:bold;color:#fff;text-decoration:none}
-.nav a{color:#ddd;text-decoration:none;margin:0 10px;padding:6px 10px;border-radius:6px}
-.nav a:hover{background:#272727}
-.search-area{display:flex;gap:0px;align-items:center}
-.search-input{padding:10px 14px;border:none;border-radius:20px 0 0 20px;width:240px;background:#121212;color:#fff;border:1px solid #333;outline:none}
-.search-input:focus{border-color:#448aff}
-.search-btn{background:#272727;color:#fff;border:none;padding:10px 14px;border-radius:0 20px 20px 0;cursor:pointer;transition:0.2s}
-.search-btn:hover{background:#448aff}
-.login-btn{padding:8px 16px;border-radius:20px;border:1px solid #448aff;background:transparent;color:#448aff;cursor:pointer}
-.container{max-width:640px;margin:40px auto;padding:0 20px}
-.form-box{background:#181818;padding:26px;border-radius:12px}
-input,textarea,select{width:100%;padding:10px;margin:8px 0;background:#111;border:1px solid #333;color:#fff;border-radius:6px}
-.submit{background:#448aff;border:none;padding:11px;color:#fff;font-weight:bold;cursor:pointer}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;z-index:1000}
-.modal-box{background:#181818;padding:26px;border-radius:10px;width:min(360px,90%)}
-.modal-box h3{margin-bottom:14px;}
-.modal-box input{width:100%;padding:10px;margin:8px 0;background:#111;border:1px solid #333;color:#fff;border-radius:6px}
-.btn-group{display:flex;gap:10px;margin-top:12px}
-button{padding:9px;border-radius:6px;border:none;cursor:pointer}
-.primary{background:#448aff;color:white}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; }
+.topbar { height: 56px; border-bottom: 1px solid #ddd; display: flex; align-items: center; padding: 0 24px; gap: 16px; position: sticky; top: 0; background: white; z-index: 100; }
+.logo { font-size: 20px; font-weight: bold; text-decoration: none; color: #000; cursor: pointer; }
+.logo span { color: #ff0000; }
+.spacer { flex: 1; }
+.user-area { display: flex; align-items: center; gap: 10px; }
+.u-avatar { width: 32px; height: 32px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; text-decoration: none; cursor: pointer; }
+.u-name { font-size: 14px; cursor: pointer; }
+.u-badge { font-size: 10px; background: #fee; color: #c00; padding: 2px 6px; border-radius: 8px; }
+.btn-out { padding: 5px 12px; border: 1px solid #ccc; background: white; border-radius: 14px; cursor: pointer; font-size: 12px; }
+.cover { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+.cover.show { display: flex; }
+.popup { background: white; border-radius: 12px; padding: 24px; width: 360px; }
+.popup h2 { margin: 0 0 16px 0; font-size: 18px; }
+.tabs { display: flex; margin-bottom: 16px; border-bottom: 1px solid #ddd; }
+.tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: #666; border-bottom: 2px solid transparent; font-size: 14px; }
+.tab.on { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: bold; }
+.page { display: none; }
+.page.on { display: block; }
+.popup input { width: 100%; padding: 10px 12px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+.popup button.go { width: 100%; padding: 10px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+.err { color: #c00; font-size: 12px; min-height: 16px; margin-bottom: 8px; }
+.tip { font-size: 12px; color: #1a73e8; background: #e8f0fe; padding: 8px 12px; border-radius: 8px; margin-bottom: 10px; }
+.container { max-width: 800px; margin: 0 auto; padding: 24px; }
+.form-box { background: white; border-radius: 12px; padding: 24px; }
+.form-box h2 { margin-bottom: 20px; font-size: 18px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: #333; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; }
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #1a73e8; }
+.btn-submit { padding: 12px 32px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 500; }
+.btn-submit:hover { background: #1558b0; }
+.toast { position: fixed; top: 70px; right: 24px; background: #323232; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 300; opacity: 0; transform: translateY(-10px); transition: opacity 0.3s, transform 0.3s; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateY(0); }
+.footer { text-align: center; padding: 24px; color: #aaa; font-size: 12px; border-top: 1px solid #ddd; margin-top: 40px; }
 </style>
 </head>
 <body>
-<header>
-<a class="logo" href="index.html">Project Pioneer</a>
-<div class="nav">
-<a href="index.html">首页</a>
-<a href="upload.html">上传视频</a>
+
+<div class="cover" id="pop">
+  <div class="popup">
+    <h2>登录</h2>
+    <div class="tabs">
+      <div class="tab on" onclick="swTab('login')">登录</div>
+      <div class="tab" onclick="swTab('reg')">注册</div>
+    </div>
+    <div class="page on" id="pg-login">
+      <div class="err" id="e-login"></div>
+      <input id="l-user" placeholder="用户名 / 邮箱">
+      <input id="l-pw" type="password" placeholder="密码">
+      <button class="go" onclick="doLogin()">登录</button>
+    </div>
+    <div class="page" id="pg-reg">
+      <div class="err" id="e-reg"></div>
+      <input id="r-mail" placeholder="邮箱">
+      <input id="r-name" placeholder="昵称">
+      <input id="r-phone" placeholder="手机号（可选）">
+      <input id="r-pw" type="password" placeholder="密码（至少6位）">
+      <button class="go" onclick="doSend()">发送验证码</button>
+      <div class="tip" id="v-tip" style="display:none"></div>
+      <input id="r-code" placeholder="6位验证码" style="display:none">
+      <button class="go" id="r-go" onclick="doReg()" style="display:none">完成注册</button>
+    </div>
+  </div>
 </div>
-<div class="search-area">
-<input class="search-input" id="searchText" placeholder="搜索视频...">
-<button class="search-btn" onclick="doSearch()">搜索</button>
-<button class="login-btn" onclick="openLogin()">登录 / 注册</button>
+
+<div class="toast" id="toast"></div>
+
+<div class="topbar">
+  <a class="logo" onclick="location.href='index.html'">Project<span>Pioneer</span></a>
+  <div class="spacer"></div>
+  <div class="user-area" id="abar"></div>
 </div>
-</header>
 
 <div class="container">
-<div class="form-box">
-<h2>发布新视频</h2>
-<input id="vidTitle" placeholder="视频标题">
-<textarea id="vidDesc" placeholder="视频简介"></textarea>
-<input id="vidPage" placeholder="播放页面文件名，例如 mDoW4d864GJ.html">
-<select id="vidType">
-<option value="local">本地视频</option>
-<option value="external">第三方外链(B站/YouTube)</option>
-</select>
-<button class="submit" onclick="publish()">提交发布</button>
-</div>
+  <div class="form-box">
+    <h2>发布新视频</h2>
+    <div class="form-group">
+      <label>视频标题 *</label>
+      <input id="v-title" placeholder="输入视频标题">
+    </div>
+    <div class="form-group">
+      <label>视频描述</label>
+      <textarea id="v-desc" placeholder="输入视频描述"></textarea>
+    </div>
+    <div class="form-group">
+      <label>视频类型 *</label>
+      <select id="v-type">
+        <option value="bilibili">B站嵌入</option>
+        <option value="local">本地视频</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label id="l-page-label">BVID（如 BV1GJ411x7h7）</label>
+      <input id="v-page" placeholder="BV号 或 目标页面名（如 dQw4w9WgXcQ.html）">
+    </div>
+    <div class="form-group">
+      <label>分类</label>
+      <select id="v-cat">
+        <option value="music">音乐</option>
+        <option value="tech">科技</option>
+        <option value="game">游戏</option>
+        <option value="life">生活</option>
+        <option value="other">其他</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>来源频道名</label>
+      <input id="v-up" placeholder="如：索尼音乐中国">
+    </div>
+    <button class="btn-submit" onclick="doSubmit()">发布视频</button>
+  </div>
 </div>
 
-<div class="modal" id="loginModal">
-<div class="modal-box">
-<h3>账号登录</h3>
-<input id="username" placeholder="用户名">
-<input id="pwd" type="password" placeholder="密码">
-<div class="btn-group">
-<button class="primary" onclick="login()">登录</button>
-<button onclick="register()">注册账号</button>
-<button onclick="closeLogin()">关闭</button>
-</div>
-</div>
-</div>
+<div class="footer">Project Pioneer · 视频发布</div>
 
 <script>
-function initDefaultVideo(){
-let videos=JSON.parse(localStorage.getItem("videos")||"[]");
-const exist=videos.find(v=>v.page==="dQw4w9WgXcQ.html");
-if(!exist){
-videos.push({
-title:"开发者演示视频",
-desc:"Project Pioneer官方演示",
-page:"dQw4w9WgXcQ.html",
-type:"local",
-author:"the1234556789",
-category:"all"
-});
-localStorage.setItem("videos",JSON.stringify(videos));
-}
-}
-initDefaultVideo();
+const STORAGE_USER_KEY = "pp_user";
+const STORAGE_USERS_LIST = "pp_users";
+const STORAGE_VIDEOS = "pp_videos";
 
-function getUrlParam(name){
-  const params=new URLSearchParams(window.location.search);
-  return params.get(name)||"";
-}
-function doSearch(){
-  let key=document.getElementById("searchText").value;
-  location.href="index.html?q="+encodeURIComponent(key);
-}
-(function checkAuth(){
-const user=JSON.parse(localStorage.getItem("nowUser")||"null");
-if(!user){
-alert("访问拒绝！请先登录账号。即将返回首页");
-location.href="index.html";
-}
-})();
+function gid(id){ return document.getElementById(id); }
+function safeStr(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-function openLogin(){document.getElementById("loginModal").style.display="flex";}
-function closeLogin(){document.getElementById("loginModal").style.display="none";}
-function login(){
-const name=document.getElementById("username").value.trim();
-const pw=document.getElementById("pwd").value.trim();
-const userList=JSON.parse(localStorage.getItem("users")||"[]");
-const find=userList.find(u=>u.name===name&&u.pwd===pw);
-if(find){
-localStorage.setItem("nowUser",JSON.stringify(find));
-alert("登录成功！");
-closeLogin();
-}else{
-alert("用户名或密码错误");
-}
-}
-function register(){
-const name=document.getElementById("username").value.trim();
-const pw=document.getElementById("pwd").value.trim();
-if(!name||!pw){alert("用户名密码不能为空");return;}
-let users=JSON.parse(localStorage.getItem("users")||"[]");
-if(users.find(x=>x.name===name)){alert("用户名已存在");return;}
-users.push({name,pw});
-localStorage.setItem("users",JSON.stringify(users));
-alert("注册完成，请登录");
+function getLoginUser(){ const raw = localStorage.getItem(STORAGE_USER_KEY); return raw ? JSON.parse(raw) : null; }
+function saveLoginUser(u){ if(u) localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(u)); else localStorage.removeItem(STORAGE_USER_KEY); renderBar(); }
+function getUsers(){ const raw = localStorage.getItem(STORAGE_USERS_LIST); return raw ? JSON.parse(raw) : []; }
+function saveUsers(list){ localStorage.setItem(STORAGE_USERS_LIST, JSON.stringify(list)); }
+
+function renderBar(){
+  const u = getLoginUser(); const abar = gid('abar');
+  if(u){ abar.innerHTML = `<a class="u-avatar" style="background:${u.color}" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">${u.name[0]}</a><span class="u-name" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">${safeStr(u.name)}</span>${u.type==='creator'?'<span class="u-badge">创作者</span>':''}<button class="btn-out" onclick="doLogout()">退出</button>`; }
+  else{ abar.innerHTML = `<button class="btn-login" onclick="openPop()">登录</button><button class="btn-reg" onclick="openPop();swTab('reg')">注册</button>`; }
 }
 
-function publish(){
-const user=JSON.parse(localStorage.getItem("nowUser")||"null");
-if(!user){alert("请先登录账号！");openLogin();return;}
-const title=document.getElementById("vidTitle").value.trim();
-const desc=document.getElementById("vidDesc").value.trim();
-const page=document.getElementById("vidPage").value.trim();
-const type=document.getElementById("vidType").value;
-if(!title||!page){alert("标题和播放页面不能为空");return;}
-let videos=JSON.parse(localStorage.getItem("videos")||"[]");
-videos.push({title,desc,page,type,author:user.name,category:"all"});
-localStorage.setItem("videos",JSON.stringify(videos));
-alert("发布成功！即将返回首页");
-location.href="index.html";
+function openPop(){ gid('pop').classList.add('show'); swTab('login'); }
+function closePop(){ gid('pop').classList.remove('show'); }
+function swTab(t){
+  const tabs = document.querySelectorAll('.tabs .tab'); tabs.forEach(tab => tab.classList.remove('on'));
+  if(t === 'login'){ tabs[0].classList.add('on'); gid('pg-login').style.display = 'block'; gid('pg-reg').style.display = 'none'; gid('e-login').textContent = ''; }
+  else{ tabs[1].classList.add('on'); gid('pg-reg').style.display = 'block'; gid('pg-login').style.display = 'none'; gid('e-reg').textContent = ''; }
+  gid('l-user').value = ''; gid('l-pw').value = ''; gid('r-mail').value = ''; gid('r-name').value = ''; gid('r-phone').value = ''; gid('r-pw').value = ''; gid('r-code').value = ''; gid('v-tip').style.display = 'none'; gid('r-code').style.display = 'none'; gid('r-go').style.display = 'none';
 }
-document.getElementById("searchText").value=getUrlParam("q");
+
+async function doLogin(){
+  const name = gid('l-user').value.trim(); const pw = gid('l-pw').value; const err = gid('e-login'); err.textContent = '';
+  if(!name || !pw){ err.textContent = '请填写账号密码'; return; }
+  try{ const resp = await fetch('./'+encodeURIComponent(name)+'/密码.txt',{cache:'no-store'}); if(resp.ok){ const txt = (await resp.text()).trim(); if(txt === pw){ saveLoginUser({name,color:'#cc0000',type:'creator'}); closePop(); return; }else{ err.textContent = '密码错误'; return; } } }catch(e){}
+  const all = getUsers(); const found = all.find(x => (x.mail === name || x.name === name) && x.pw === pw);
+  if(found){ saveLoginUser({name:found.name,color:found.color,type:'user'}); closePop(); }
+  else err.textContent = '账号不存在或密码错误';
+}
+
+let _vcode='', _vexp=0, _rname='', _rpw='';
+function doSend(){
+  const mail = gid('r-mail').value.trim(); const name = gid('r-name').value.trim(); const phone = gid('r-phone').value.trim(); const pw = gid('r-pw').value; const err = gid('e-reg'); err.textContent = '';
+  if(!mail || !name || !pw){ err.textContent = '请填写完整信息'; return; }
+  if(phone && !/^1[3-9]\d{9}$/.test(phone)){ err.textContent = '手机号格式不正确'; return; }
+  if(pw.length < 6){ err.textContent = '密码至少6位'; return; }
+  if(getUsers().some(x => x.mail === mail)){ err.textContent = '该邮箱已注册'; return; }
+  if(getUsers().some(x => x.name === name)){ err.textContent = '该昵称已被占用'; return; }
+  if(phone && getUsers().some(x => x.phone === phone)){ err.textContent = '该手机号已注册'; return; }
+  _vcode = String(Math.floor(100000 + Math.random() * 900000)); _vexp = Date.now() + 300000; _rname = name; _rpw = pw;
+  gid('v-tip').style.display = 'block'; gid('v-tip').textContent = '演示验证码：' + _vcode;
+  gid('r-code').style.display = 'block'; gid('r-go').style.display = 'block';
+}
+function doReg(){
+  const code = gid('r-code').value.trim(); const err = gid('e-reg');
+  if(!_vcode) return; if(Date.now() > _vexp){ err.textContent = '验证码已过期'; return; } if(code !== _vcode){ err.textContent = '验证码错误'; return; }
+  const colors = ['#065fd4','#137333','#e37400','#8e24aa','#0097a7','#cc0000']; const color = colors[Math.floor(Math.random()*colors.length)];
+  const all = getUsers(); all.push({mail:mail,name:_rname,phone:gid('r-phone').value.trim(),pw:_rpw,color}); saveUsers(all); saveLoginUser({name:_rname,color,type:'user'}); closePop();
+}
+function doLogout(){ saveLoginUser(null); }
+
+function showToast(msg){
+  const t = gid('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function doSubmit(){
+  const u = getLoginUser();
+  if(!u){ showToast('请先登录'); openPop(); return; }
+  const title = gid('v-title').value.trim();
+  const desc = gid('v-desc').value.trim();
+  const type = gid('v-type').value;
+  const page = gid('v-page').value.trim();
+  const cat = gid('v-cat').value;
+  const up = gid('v-up').value.trim();
+  if(!title || !page){ showToast('标题和目标页面不能为空'); return; }
+  let videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS) || "[]");
+  if(videos.find(v => v.page === page)){ showToast('该页面已存在视频记录'); return; }
+  const entry = { title, desc, type, page, category: cat, up, date: new Date().toISOString().slice(0,10) };
+  if(type === 'bilibili'){ entry.bvid = page; }
+  videos.push(entry);
+  localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
+  showToast('发布成功！');
+  setTimeout(() => location.href = 'index.html', 1200);
+}
+
+function initPage(){
+  renderBar();
+  gid('v-type').addEventListener('change', function(){
+    gid('l-page-label').textContent = this.value === 'bilibili' ? 'BVID（如 BV1GJ411x7h7）' : '目标页面名（如 dQw4w9WgXcQ.html）';
+    gid('v-page').placeholder = this.value === 'bilibili' ? 'BV号' : '目标页面名（如 dQw4w9WgXcQ.html）';
+  });
+  gid('pop').addEventListener('click', e => { if(e.target === gid('pop')) closePop(); });
+}
+initPage();
 </script>
 </body>
 </html>
