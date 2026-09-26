@@ -6,264 +6,58 @@
 <title>【官方 MV】Never Gonna Give You Up - Rick Astley | Project Pioneer</title>
 <style>
 body { margin: 0; font-family: Arial, sans-serif; }
-/* 顶部导航栏 */
-.topbar {
-  height: 50px;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 15px;
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 100;
-}
-.logo {
-  font-size: 18px;
-  font-weight: bold;
-  text-decoration: none;
-  color: black;
-  cursor: pointer;
-}
+.topbar { height: 50px; border-bottom: 1px solid #ddd; display: flex; align-items: center; padding: 0 20px; gap: 15px; position: sticky; top: 0; background: white; z-index: 100; }
+.logo { font-size: 18px; font-weight: bold; text-decoration: none; color: black; cursor: pointer; }
 .logo span { color: red; }
 .spacer { flex: 1; }
-.btn-login {
-  padding: 6px 14px;
-  border: 1px solid blue;
-  background: white;
-  color: blue;
-  border-radius: 14px;
-  cursor: pointer;
-}
-.btn-reg {
-  padding: 6px 14px;
-  border: none;
-  background: white;
-  color: blue;
-  cursor: pointer;
-}
+.btn-login { padding: 6px 14px; border: 1px solid blue; background: white; color: blue; border-radius: 14px; cursor: pointer; }
+.btn-reg { padding: 6px 14px; border: none; background: white; color: blue; cursor: pointer; }
 .user-area { display: flex; align-items: center; gap: 8px; }
-.u-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-  text-decoration: none;
-  cursor: pointer;
-}
+.u-avatar { width: 30px; height: 30px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; text-decoration: none; cursor: pointer; }
 .u-name { font-size: 14px; cursor: pointer; }
-.u-badge {
-  font-size: 10px;
-  background: #fee;
-  color: red;
-  padding: 1px 5px;
-  border-radius: 6px;
-}
-.btn-out {
-  padding: 4px 10px;
-  border: 1px solid #ccc;
-  background: white;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 12px;
-}
-/* 登录弹窗遮罩 */
-.cover {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 200;
-  align-items: center;
-  justify-content: center;
-}
+.u-badge { font-size: 10px; background: #fee; color: red; padding: 1px 5px; border-radius: 6px; }
+.btn-out { padding: 4px 10px; border: 1px solid #ccc; background: white; border-radius: 12px; cursor: pointer; font-size: 12px; }
+.cover { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
 .cover.show { display: flex; }
-.popup {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  width: 340px;
-}
+.popup { background: white; border-radius: 10px; padding: 20px; width: 340px; }
 .popup h2 { margin: 0 0 15px 0; font-size: 16px; }
-.tabs {
-  display: flex;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #ddd;
-}
-.tab {
-  flex: 1;
-  text-align: center;
-  padding: 8px;
-  cursor: pointer;
-  color: gray;
-  border-bottom: 2px solid transparent;
-  font-size: 14px;
-}
+.tabs { display: flex; margin-bottom: 15px; border-bottom: 1px solid #ddd; }
+.tab { flex: 1; text-align: center; padding: 8px; cursor: pointer; color: gray; border-bottom: 2px solid transparent; font-size: 14px; }
 .tab.on { color: blue; border-bottom-color: blue; font-weight: bold; }
 .page { display: none; }
 .page.on { display: block; }
-.popup input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  font-size: 14px;
-}
-.popup button.go {
-  width: 100%;
-  padding: 9px;
-  background: blue;
-  color: white;
-  border: none;
-  border-radius: 6;
-  cursor: pointer;
-  font-size: 14px;
-}
-.err { color: red; font-size: 12px; min-height:14px; margin-bottom:8px; }
-.tip {
-  font-size: 12px;
-  color: blue;
-  background: #eef;
-  padding: 8px;
-  border-radius:6px;
-  margin-bottom:8px;
-}
-/* 主体双栏 YouTube 播放布局 */
-.container {
-  display: flex;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 20px;
-  gap: 20px;
-}
+.popup input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+.popup button.go { width: 100%; padding: 9px; background: blue; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.err { color: red; font-size: 12px; min-height: 14px; margin-bottom: 8px; }
+.tip { font-size: 12px; color: blue; background: #eef; padding: 8px; border-radius: 6px; margin-bottom: 8px; }
+.container { display: flex; max-width: 1300px; margin: 0 auto; padding: 20px; gap: 20px; }
 .left { flex: 1; }
 .right { width: 350px; }
-/* 播放器容器 16:9 */
-.video-box {
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: #000;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom:15px;
-}
-.video-box iframe {
-  width:100%;
-  height:100%;
-  border:none;
-}
-.vtitle { font-size: 18px; font-weight: bold; margin-bottom:8px; }
-.vstats { color: #666; font-size:13px; margin-bottom:12px; }
-.channel-row {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 0;
-  border-top:1px solid #ddd;
-  border-bottom:1px solid #ddd;
-  margin-bottom:12px;
-}
-.c-ava {
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  background:#e62143;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:16px;
-  font-weight:bold;
-}
-.c-name a {
-  color:#000;
-  text-decoration:none;
-  font-size:14px;
-  font-weight:500;
-}
-.c-name a:hover { color:blue; }
-.desc {
-  background:#f5f5f5;
-  padding:12px;
-  border-radius:10px;
-  font-size:13px;
-  line-height:1.6;
-  margin-bottom:12px;
-}
-.tags {
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-bottom:20px;
-}
-.tag {
-  background:#f5f5f5;
-  color:blue;
-  padding:4px 10px;
-  border-radius:12px;
-  font-size:12px;
-  text-decoration:none;
-}
-
-/* 右侧推荐卡片 */
-.rec-hdr { font-size:14px; font-weight:bold; margin-bottom:12px; }
-.rec-card {
-  display:flex;
-  gap:8px;
-  margin-bottom:10px;
-  padding:4px;
-  border-radius:6px;
-  text-decoration:none;
-  color:#000;
-}
-.rec-card:hover { background:#f5f5f5; }
-.rec-img {
-  width:150px;
-  aspect-ratio:16/9;
-  background:#333;
-  border-radius:6px;
-  flex-shrink:0;
-  position:relative;
-}
-.rec-dur {
-  position:absolute;
-  bottom:3px;
-  right:3px;
-  background:rgba(0,0,0,0.85);
-  color:#fff;
-  font-size:11px;
-  padding:1px 4px;
-  border-radius:3px;
-}
-.rec-info { flex:1; }
-.rec-title { font-size:13px; font-weight:500; line-height:1.3; }
-.rec-author { font-size:12px; color:#666; margin-top:4px; }
-.footer {
-  text-align:center;
-  padding:20px;
-  color:#aaa;
-  font-size:12px;
-  border-top:1px solid #ddd;
-  margin-top:30px;
-}
-@media (max-width:900px) {
-  .container { flex-direction:column; padding:15px; }
-  .right { width:100%; }
-  .video-box { border-radius:0; }
-}
+.video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
+.video-box iframe { width: 100%; height: 100%; border: none; }
+.vtitle { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+.vstats { color: #666; font-size: 13px; margin-bottom: 12px; }
+.channel-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; margin-bottom: 12px; }
+.c-ava { width: 38px; height: 38px; border-radius: 50%; background: #e62143; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; }
+.c-name a { color: #000; text-decoration: none; font-size: 14px; font-weight: 500; }
+.c-name a:hover { color: blue; }
+.desc { background: #f5f5f5; padding: 12px; border-radius: 10px; font-size: 13px; line-height: 1.6; margin-bottom: 12px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.tag { background: #f5f5f5; color: blue; padding: 4px 10px; border-radius: 12px; font-size: 12px; text-decoration: none; }
+.rec-hdr { font-size: 14px; font-weight: bold; margin-bottom: 12px; }
+.rec-card { display: flex; gap: 8px; margin-bottom: 10px; padding: 4px; border-radius: 6px; text-decoration: none; color: #000; }
+.rec-card:hover { background: #f5f5f5; }
+.rec-img { width: 150px; aspect-ratio: 16/9; background: #333; border-radius: 6px; flex-shrink: 0; position: relative; }
+.rec-dur { position: absolute; bottom: 3px; right: 3px; background: rgba(0,0,0,0.85); color: #fff; font-size: 11px; padding: 1px 4px; border-radius: 3px; }
+.rec-info { flex: 1; }
+.rec-title { font-size: 13px; font-weight: 500; line-height: 1.3; }
+.rec-author { font-size: 12px; color: #666; margin-top: 4px; }
+.footer { text-align: center; padding: 20px; color: #aaa; font-size: 12px; border-top: 1px solid #ddd; margin-top: 30px; }
+@media (max-width: 900px) { .container { flex-direction: column; padding: 15px; } .right { width: 100%; } .video-box { border-radius: 0; } }
 </style>
 </head>
 <body>
-<!-- 登录弹窗 -->
+
 <div class="cover" id="pop">
   <div class="popup">
     <h2>登录</h2>
@@ -281,98 +75,55 @@ body { margin: 0; font-family: Arial, sans-serif; }
       <div class="err" id="e-reg"></div>
       <input id="r-mail" placeholder="邮箱">
       <input id="r-name" placeholder="昵称">
+      <input id="r-phone" placeholder="手机号（可选）">
       <input id="r-pw" type="password" placeholder="密码（至少6位）">
       <button class="go" onclick="doSend()">发送验证码</button>
       <div class="tip" id="v-tip" style="display:none"></div>
       <input id="r-code" placeholder="6位验证码" style="display:none">
-      <button class="go" id="r-go" onclick="doReg()">完成注册</button>
+      <button class="go" id="r-go" onclick="doReg()" style="display:none">完成注册</button>
     </div>
   </div>
 </div>
 
-<!-- 顶部导航 -->
 <div class="topbar">
   <a class="logo" onclick="location.href='index.html'">Project<span>Pioneer</span></a>
   <div class="spacer"></div>
   <div class="user-area" id="abar"></div>
 </div>
 
-<!-- 主体双栏布局 -->
 <div class="container">
   <div class="left">
-    <!-- B站BV1GJ411x7h7 官方外链播放器 -->
     <div class="video-box">
       <iframe src="https://player.bilibili.com/player.html?bvid=BV1GJ411x7h7&page=1&autoplay=0&danmaku=1&as_wide=1&high_quality=1" scrolling="no" frameborder="0" allowfullscreen></iframe>
     </div>
-
     <h1 class="vtitle" id="videoTitle">【官方 MV】Never Gonna Give You Up - Rick Astley</h1>
-    <div class="vstats">
-      <span id="playCount">1.0亿次播放 · 14.4万弹幕 · 279.6万点赞</span>
-      &nbsp;
-      <span id="ptime">2020-01-01 发布</span>
-    </div>
-
+    <div class="vstats"><span id="playCount">1.0亿次播放 · 14.4万弹幕 · 279.6万点赞</span>&nbsp;<span id="ptime">2020-01-01 发布</span></div>
     <div class="channel-row">
       <div class="c-ava" id="chanAvatar">索</div>
-      <div class="c-name">
-        <a id="chanLink">索尼音乐中国</a>
-      </div>
+      <div class="c-name"><a id="chanLink">索尼音乐中国</a></div>
     </div>
-
-    <div class="desc" id="videoDesc">
-官方营业，欢迎一键三连~<br>
-经典Rickroll原版MV，互联网知名整活神曲Never Gonna Give You Up。
-    </div>
-
+    <div class="desc" id="videoDesc">经典Rickroll原版MV，互联网知名整活神曲Never Gonna Give You Up。搬运自B站 BV1GJ411x7h7</div>
     <div class="tags" id="tagBox">
-      <a class="tag">#Rick Astley</a>
-      <a class="tag">#Never Gonna Give You Up</a>
-      <a class="tag">#欧美MV</a>
-      <a class="tag">#流行音乐</a>
-      <a class="tag">#整活神曲</a>
-      <a class="tag">#索尼音乐</a>
+      <a class="tag">#Rick Astley</a><a class="tag">#Never Gonna Give You Up</a><a class="tag">#欧美MV</a><a class="tag">#流行音乐</a><a class="tag">#整活神曲</a><a class="tag">#索尼音乐</a>
     </div>
-
-
   </div>
-
-  <!-- 右侧相关推荐（B站来源，点击在当前页播放器切换播放） -->
   <div class="right">
     <div class="rec-hdr">相关推荐视频</div>
     <a class="rec-card" href="https://search.bilibili.com/all?keyword=Rickrocknroll" target="_blank" rel="noopener" data-bvid="BV1GJ411x7h7" data-title="大家好，我是Rick Astley,今天我入驻b站了！doge" data-author="Rickrocknroll" data-avatar="R" data-desc="官方MV Never Gonna Give You Up，Rick Astley入驻B站！" data-tags="Rick Astley,入驻,官方MV" data-plays="1.0亿次播放" data-date="2020-01-01" data-up="索尼音乐国际">
       <div class="rec-img"><span class="rec-dur">03:52</span></div>
-      <div class="rec-info">
-        <div class="rec-title">大家好，我是Rick Astley,今天我入驻b站了！doge</div>
-        <div class="rec-author">Rickrocknroll</div>
-      </div>
+      <div class="rec-info"><div class="rec-title">大家好，我是Rick Astley,今天我入驻b站了！doge</div><div class="rec-author">Rickrocknroll</div></div>
     </a>
     <a class="rec-card" href="https://search.bilibili.com/all?keyword=KG-Area21" target="_blank" rel="noopener" data-bvid="BV1Pg411r7V5" data-title="【4K60帧】三十五年后Rickroll经典重现 AI修复版" data-author="KG-Area21" data-avatar="K" data-desc="AI修复补帧画质增强版 Rickroll 经典重现" data-tags="Rickroll,AI修复,4K" data-plays="520万次播放" data-date="2021-05-12" data-up="KG-Area21">
       <div class="rec-img"><span class="rec-dur">02:13</span></div>
-      <div class="rec-info">
-        <div class="rec-title">【4K60帧】三十五年后Rickroll经典重现 AI修复版</div>
-        <div class="rec-author">KG-Area21</div>
-      </div>
+      <div class="rec-info"><div class="rec-title">【4K60帧】三十五年后Rickroll经典重现 AI修复版</div><div class="rec-author">KG-Area21</div></div>
     </a>
     <a class="rec-card" href="https://search.bilibili.com/all?keyword=SoulTorch" target="_blank" rel="noopener" data-bvid="" data-title="⚡你！被！骗！啦！⚡" data-author="SoulTorch" data-avatar="S" data-desc="经典 Rickroll 整活骗术合集" data-tags="Rickroll,整活,被骗" data-plays="86万次播放" data-date="2019-07-03" data-up="SoulTorch">
       <div class="rec-img"><span class="rec-dur">01:05</span></div>
-      <div class="rec-info">
-        <div class="rec-title">⚡你！被！骗！啦！⚡</div>
-        <div class="rec-author">SoulTorch</div>
-      </div>
+      <div class="rec-info"><div class="rec-title">⚡你！被！骗！啦！⚡</div><div class="rec-author">SoulTorch</div></div>
     </a>
     <a class="rec-card" href="https://search.bilibili.com/all?keyword=梗指南" target="_blank" rel="noopener" data-bvid="" data-title="rick roll是什么梗【梗指南】" data-author="梗指南" data-avatar="梗" data-desc="Rickroll 迷因科普：从永不放弃你到全网整活" data-tags="rick roll,梗,迷因,科普" data-plays="240万次播放" data-date="2020-11-20" data-up="梗指南">
       <div class="rec-img"><span class="rec-dur">01:16</span></div>
-      <div class="rec-info">
-        <div class="rec-title">rick roll是什么梗【梗指南】</div>
-        <div class="rec-author">梗指南</div>
-      </div>
-    </a>
-    <a class="rec-card" href="https://search.bilibili.com/all?keyword=索尼音乐国际" target="_blank" rel="noopener" data-bvid="BV1GJ411x7h7" data-title="喜报，B站网友被这个视频诈骗一亿次了！" data-author="索尼音乐国际" data-avatar="索" data-desc="官方MV破亿播放纪念，互联网整活文化源头" data-tags="Rick Astley,破亿,整活神曲,索尼音乐" data-plays="1.0亿次播放" data-date="2020-01-01" data-up="索尼音乐国际">
-      <div class="rec-img"><span class="rec-dur">00:32</span></div>
-      <div class="rec-info">
-        <div class="rec-title">喜报，B站网友被这个视频诈骗一亿次了！</div>
-        <div class="rec-author">索尼音乐国际</div>
-      </div>
+      <div class="rec-info"><div class="rec-title">rick roll是什么梗【梗指南】</div><div class="rec-author">梗指南</div></div>
     </a>
   </div>
 </div>
@@ -380,247 +131,90 @@ body { margin: 0; font-family: Arial, sans-serif; }
 <div class="footer">Project Pioneer 仿YouTube播放页 | 视频源：B站 BV1GJ411x7h7</div>
 
 <script>
-// 本地存储键（全站统一）
 const STORAGE_USER_KEY = "pp_user";
 const STORAGE_USERS_LIST = "pp_users";
-// 视频存储键（全站统一）
 const STORAGE_VIDEOS = "pp_videos";
 
-// 从推荐卡片 dataset 构造元数据
-function metaFromCard(c){
-  return {
-    title:c.dataset.title, author:c.dataset.author, avatar:c.dataset.avatar,
-    desc:c.dataset.desc, tags:c.dataset.tags, plays:c.dataset.plays,
-    date:c.dataset.date, up:c.dataset.up
-  };
-}
-
-// 切换 B站外链播放器 + 更新左侧信息区
+function metaFromCard(c){ return { title:c.dataset.title, author:c.dataset.author, avatar:c.dataset.avatar, desc:c.dataset.desc, tags:c.dataset.tags, plays:c.dataset.plays, date:c.dataset.date, up:c.dataset.up }; }
 function playVideo(bvid, meta){
-  if(bvid){
-    const iframe = document.querySelector('.video-box iframe');
-    if(iframe) iframe.src = 'https://player.bilibili.com/player.html?bvid='+bvid+'&page=1&autoplay=1&danmaku=1&as_wide=1&high_quality=1';
-  }
+  if(bvid){ const iframe=document.querySelector('.video-box iframe'); if(iframe) iframe.src='https://player.bilibili.com/player.html?bvid='+bvid+'&page=1&autoplay=1&danmaku=1&as_wide=1&high_quality=1'; }
   if(!meta) return;
-  const t = document.getElementById('videoTitle'); if(t) t.textContent = meta.title;
-  const pc = document.getElementById('playCount'); if(pc) pc.textContent = (meta.plays||'') + (meta.plays?' · ':'') + 'B站来源';
-  const pt = document.getElementById('ptime'); if(pt) pt.textContent = (meta.date||'') + (meta.date?' 发布':'');
-  const ca = document.getElementById('chanAvatar'); if(ca){ ca.textContent = (meta.avatar||(meta.up||meta.author||'?')[0]); }
-  const cl = document.getElementById('chanLink'); if(cl){ cl.textContent = meta.up||meta.author; }
-  const vd = document.getElementById('videoDesc'); if(vd) vd.textContent = meta.desc||'';
-  const tb = document.getElementById('tagBox'); if(tb){
-    tb.innerHTML = '';
-    (meta.tags||'').split(',').forEach(function(tg){
-      tg=tg.trim(); if(!tg) return;
-      var a=document.createElement('a'); a.className='tag'; a.textContent='#'+tg; tb.appendChild(a);
-    });
-  }
+  const t=document.getElementById('videoTitle'); if(t) t.textContent=meta.title;
+  const pc=document.getElementById('playCount'); if(pc) pc.textContent=(meta.plays||'')+(meta.plays?' · ':'')+'B站来源';
+  const pt=document.getElementById('ptime'); if(pt) pt.textContent=(meta.date||'')+(meta.date?' 发布':'');
+  const ca=document.getElementById('chanAvatar'); if(ca) ca.textContent=(meta.avatar||(meta.up||meta.author||'?')[0]);
+  const cl=document.getElementById('chanLink'); if(cl) cl.textContent=meta.up||meta.author;
+  const vd=document.getElementById('videoDesc'); if(vd) vd.textContent=meta.desc||'';
+  const tb=document.getElementById('tagBox'); if(tb){ tb.innerHTML=''; (meta.tags||'').split(',').forEach(function(tg){ tg=tg.trim(); if(!tg) return; var a=document.createElement('a'); a.className='tag'; a.textContent='#'+tg; tb.appendChild(a); }); }
 }
 
-// 初始化开发者演示视频（写入 pp_videos，保证"开发者发的视频"存在）
 function initDefaultVideo(){
-  var videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS)||"[]");
-  var SEED = {title:"开发者演示视频",desc:"Project Pioneer 官方演示 · Rickroll 经典原版MV",bvid:"BV1GJ411x7h7",page:"mDoW4d864GJ.html?bvid=BV1GJ411x7h7",type:"bilibili",author:"the1234556789",category:"all",plays:"1.0亿次播放",date:"2020-01-01",up:"索尼音乐国际"};
-  if(!videos.find(function(v){ return v.bvid===SEED.bvid; })){
-    videos.push(SEED);
-    localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
-  }
+  var videos=JSON.parse(localStorage.getItem(STORAGE_VIDEOS)||"[]");
+  videos.forEach(function(v){ if(v.page==="mDoW4d864GJ.html"||v.page==="mDoW4d864GJ.html?bvid=BV1GJ411x7h7"){ v.title="【官方 MV】Never Gonna Give You Up - Rick Astley"; v.desc="经典Rickroll原版MV，互联网知名整活神曲Never Gonna Give You Up。搬运自B站 BV1GJ411x7h7"; delete v.author; v.up="索尼音乐中国"; } });
+  var SEED={title:"【官方 MV】Never Gonna Give You Up - Rick Astley",desc:"经典Rickroll原版MV，互联网知名整活神曲Never Gonna Give You Up。搬运自B站 BV1GJ411x7h7",bvid:"BV1GJ411x7h7",page:"mDoW4d864GJ.html?bvid=BV1GJ411x7h7",type:"bilibili",category:"music",plays:"1.0亿次播放",date:"2020-01-01",up:"索尼音乐中国"};
+  if(!videos.find(function(v){ return v.page==="mDoW4d864GJ.html"; })){ videos.push(SEED); localStorage.setItem(STORAGE_VIDEOS,JSON.stringify(videos)); }
 }
-
 
 function gid(id){ return document.getElementById(id); }
-function safeStr(s){
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
-// 时间格式化
-function timeAgo(ts){
-  const d = Date.now() - ts;
-  const m = 60000, h = 3600000, day = 86400000;
-  if(d < m) return '刚刚';
-  if(d < h) return Math.floor(d/m) + '分钟前';
-  if(d < day) return Math.floor(d/h) + '小时前';
-  if(d < day * 30) return Math.floor(d/day) + '天前';
-  const dt = new Date(ts);
-  return dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日';
-}
+function safeStr(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function timeAgo(ts){ const d=Date.now()-ts; const m=60000,h=3600000,day=86400000; if(d<m) return '刚刚'; if(d<h) return Math.floor(d/m)+'分钟前'; if(d<day) return Math.floor(d/h)+'小时前'; if(d<day*30) return Math.floor(d/day)+'天前'; const dt=new Date(ts); return dt.getFullYear()+'年'+(dt.getMonth()+1)+'月'+dt.getDate()+'日'; }
+function getLoginUser(){ const raw=localStorage.getItem(STORAGE_USER_KEY); return raw?JSON.parse(raw):null; }
+function saveLoginUser(u){ if(u) localStorage.setItem(STORAGE_USER_KEY,JSON.stringify(u)); else localStorage.removeItem(STORAGE_USER_KEY); renderBar(); }
+function getUsers(){ const raw=localStorage.getItem(STORAGE_USERS_LIST); return raw?JSON.parse(raw):[]; }
+function saveUsers(list){ localStorage.setItem(STORAGE_USERS_LIST,JSON.stringify(list)); }
 
-// 用户相关工具
-function getLoginUser(){
-  const raw = localStorage.getItem(STORAGE_USER_KEY);
-  return raw ? JSON.parse(raw) : null;
-}
-function saveLoginUser(u){
-  if(u) localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(u));
-  else localStorage.removeItem(STORAGE_USER_KEY);
-  renderBar();
-}
-function getUsers(){
-  const raw = localStorage.getItem(STORAGE_USERS_LIST);
-  return raw ? JSON.parse(raw) : [];
-}
-function saveUsers(list){
-  localStorage.setItem(STORAGE_USERS_LIST, JSON.stringify(list));
-}
-
-// 顶部用户栏渲染
 function renderBar(){
-  const u = getLoginUser();
-  const abar = gid('abar');
-  if(u){
-    abar.innerHTML = `
-      <a class="u-avatar" style="background:${u.color}" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">
-        ${u.name[0]}
-      </a>
-      <span class="u-name" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">
-        ${safeStr(u.name)}
-      </span>
-      ${u.type === 'creator' ? '<span class="u-badge">创作者</span>' : ''}
-      <button class="btn-out" onclick="doLogout()">退出</button>
-    `;
-  }else{
-    abar.innerHTML = `
-      <button class="btn-login" onclick="openPop()">登录</button>
-      <button class="btn-reg" onclick="openPop();swTab('reg')">注册</button>
-    `;
-  }
+  const u=getLoginUser(); const abar=gid('abar');
+  if(u){ abar.innerHTML=`<a class="u-avatar" style="background:${u.color}" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">${u.name[0]}</a><span class="u-name" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">${safeStr(u.name)}</span>${u.type==='creator'?'<span class="u-badge">创作者</span>':''}<button class="btn-out" onclick="doLogout()">退出</button>`; }
+  else{ abar.innerHTML=`<button class="btn-login" onclick="openPop()">登录</button><button class="btn-reg" onclick="openPop();swTab('reg')">注册</button>`; }
 }
 
-// 弹窗控制
 function openPop(){ gid('pop').classList.add('show'); swTab('login'); }
 function closePop(){ gid('pop').classList.remove('show'); }
 function swTab(t){
-  const pgLogin = gid('pg-login');
-  const pgReg = gid('pg-reg');
-  const tabs = document.querySelectorAll('.tabs .tab');
-  tabs.forEach(tab=>tab.classList.remove('on'));
-  if(t === 'login'){
-    tabs[0].classList.add('on');
-    pgLogin.style.display = 'block'; pgReg.style.display = 'none';
-    gid('e-login').textContent = '';
-  }else{
-    tabs[1].classList.add('on');
-    pgReg.style.display = 'block'; pgLogin.style.display = 'none';
-    gid('e-reg').textContent = '';
-  }
-  // 清空输入
-  gid('l-user').value = '';
-  gid('l-pw').value = '';
-  gid('r-mail').value = '';
-  gid('r-name').value = '';
-  gid('r-pw').value = '';
-  gid('r-code').value = '';
-  gid('v-tip').style.display = 'none';
-  gid('r-code').style.display = 'none';
-  gid('r-go').style.display = 'none';
+  const tabs=document.querySelectorAll('.tabs .tab'); tabs.forEach(tab=>tab.classList.remove('on'));
+  if(t==='login'){ tabs[0].classList.add('on'); gid('pg-login').style.display='block'; gid('pg-reg').style.display='none'; gid('e-login').textContent=''; }
+  else{ tabs[1].classList.add('on'); gid('pg-reg').style.display='block'; gid('pg-login').style.display='none'; gid('e-reg').textContent=''; }
+  gid('l-user').value=''; gid('l-pw').value=''; gid('r-mail').value=''; gid('r-name').value=''; gid('r-phone').value=''; gid('r-pw').value=''; gid('r-code').value=''; gid('v-tip').style.display='none'; gid('r-code').style.display='none'; gid('r-go').style.display='none';
 }
 
-// 登录逻辑
 async function doLogin(){
-  const name = gid('l-user').value.trim();
-  const pw = gid('l-pw').value;
-  const errDom = gid('e-login');
-  errDom.textContent = '';
-  if(!name || !pw){ errDom.textContent = '请填写账号密码'; return; }
-  try{
-    const resp = await fetch('./' + encodeURIComponent(name) + '/密码.txt', {cache:'no-store'});
-    if(resp.ok){
-      const txt = (await resp.text()).trim();
-      if(txt === pw){
-        saveLoginUser({name, color:'#cc0000', type:'creator'});
-        closePop();
-        return;
-      }else{
-        errDom.textContent = '密码错误';
-        return;
-      }
-    }
-  }catch(e){}
-  const all = getUsers();
-  const found = all.find(x => (x.mail === name || x.name === name) && x.pw === pw);
-  if(found){
-    saveLoginUser({name:found.name, color:found.color, type:'user'});
-    closePop();
-  }else{
-    errDom.textContent = '账号不存在或密码错误';
-  }
+  const name=gid('l-user').value.trim(); const pw=gid('l-pw').value; const err=gid('e-login'); err.textContent='';
+  if(!name||!pw){ err.textContent='请填写账号密码'; return; }
+  try{ const resp=await fetch('./'+encodeURIComponent(name)+'/密码.txt',{cache:'no-store'}); if(resp.ok){ const txt=(await resp.text()).trim(); if(txt===pw){ saveLoginUser({name,color:'#cc0000',type:'creator'}); closePop(); return; }else{ err.textContent='密码错误'; return; } } }catch(e){}
+  const all=getUsers(); const found=all.find(x=>(x.mail===name||x.name===name)&&x.pw===pw);
+  if(found){ saveLoginUser({name:found.name,color:found.color,type:'user'}); closePop(); }
+  else err.textContent='账号不存在或密码错误';
 }
 
-// 注册逻辑
-let _vcode = '';
-let _vexp = 0;
-let _rname = '';
-let _rpw = '';
+let _vcode='',_vexp=0,_rname='',_rpw='';
 function doSend(){
-  const mail = gid('r-mail').value.trim();
-  const name = gid('r-name').value.trim();
-  const pw = gid('r-pw').value;
-  const errDom = gid('e-reg');
-  errDom.textContent = '';
-  if(!mail || !name || !pw){ errDom.textContent = '请填写完整信息'; return; }
-  if(pw.length < 6){ errDom.textContent = '密码至少6位'; return; }
-  if(getUsers().some(x => x.mail === mail)){
-    errDom.textContent = '该邮箱已注册';
-    return;
-  }
-  _vcode = String(Math.floor(100000 + Math.random() * 900000));
-  _vexp = Date.now() + 300000;
-  _rname = name;
-  _rpw = pw;
-  gid('v-tip').style.display = 'block';
-  gid('v-tip').textContent = '演示验证码：' + _vcode;
-  gid('r-code').style.display = 'block';
-  gid('r-go').style.display = 'block';
+  const mail=gid('r-mail').value.trim(); const name=gid('r-name').value.trim(); const phone=gid('r-phone').value.trim(); const pw=gid('r-pw').value; const err=gid('e-reg'); err.textContent='';
+  if(!mail||!name||!pw){ err.textContent='请填写完整信息'; return; }
+  if(phone&&!/^1[3-9]\d{9}$/.test(phone)){ err.textContent='手机号格式不正确'; return; }
+  if(pw.length<6){ err.textContent='密码至少6位'; return; }
+  if(getUsers().some(x=>x.mail===mail)){ err.textContent='该邮箱已注册'; return; }
+  if(getUsers().some(x=>x.name===name)){ err.textContent='该昵称已被占用'; return; }
+  if(phone&&getUsers().some(x=>x.phone===phone)){ err.textContent='该手机号已注册'; return; }
+  _vcode=String(Math.floor(100000+Math.random()*900000)); _vexp=Date.now()+300000; _rname=name; _rpw=pw;
+  gid('v-tip').style.display='block'; gid('v-tip').textContent='演示验证码：'+_vcode; gid('r-code').style.display='block'; gid('r-go').style.display='block';
 }
 function doReg(){
-  const code = gid('r-code').value.trim();
-  const errDom = gid('e-reg');
-  if(!_vcode) return;
-  if(Date.now() > _vexp){ errDom.textContent = '验证码已过期'; return; }
-  if(code !== _vcode){ errDom.textContent = '验证码错误'; return; }
-  const colors = ['#065fd4','#137333','#e37400','#8e24aa','#0097a7','#cc0000'];
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  const all = getUsers();
-  all.push({mail:gid('r-mail').value.trim(), name:_rname, pw:_rpw, color});
-  saveUsers(all);
-  saveLoginUser({name:_rname, color, type:'user'});
-  closePop();
+  const code=gid('r-code').value.trim(); const err=gid('e-reg');
+  if(!_vcode) return; if(Date.now()>_vexp){ err.textContent='验证码已过期'; return; } if(code!==_vcode){ err.textContent='验证码错误'; return; }
+  const colors=['#065fd4','#137333','#e37400','#8e24aa','#0097a7','#cc0000']; const color=colors[Math.floor(Math.random()*colors.length)];
+  const all=getUsers(); all.push({mail:mail,name:_rname,phone:gid('r-phone').value.trim(),pw:_rpw,color}); saveUsers(all); saveLoginUser({name:_rname,color,type:'user'}); closePop();
 }
-function doLogout(){
-  saveLoginUser(null);
-}
+function doLogout(){ saveLoginUser(null); }
 
-// 页面初始化
 function initPage(){
-  // 保证开发者演示视频存在
   initDefaultVideo();
-  // UP主信息赋值
-  const uploaderName = "索尼音乐中国";
-  gid('chanLink').innerText = uploaderName;
-  gid('chanLink').onclick = ()=> location.href = `profile.html?name=${encodeURIComponent(uploaderName)}`;
-  gid('chanAvatar').innerText = uploaderName[0];
-  // 发布时间
-  gid('ptime').textContent = timeAgo(new Date("2020-01-01 07:43:23").getTime());
-  // 渲染顶部用户栏+评论区
+  const uploaderName="索尼音乐中国";
+  gid('chanLink').innerText=uploaderName; gid('chanLink').onclick=()=>location.href=`profile.html?name=${encodeURIComponent(uploaderName)}`; gid('chanAvatar').innerText=uploaderName[0];
+  gid('ptime').textContent=timeAgo(new Date("2020-01-01 07:43:23").getTime());
   renderBar();
-
-  // 绑定推荐卡片点击：站内切换播放器 + 更新左侧信息
-  document.querySelectorAll('.rec-card').forEach(function(card){
-    card.addEventListener('click', function(ev){
-      var bvid = card.dataset.bvid;
-      var meta = metaFromCard(card);
-      // 修饰键/中键/右键 -> 新标签页打开 B站原链接
-      if(ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.button===1 || ev.button===2){ return; }
-      ev.preventDefault();
-      if(bvid){ playVideo(bvid, meta); }
-      else { window.open(card.getAttribute('href'), '_blank', 'noopener'); }
-    });
-  });
-  // 点击弹窗外部关闭弹窗
-  gid('pop').addEventListener('click', e=>{
-    if(e.target === gid('pop')) closePop();
-  });
+  document.querySelectorAll('.rec-card').forEach(function(card){ card.addEventListener('click',function(ev){ var bvid=card.dataset.bvid; var meta=metaFromCard(card); if(ev.ctrlKey||ev.metaKey||ev.shiftKey||ev.button===1||ev.button===2) return; ev.preventDefault(); if(bvid) playVideo(bvid,meta); else window.open(card.getAttribute('href'),'_blank','noopener'); }); });
+  gid('pop').addEventListener('click',e=>{ if(e.target===gid('pop')) closePop(); });
 }
 initPage();
 </script>
