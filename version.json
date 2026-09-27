@@ -1,0 +1,6 @@
+{
+  "latest": "5.6.0.2",
+  "mandatory": false,
+  "url": "https://gitee.com/Wanderlust-Code/ProjectPioneer/releases/tag/%232Beta5.6.0.1",
+  "notes": "修复启动器崩溃，更新 Electron 依赖"
+}
