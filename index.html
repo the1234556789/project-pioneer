@@ -13,8 +13,6 @@ body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; p
 .spacer { flex: 1; }
 .search-box { width: 360px; height: 36px; border: 1px solid #ccc; border-radius: 18px; padding: 0 16px; font-size: 14px; outline: none; }
 .search-box:focus { border-color: #1a73e8; }
-
-/* 右上角导航 */
 .abtn { display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; margin-right: 12px; }
 .user-chip { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; }
 .user-name { color: #5f6368; }
@@ -22,7 +20,6 @@ body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; p
 .btn-reg-nav { background: #fff; color: #1a73e8; border: 1px solid #1a73e8; padding: 8px 20px; border-radius: 16px; font-size: 14px; cursor: pointer; font-family: inherit; }
 .btn-logout { background: none; border: 1px solid #dadce0; color: #5f6368; padding: 6px 14px; border-radius: 14px; font-size: 14px; cursor: pointer; font-family: inherit; }
 .btn-logout:hover { background: #f1f3f4; }
-
 .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
 .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 .filter-btn { padding: 6px 16px; border: 1px solid #ddd; background: white; border-radius: 16px; cursor: pointer; font-size: 13px; }
@@ -38,14 +35,9 @@ body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; p
 .vauthor { font-size: 12px; color: #666; }
 .vstats { font-size: 12px; color: #999; margin-top: 2px; }
 .footer { text-align: center; padding: 24px; color: #aaa; font-size: 12px; border-top: 1px solid #ddd; margin-top: 40px; }
-
-/* 上传按钮 */
 .upload-fab { position: fixed; right: 24px; bottom: 56px; background: #1a73e8; color: #fff; border: none; padding: 14px 24px; border-radius: 24px; font-size: 14px; font-weight: 500; cursor: pointer; box-shadow: 0 4px 12px rgba(26,115,232,0.4); z-index: 150; display: none; }
 .upload-fab:hover { background: #1557b0; }
-
-/* 版权 */
 .copyright { position: fixed; right: 16px; bottom: 16px; font-size: 12px; color: #5f6368; background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); z-index: 200; }
-
 @media (max-width: 768px) { .search-box { width: 200px; } .container { padding: 12px; } .video-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; } }
 </style>
 </head>
@@ -64,7 +56,6 @@ body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; p
 </div>
 
 <div class="footer">Project Pioneer · 纯前端演示项目</div>
-
 <button class="upload-fab" id="uploadFab" onclick="location.href='upload.html'">＋ 上传视频</button>
 <div class="copyright">©2024-2026 会泽工作室 版权所有</div>
 
@@ -78,7 +69,7 @@ function safeStr(s){ const d=document.createElement('div'); d.textContent=s; ret
 function initDefaultVideo(){
   let videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS) || "[]");
 
-  // ── 视频1：Rickroll（mDoW4d864GJ.html）──
+  // ── 视频1：Rickroll（B站）──
   if (!videos.find(v => v.page === "mDoW4d864GJ.html")) {
     videos.push({
       title: "【官方 MV】Never Gonna Give You Up - Rick Astley",
@@ -93,7 +84,7 @@ function initDefaultVideo(){
     });
   }
 
-  // ── 视频2：自制短片（dQw4w9WgXcQ.html）──
+  // ── 视频2：自制短片（本地）──
   if (!videos.find(v => v.page === "dQw4w9WgXcQ.html")) {
     videos.push({
       title: "自制短片 - 项目完整演示",
@@ -116,7 +107,7 @@ function renderVideos(){
   grid.innerHTML = '';
   videos.forEach(v => {
     const card = document.createElement('div'); card.className = 'video-card';
-    card.onclick = () => location.href = v.page;
+    card.onclick = () => location.href = `watch.html?page=${v.page}`;
     const isBili = v.type === 'bilibili' && v.bvid;
     card.innerHTML = `<div class="vthumb">${isBili ? `<iframe src="https://player.bilibili.com/player.html?bvid=${v.bvid}&page=1&autoplay=0&danmaku=0&as_wide=1&high_quality=0" scrolling="no" frameborder="0" allowfullscreen></iframe>` : `<div style="width:100%;height:100%;background:#333;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">本地视频</div>`}</div><div class="vinfo"><div class="vtitle">${safeStr(v.title)}</div><div class="vauthor">${safeStr(v.up || v.author || '未知')}</div><div class="vstats">${safeStr(v.plays || '')} ${v.date || ''}</div></div>`;
     grid.appendChild(card);
@@ -126,6 +117,7 @@ function renderVideos(){
 function initPage(){
   initDefaultVideo();
   AUTH.renderBar();
+  if (AUTH.getUser()){ gid('uploadFab').style.display = 'block'; }
   renderVideos();
 }
 initPage();
