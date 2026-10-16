@@ -1,94 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>视频播放 - project-pioneer</title>
-<style>
-  :root { --google-blue:#1a73e8; --google-blue-hover:#1557b0; --text-main:#202124; --text-sub:#5f6368; --border-color:#dadce0; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Roboto',Arial,sans-serif; background:#f6f9fc; color:var(--text-main); padding-bottom:80px; }
-
-  .topbar { background:#fff; border-bottom:1px solid var(--border-color); padding:10px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-  .topbar .brand { display:flex; align-items:center; gap:10px; font-size:18px; font-weight:500; }
-  .topbar .brand img { width:32px; height:32px; border-radius:50%; object-fit:cover; }
-
-  .abtn { display:flex; align-items:center; gap:8px; text-decoration:none; font-size:14px; margin-right:12px; }
-  .user-chip { width:32px; height:32px; border-radius:50%; background:var(--google-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; }
-  .user-name { color:var(--text-sub); }
-  .btn-login-nav { background:var(--google-blue); color:#fff; border:none; padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; margin-right:8px; font-family:inherit; }
-  .btn-reg-nav { background:#fff; color:var(--google-blue); border:1px solid var(--google-blue); padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; font-family:inherit; }
-  .btn-logout { background:none; border:1px solid var(--border-color); color:var(--text-sub); padding:6px 14px; border-radius:14px; font-size:14px; cursor:pointer; font-family:inherit; }
-
-  .layout { max-width:1200px; margin:0 auto; padding:24px; display:flex; gap:24px; }
-  .main { flex:1; }
-  .player { width:100%; aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden; margin-bottom:16px; }
-  .player iframe { width:100%; height:100%; border:none; }
-  .video-title { font-size:20px; font-weight:500; margin-bottom:8px; }
-  .video-meta { font-size:14px; color:var(--text-sub); margin-bottom:12px; }
-  .video-desc { font-size:14px; color:var(--text-sub); line-height:1.6; background:#fff; border-radius:8px; padding:16px; }
-
-  .sidebar { width:320px; flex-shrink:0; }
-  .sidebar h3 { font-size:16px; font-weight:500; margin-bottom:12px; }
-  .rec-card { display:flex; gap:10px; margin-bottom:12px; cursor:pointer; }
-  .rec-card:hover .rec-title { color:var(--google-blue); }
-  .rec-thumb { width:140px; height:80px; background:#e0e0e0; border-radius:8px; flex-shrink:0; overflow:hidden; }
-  .rec-thumb img { width:100%; height:100%; object-fit:cover; }
-  .rec-info { flex:1; min-width:0; }
-  .rec-title { font-size:13px; font-weight:500; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.4; margin-bottom:4px; }
-  .rec-author { font-size:12px; color:var(--text-sub); }
-
-  /* 上传按钮 */
-  .upload-fab { position:fixed; right:24px; bottom:56px; background:var(--google-blue); color:#fff; border:none; padding:14px 24px; border-radius:24px; font-size:14px; font-weight:500; cursor:pointer; box-shadow:0 4px 12px rgba(26,115,232,0.4); z-index:150; display:none; }
-  .upload-fab:hover { background:var(--google-blue-hover); }
-
-  /* 版权 */
-  .copyright { position:fixed; right:16px; bottom:16px; font-size:12px; color:var(--text-sub); background:rgba(255,255,255,0.9); padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); z-index:200; }
-
-  @media(max-width:768px){ .layout{flex-direction:column} .sidebar{width:100%} }
-</style>
+<title>重定向中...</title>
+<script>location.href = 'watch.html?page=mDoW4d864GJ.html';</script>
 </head>
-<body>
-
-<div class="topbar">
-  <div class="brand">
-    <img src="https://the1234556789.github.io/project-pioneer/login/project-pioneer.jpg" alt="project-pioneer">
-    <span>project-pioneer</span>
-  </div>
-  <div id="abar"></div>
-</div>
-
-<div class="layout">
-  <div class="main">
-    <div class="player">
-      <iframe id="videoFrame" src="https://player.bilibili.com/player.html?bvid=BV1GJ411x7h7&page=1" allowfullscreen></iframe>
-    </div>
-    <div class="video-title" id="videoTitle">Rick Astley - Never Gonna Give You Up</div>
-    <div class="video-meta" id="videoMeta">Rick Astley · 1.4亿次观看</div>
-    <div class="video-desc" id="videoDesc">经典 Rickroll 视频</div>
-  </div>
-  <div class="sidebar">
-    <h3>相关推荐</h3>
-    <div class="rec-card" onclick="playVideo('https://player.bilibili.com/player.html?bvid=BV1GJ411x7h7&page=1','Rick Astley - Never Gonna Give You Up','Rick Astley','1.4亿次观看','经典 Rickroll 视频')">
-      <div class="rec-thumb">▶️</div>
-      <div class="rec-info"><div class="rec-title">Rick Astley - Never Gonna Give You Up</div><div class="rec-author">Rick Astley</div></div>
-    </div>
-  </div>
-</div>
-
-<button class="upload-fab" id="uploadFab" onclick="location.href='https://the1234556789.github.io/project-pioneer/upload.html'">＋ 上传视频</button>
-<div class="copyright">©2024-2026 会泽工作室 版权所有</div>
-
-<script src="https://the1234556789.github.io/project-pioneer/auth.js"></script>
-<script>
-AUTH.renderBar();
-
-function playVideo(src,title,author,meta,desc){
-  document.getElementById('videoFrame').src=src;
-  document.getElementById('videoTitle').textContent=title;
-  document.getElementById('videoMeta').textContent=author+' · '+meta;
-  document.getElementById('videoDesc').textContent=desc;
-}
-</script>
-</body>
+<body><p style="text-align:center;padding:40px;">正在跳转到播放页...</p></body>
 </html>
