@@ -5,241 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>project-pioneer</title>
 <style>
-  :root {
-    --google-blue: #1a73e8;
-    --google-blue-hover: #1557b0;
-    --text-main: #202124;
-    --text-sub: #5f6368;
-    --border-color: #dadce0;
-    --bg-color: #f6f9fc;
-  }
+  :root { --google-blue:#1a73e8; --google-blue-hover:#1557b0; --text-main:#202124; --text-sub:#5f6368; --border-color:#dadce0; --bg-color:#f6f9fc; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Roboto','Segoe UI',Arial,sans-serif; background:var(--bg-color); color:var(--text-main); display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-size:14px; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .card { background:#fff; width:900px; max-width:95%; border-radius:28px; box-shadow:0 4px 20px rgba(0,0,0,0.05); display:flex; padding:48px 56px; min-height:480px; }
+  .left-panel { flex:1; display:flex; flex-direction:column; justify-content:flex-start; padding-right:40px; }
+  .brand { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+  .brand-icon { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+  .title { font-size:36px; font-weight:400; margin-bottom:12px; }
+  .subtitle { font-size:15px; color:var(--text-sub); margin-bottom:40px; }
 
-  body {
-    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-main);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    font-size: 14px;
-  }
+  .right-panel { flex:1; display:flex; flex-direction:column; justify-content:center; padding-left:20px; }
+  .step { display:none; }
+  .step.active { display:block; }
 
-  .card {
-    background: #fff;
-    width: 900px;
-    max-width: 95%;
-    border-radius: 28px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    display: flex;
-    padding: 48px 56px;
-    min-height: 480px;
-  }
+  .input-wrapper { position:relative; margin-bottom:8px; }
+  .input-wrapper input { width:100%; padding:22px 14px 10px; font-size:16px; border:1px solid var(--border-color); border-radius:4px; outline:none; transition:border 0.2s; font-family:inherit; }
+  .input-wrapper input:focus { border:2px solid var(--google-blue); padding:21px 13px 9px; }
+  .input-wrapper label { position:absolute; left:14px; top:16px; color:#80868b; font-size:16px; pointer-events:none; transition:0.2s; background:#fff; padding:0 4px; }
+  .input-wrapper input:focus ~ label, .input-wrapper input:not(:placeholder-shown) ~ label { top:-8px; font-size:12px; color:var(--google-blue); }
 
-  .left-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-right: 40px;
-  }
+  .forgot { display:inline-block; margin-top:8px; color:var(--google-blue); text-decoration:none; font-weight:500; font-size:14px; }
+  .forgot:hover { text-decoration:underline; }
+  .privacy-hint { margin-top:32px; color:var(--text-sub); font-size:14px; line-height:1.6; }
+  .privacy-hint a { color:var(--google-blue); text-decoration:none; font-weight:500; }
+  .privacy-hint a:hover { text-decoration:underline; }
 
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
+  .actions { display:flex; justify-content:flex-end; align-items:center; gap:24px; margin-top:40px; }
+  .btn-text { color:var(--google-blue); text-decoration:none; font-weight:500; font-size:14px; background:none; border:none; cursor:pointer; font-family:inherit; padding:0; }
+  .btn-text:hover { text-decoration:underline; }
+  .btn-next { background:var(--google-blue); color:#fff; border:none; padding:12px 28px; border-radius:20px; font-size:14px; font-weight:500; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; }
+  .btn-next:hover { background:var(--google-blue-hover); box-shadow:0 2px 6px rgba(26,115,232,0.3); }
+  .btn-next:disabled { background:#ccc; cursor:not-allowed; box-shadow:none; }
 
-  .brand-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+  .footer { width:900px; max-width:95%; display:flex; justify-content:space-between; margin-top:16px; padding:0 16px; color:var(--text-sub); font-size:12px; }
+  .footer-left select { border:none; background:transparent; color:var(--text-sub); cursor:pointer; font-size:12px; }
+  .footer-right a { color:var(--text-sub); text-decoration:none; margin-left:24px; }
+  .footer-right a:hover { text-decoration:underline; }
+  .error-msg { color:#d93025; font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show { display:block; }
 
-  .title {
-    font-size: 36px;
-    font-weight: 400;
-    margin-bottom: 12px;
-    color: var(--text-main);
-  }
+  /* 右上角导航 */
+  .abar-wrap { position:fixed; top:16px; right:24px; z-index:100; }
+  .abtn { display:flex; align-items:center; gap:8px; text-decoration:none; font-size:14px; margin-right:12px; }
+  .user-chip { width:32px; height:32px; border-radius:50%; background:var(--google-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; }
+  .user-name { color:var(--text-sub); }
+  .btn-login-nav { background:var(--google-blue); color:#fff; border:none; padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; margin-right:8px; font-family:inherit; }
+  .btn-reg-nav { background:#fff; color:var(--google-blue); border:1px solid var(--google-blue); padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; font-family:inherit; }
+  .btn-logout { background:none; border:1px solid var(--border-color); color:var(--text-sub); padding:6px 14px; border-radius:14px; font-size:14px; cursor:pointer; font-family:inherit; }
 
-  .subtitle {
-    font-size: 15px;
-    color: var(--text-sub);
-    margin-bottom: 40px;
-  }
+  /* 验证码弹窗 */
+  .code-modal-mask { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:9999; }
+  .code-modal-mask.show { display:flex; }
+  .code-modal { background:#fff; border-radius:16px; padding:32px; max-width:420px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.2); animation:modalIn 0.25s ease-out; }
+  @keyframes modalIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
+  .modal-icon { font-size:48px; margin-bottom:12px; }
+  .code-modal h3 { font-size:18px; font-weight:500; margin-bottom:8px; }
+  .code-hint { font-size:13px; color:var(--text-sub); margin-bottom:4px; }
+  .code-display { font-size:40px; font-weight:700; letter-spacing:12px; color:var(--google-blue); background:#e8f0fe; padding:18px 28px; border-radius:12px; margin:16px auto; cursor:pointer; transition:background 0.2s,transform 0.1s; user-select:all; display:inline-block; border:2px dashed transparent; }
+  .code-display:hover { background:#d2e3fc; border-color:var(--google-blue); }
+  .code-display:active { transform:scale(0.97); }
+  .click-hint { font-size:11px; color:#80868b; margin-bottom:12px; }
+  .countdown { font-size:13px; color:#e8710a; margin-bottom:20px; font-weight:500; }
+  .modal-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:8px; }
+  .btn-copy { background:#f1f3f4; color:var(--text-main); border:1px solid var(--border-color); padding:10px 22px; border-radius:18px; font-size:14px; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:6px; transition:background 0.2s; }
+  .btn-copy:hover { background:#e8eaed; }
+  .btn-copy.copied { background:#e6f4ea; color:#1e8e3e; border-color:#1e8e3e; }
+  .btn-close-modal { background:var(--google-blue); color:#fff; border:none; padding:10px 28px; border-radius:18px; font-size:14px; cursor:pointer; font-family:inherit; transition:background 0.2s; }
+  .btn-close-modal:hover { background:var(--google-blue-hover); }
+  .copy-toast { font-size:12px; color:#1e8e3e; margin-top:8px; display:none; }
+  .copy-toast.show { display:block; animation:fadeIn 0.3s; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-  .right-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 20px;
-  }
+  /* 版权 */
+  .copyright { position:fixed; right:16px; bottom:16px; font-size:12px; color:var(--text-sub); background:rgba(255,255,255,0.9); padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); z-index:200; }
 
-  .step { display: none; }
-  .step.active { display: block; }
-
-  .input-wrapper {
-    position: relative;
-    margin-bottom: 8px;
-  }
-
-  .input-wrapper input {
-    width: 100%;
-    padding: 22px 14px 10px;
-    font-size: 16px;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    outline: none;
-    transition: border 0.2s;
-    font-family: inherit;
-  }
-
-  .input-wrapper input:focus {
-    border: 2px solid var(--google-blue);
-    padding: 21px 13px 9px;
-  }
-
-  .input-wrapper label {
-    position: absolute;
-    left: 14px;
-    top: 16px;
-    color: #80868b;
-    font-size: 16px;
-    pointer-events: none;
-    transition: 0.2s;
-    background: #fff;
-    padding: 0 4px;
-  }
-
-  .input-wrapper input:focus ~ label,
-  .input-wrapper input:not(:placeholder-shown) ~ label {
-    top: -8px;
-    font-size: 12px;
-    color: var(--google-blue);
-  }
-
-  .forgot {
-    display: inline-block;
-    margin-top: 8px;
-    color: var(--google-blue);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
-  }
-
-  .forgot:hover { text-decoration: underline; }
-
-  .privacy-hint {
-    margin-top: 32px;
-    color: var(--text-sub);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .privacy-hint a {
-    color: var(--google-blue);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .privacy-hint a:hover { text-decoration: underline; }
-
-  .actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 24px;
-    margin-top: 40px;
-  }
-
-  .btn-text {
-    color: var(--google-blue);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 14px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    padding: 0;
-  }
-  .btn-text:hover { text-decoration: underline; }
-
-  .btn-next {
-    background: var(--google-blue);
-    color: #fff;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s, box-shadow 0.2s;
-  }
-
-  .btn-next:hover {
-    background: var(--google-blue-hover);
-    box-shadow: 0 2px 6px rgba(26,115,232,0.3);
-  }
-
-  .btn-next:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
-
-  .footer {
-    width: 900px;
-    max-width: 95%;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 16px;
-    padding: 0 16px;
-    color: var(--text-sub);
-    font-size: 12px;
-  }
-
-  .footer-left select {
-    border: none;
-    background: transparent;
-    color: var(--text-sub);
-    cursor: pointer;
-    font-size: 12px;
-  }
-
-  .footer-right a {
-    color: var(--text-sub);
-    text-decoration: none;
-    margin-left: 24px;
-  }
-
-  .footer-right a:hover { text-decoration: underline; }
-
-  .error-msg {
-    color: #d93025;
-    font-size: 13px;
-    margin-top: 8px;
-    display: none;
-  }
-
-  .error-msg.show { display: block; }
-
-  @media (max-width: 768px) {
-    .card { flex-direction: column; padding: 32px 24px; }
-    .left-panel { padding-right: 0; margin-bottom: 32px; }
-    .right-panel { padding-left: 0; }
-    .footer { flex-direction: column; gap: 12px; }
-  }
+  @media(max-width:768px){ .card{flex-direction:column;padding:32px 24px} .left-panel{padding-right:0;margin-bottom:32px} .right-panel{padding-left:0} .footer{flex-direction:column;gap:12px} }
 </style>
 </head>
 <body>
+
+<!-- 右上角登录态 -->
+<div class="abar-wrap"><span id="abar"></span></div>
 
 <div class="card">
   <div class="left-panel">
@@ -251,19 +99,17 @@
   </div>
 
   <div class="right-panel">
-    <!-- Step 1: 邮箱/电话 -->
+    <!-- Step 1 -->
     <div class="step active" id="stepEmail">
       <div class="input-wrapper">
         <input type="text" id="emailInput" placeholder=" " autocomplete="username">
         <label for="emailInput">电子邮件地址或电话号码</label>
       </div>
-      <a class="forgot" href="#" onclick="alert('密码找回功能暂未开放'); return false;">忘记电子邮件地址？</a>
-
+      <a class="forgot" href="#" onclick="alert('密码找回功能暂未开放');return false;">忘记电子邮件地址？</a>
       <div class="privacy-hint" id="privacyHint">
         不是您自己的计算机？请使用无痕浏览窗口进行登录。<br>
         <a href="https://support.google.com/accounts?p=signin_privatebrowsing&hl=zh-CN" id="guestModeLink" target="_blank" rel="noopener">详细了解如何使用访客模式</a>
       </div>
-
       <div class="actions">
         <button class="btn-text" onclick="showStep('stepSignup')">创建账号</button>
         <button class="btn-next" onclick="doEmailNext()">下一步</button>
@@ -271,15 +117,14 @@
       <div class="error-msg" id="emailError">请输入有效的电子邮件地址或电话号码</div>
     </div>
 
-    <!-- Step 2: 密码 -->
+    <!-- Step 2 -->
     <div class="step" id="stepPassword">
-      <div style="font-size:14px; color:var(--text-sub); margin-bottom:8px;" id="emailDisplay"></div>
+      <div style="font-size:14px;color:var(--text-sub);margin-bottom:8px;" id="emailDisplay"></div>
       <div class="input-wrapper">
         <input type="password" id="passwordInput" placeholder=" " autocomplete="current-password">
         <label for="passwordInput">输入密码</label>
       </div>
-      <a class="forgot" href="#" onclick="alert('密码找回功能暂未开放'); return false;">忘记密码？</a>
-
+      <a class="forgot" href="#" onclick="alert('密码找回功能暂未开放');return false;">忘记密码？</a>
       <div class="actions">
         <button class="btn-text" onclick="showStep('stepEmail')">返回</button>
         <button class="btn-next" onclick="doPasswordNext()">下一步</button>
@@ -287,7 +132,7 @@
       <div class="error-msg" id="passwordError">密码错误，请重试</div>
     </div>
 
-    <!-- Step 3: 注册 -->
+    <!-- Step 3 注册 -->
     <div class="step" id="stepSignup">
       <div class="input-wrapper">
         <input type="text" id="signupEmail" placeholder=" ">
@@ -301,7 +146,7 @@
         <input type="text" id="signupCode" placeholder=" " maxlength="6">
         <label for="signupCode">验证码</label>
       </div>
-      <button class="btn-next" id="sendCodeBtn" onclick="sendCode()" style="margin-top:8px; padding: 8px 16px; font-size:13px;">发送验证码</button>
+      <button class="btn-next" id="sendCodeBtn" onclick="sendCode()" style="margin-top:8px;padding:8px 16px;font-size:13px;">发送验证码</button>
       <div class="actions">
         <button class="btn-text" onclick="showStep('stepEmail')">返回登录</button>
         <button class="btn-next" onclick="doReg()">注册</button>
@@ -325,162 +170,185 @@
   </div>
 </div>
 
-<script>
-// ===== 可配置区域 =====
-var GUEST_MODE_URL = 'https://support.google.com/accounts?p=signin_privatebrowsing&hl=zh-CN';
-// =====================
+<div class="copyright">©2024-2026 会泽工作室 版权所有</div>
 
-document.getElementById('guestModeLink').href = GUEST_MODE_URL;
+<!-- 验证码弹窗 -->
+<div class="code-modal-mask" id="codeModalMask">
+  <div class="code-modal">
+    <div class="modal-icon">📧</div>
+    <h3>验证码已发送</h3>
+    <div class="code-hint">以下是您的注册验证码（同时已模拟发送到邮箱）：</div>
+    <div class="code-display" id="codeDisplay" onclick="doCopyCode()" title="点击复制验证码">------</div>
+    <div class="click-hint">👆 点击上方验证码即可快速复制</div>
+    <div class="countdown" id="modalCountdown"></div>
+    <div class="modal-actions">
+      <button class="btn-copy" id="btnCopy" onclick="doCopyCode()"><span>📋</span> 复制验证码</button>
+      <button class="btn-close-modal" onclick="closeCodeModal()">我知道了</button>
+    </div>
+    <div class="copy-toast" id="copyToast">✓ 已复制到剪贴板，快去粘贴吧！</div>
+  </div>
+</div>
+
+<script src="https://the1234556789.github.io/project-pioneer/auth.js"></script>
+<script>
+var GUEST_MODE_URL='https://support.google.com/accounts?p=signin_privatebrowsing&hl=zh-CN';
+document.getElementById('guestModeLink').href=GUEST_MODE_URL;
+
+// 渲染登录态
+AUTH.renderBar();
 
 // ===== 验证码 =====
-var verificationCode = '';
-var codeSent = false;
-var codeExpireTimer = null;
-var countdown = 0;
+var verificationCode='';
+var codeSent=false;
+var codeExpireTimer=null;
+var countdown=0;
+var modalCountdownTimer=null;
 
-function generateCode() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+function generateCode(){return Math.floor(100000+Math.random()*900000).toString();}
+
+function showCodeModal(code){
+  document.getElementById('codeDisplay').textContent=code;
+  document.getElementById('codeModalMask').classList.add('show');
+  document.getElementById('copyToast').classList.remove('show');
+  var btnCopy=document.getElementById('btnCopy');
+  btnCopy.classList.remove('copied');
+  btnCopy.innerHTML='<span>📋</span> 复制验证码';
 }
 
-function sendCode() {
-  if (countdown > 0) {
-    alert('请等待 ' + countdown + ' 秒后再重新发送');
-    return;
+function closeCodeModal(){document.getElementById('codeModalMask').classList.remove('show');}
+
+function doCopyCode(){
+  if(!verificationCode) return;
+  var done=function(){showCopySuccess();};
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(verificationCode).then(done).catch(function(){fallbackCopy();done();});
+  }else{fallbackCopy();done();}
+}
+
+function fallbackCopy(){
+  var el=document.getElementById('codeDisplay');
+  var range=document.createRange();
+  range.selectNodeContents(el);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  document.execCommand('copy');
+  window.getSelection().removeAllRanges();
+}
+
+function showCopySuccess(){
+  document.getElementById('copyToast').classList.add('show');
+  var btnCopy=document.getElementById('btnCopy');
+  btnCopy.classList.add('copied');
+  btnCopy.innerHTML='<span>✓</span> 已复制';
+  setTimeout(function(){document.getElementById('copyToast').classList.remove('show');},2500);
+}
+
+function startModalCountdown(){
+  var expireSec=300;
+  var cdEl=document.getElementById('modalCountdown');
+  cdEl.textContent='⏱ 有效期剩余：'+Math.floor(expireSec/60)+'分'+(expireSec%60)+'秒';
+  clearInterval(modalCountdownTimer);
+  modalCountdownTimer=setInterval(function(){
+    expireSec--;
+    if(expireSec<=0){
+      clearInterval(modalCountdownTimer);
+      cdEl.textContent='❌ 验证码已过期，请重新发送';
+      verificationCode='';codeSent=false;return;
+    }
+    cdEl.textContent='⏱ 有效期剩余：'+Math.floor(expireSec/60)+'分'+(expireSec%60)+'秒';
+  },1000);
+}
+
+function sendCode(){
+  if(countdown>0){alert('请等待 '+countdown+' 秒后再重新发送');return;}
+  var mail=document.getElementById('signupEmail').value.trim();
+  if(!mail){
+    document.getElementById('signupError').textContent='请先输入电子邮件地址再获取验证码';
+    document.getElementById('signupError').classList.add('show');return;
   }
-
-  var mail = document.getElementById('signupEmail').value.trim();
-  if (!mail) {
-    document.getElementById('signupError').textContent = '请先输入电子邮件地址再获取验证码';
-    document.getElementById('signupError').classList.add('show');
-    return;
-  }
-
-  verificationCode = generateCode();
-  codeSent = true;
-
-  alert('【演示】验证码已发送至 ' + mail + '\n验证码：' + verificationCode + '\n（5分钟内有效）');
-  console.log('验证码:', verificationCode);
-
+  verificationCode=generateCode();
+  codeSent=true;
+  showCodeModal(verificationCode);
+  startModalCountdown();
   document.getElementById('signupError').classList.remove('show');
 
-  countdown = 60;
-  var btn = document.getElementById('sendCodeBtn');
-  var originalText = btn.textContent;
-  btn.disabled = true;
-  var timer = setInterval(function() {
-    btn.textContent = '重新发送 (' + countdown + 's)';
+  countdown=60;
+  var btn=document.getElementById('sendCodeBtn');
+  var originalText=btn.textContent;
+  btn.disabled=true;
+  var btnTimer=setInterval(function(){
+    btn.textContent='重新发送 ('+countdown+'s)';
     countdown--;
-    if (countdown < 0) {
-      clearInterval(timer);
-      btn.textContent = originalText;
-      btn.disabled = false;
-      countdown = 0;
-    }
-  }, 1000);
+    if(countdown<0){clearInterval(btnTimer);btn.textContent=originalText;btn.disabled=false;countdown=0;}
+  },1000);
 
   clearTimeout(codeExpireTimer);
-  codeExpireTimer = setTimeout(function() {
-    verificationCode = '';
-    codeSent = false;
-    alert('验证码已过期，请重新发送');
-  }, 300000);
+  codeExpireTimer=setTimeout(function(){verificationCode='';codeSent=false;},300000);
 }
 
 // ===== 参数解析 =====
-function readAuthParams() {
-  var params = {};
-  var qs = window.location.search.substring(1);
-  if (!qs) return params;
-  qs.split('&').forEach(function(pair) {
-    var parts = pair.split('=');
-    if (parts.length === 2) {
-      params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-    }
+function readAuthParams(){
+  var params={};
+  var qs=window.location.search.substring(1);
+  if(!qs) return params;
+  qs.split('&').forEach(function(pair){
+    var parts=pair.split('=');
+    if(parts.length===2) params[decodeURIComponent(parts[0])]=decodeURIComponent(parts[1]);
   });
   return params;
 }
+var authParams=readAuthParams();
+if(authParams.service) document.getElementById('pageSubtitle').textContent='继续使用 '+authParams.service;
 
-var authParams = readAuthParams();
-
-if (authParams.service) {
-  document.getElementById('pageSubtitle').textContent = '继续使用 ' + authParams.service;
-}
-
-function showStep(stepId) {
-  document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+function showStep(stepId){
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
   document.getElementById(stepId).classList.add('active');
 }
 
-var currentEmail = '';
+var currentEmail='';
 
-function doEmailNext() {
-  var email = document.getElementById('emailInput').value.trim();
-  if (!email) {
-    document.getElementById('emailError').classList.add('show');
-    return;
-  }
+function doEmailNext(){
+  var email=document.getElementById('emailInput').value.trim();
+  if(!email){document.getElementById('emailError').classList.add('show');return;}
   document.getElementById('emailError').classList.remove('show');
-  currentEmail = email;
-  document.getElementById('emailDisplay').textContent = email;
+  currentEmail=email;
+  document.getElementById('emailDisplay').textContent=email;
   showStep('stepPassword');
 }
 
-function doPasswordNext() {
-  var pwd = document.getElementById('passwordInput').value;
-  if (!pwd) {
+function doPasswordNext(){
+  var email=currentEmail;
+  var pwd=document.getElementById('passwordInput').value;
+  if(!pwd){document.getElementById('passwordError').classList.add('show');return;}
+  if(AUTH.login(email,pwd)){
+    document.getElementById('passwordError').classList.remove('show');
+    var next=authParams.next||authParams.continue||authParams.redirect||'https://the1234556789.github.io/project-pioneer/';
+    location.href=next;
+  }else{
+    document.getElementById('passwordError').textContent='邮箱或密码错误';
     document.getElementById('passwordError').classList.add('show');
-    return;
   }
-  document.getElementById('passwordError').classList.remove('show');
-  var next = authParams.next || authParams.continue || authParams.redirect || 'https://the1234556789.github.io/project-pioneer/login/';
-  window.location.href = next;
 }
 
-function doReg() {
-  var mail = document.getElementById('signupEmail').value.trim();
-  var pwd = document.getElementById('signupPassword').value;
-  var code = document.getElementById('signupCode').value;
-  var errEl = document.getElementById('signupError');
-
-  if (!mail) {
-    errEl.textContent = '请输入电子邮件地址';
-    errEl.classList.add('show');
-    return;
+function doReg(){
+  var mail=document.getElementById('signupEmail').value.trim();
+  var pwd=document.getElementById('signupPassword').value;
+  var code=document.getElementById('signupCode').value;
+  var errEl=document.getElementById('signupError');
+  if(!mail){errEl.textContent='请输入电子邮件地址';errEl.classList.add('show');return;}
+  if(!pwd||pwd.length<8){errEl.textContent='密码至少8位';errEl.classList.add('show');return;}
+  if(!code){errEl.textContent='请输入验证码';errEl.classList.add('show');return;}
+  if(code!==verificationCode){errEl.textContent='验证码错误';errEl.classList.add('show');return;}
+  if(!AUTH.register(mail,pwd)){
+    errEl.textContent='该邮箱已注册';errEl.classList.add('show');return;
   }
-  if (!pwd || pwd.length < 8) {
-    errEl.textContent = '密码至少8位';
-    errEl.classList.add('show');
-    return;
-  }
-  if (!code) {
-    errEl.textContent = '请输入验证码';
-    errEl.classList.add('show');
-    return;
-  }
-  if (!codeSent) {
-    errEl.textContent = '请先点击"发送验证码"获取验证码';
-    errEl.classList.add('show');
-    return;
-  }
-  if (code !== verificationCode) {
-    errEl.textContent = '验证码错误，请检查后重试';
-    errEl.classList.add('show');
-    return;
-  }
-
   errEl.classList.remove('show');
-  var next = authParams.next || authParams.continue || authParams.redirect || 'https://the1234556789.github.io/project-pioneer/login/';
-  window.location.href = next;
+  var next=authParams.next||authParams.continue||authParams.redirect||'https://the1234556789.github.io/project-pioneer/';
+  location.href=next;
 }
 
-function changeLang(lang) {
-  console.log('切换语言:', lang);
-}
-
-if (authParams.signup === '1') {
-  showStep('stepSignup');
-}
+function changeLang(v){}
+if(authParams.signup==='1') showStep('stepSignup');
 </script>
-
 </body>
 </html>
