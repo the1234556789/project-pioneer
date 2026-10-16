@@ -3,106 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>发布视频 - project-pioneer</title>
+<title>上传视频 - Project Pioneer</title>
 <style>
-  :root { --google-blue:#1a73e8; --google-blue-hover:#1557b0; --text-main:#202124; --text-sub:#5f6368; --border-color:#dadce0; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Roboto',Arial,sans-serif; background:#f6f9fc; color:var(--text-main); }
-
-  .topbar { background:#fff; border-bottom:1px solid var(--border-color); padding:10px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-  .topbar .brand { display:flex; align-items:center; gap:10px; font-size:18px; font-weight:500; }
-  .topbar .brand img { width:32px; height:32px; border-radius:50%; object-fit:cover; }
-
-  .abtn { display:flex; align-items:center; gap:8px; text-decoration:none; font-size:14px; margin-right:12px; }
-  .user-chip { width:32px; height:32px; border-radius:50%; background:var(--google-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; }
-  .user-name { color:var(--text-sub); }
-  .btn-login-nav { background:var(--google-blue); color:#fff; border:none; padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; margin-right:8px; font-family:inherit; }
-  .btn-reg-nav { background:#fff; color:var(--google-blue); border:1px solid var(--google-blue); padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; font-family:inherit; }
-  .btn-logout { background:none; border:1px solid var(--border-color); color:var(--text-sub); padding:6px 14px; border-radius:14px; font-size:14px; cursor:pointer; font-family:inherit; }
-
-  .container { max-width:680px; margin:40px auto; background:#fff; border-radius:12px; padding:32px; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
-  h1 { font-size:22px; font-weight:400; margin-bottom:24px; }
-  label { display:block; font-size:14px; font-weight:500; color:var(--text-sub); margin:18px 0 6px; }
-  input,textarea,select { width:100%; padding:12px 14px; font-size:15px; border:1px solid var(--border-color); border-radius:8px; outline:none; font-family:inherit; box-sizing:border-box; }
-  input:focus,textarea:focus,select:focus { border-color:var(--google-blue); box-shadow:0 2px 8px rgba(26,115,232,0.15); }
-  textarea { resize:vertical; min-height:100px; }
-  .btn-primary { background:var(--google-blue); color:#fff; border:none; padding:12px 32px; border-radius:20px; font-size:14px; font-weight:500; cursor:pointer; margin-top:24px; }
-  .btn-primary:hover { background:var(--google-blue-hover); }
-  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
-
-  .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#323232; color:#fff; padding:12px 24px; border-radius:8px; font-size:14px; opacity:0; pointer-events:none; transition:opacity 0.3s; z-index:999; }
-  .toast.show { opacity:1; }
-
-  /* 上传按钮 */
-  .upload-fab { position:fixed; right:24px; bottom:56px; background:var(--google-blue); color:#fff; border:none; padding:14px 24px; border-radius:24px; font-size:14px; font-weight:500; cursor:pointer; box-shadow:0 4px 12px rgba(26,115,232,0.4); z-index:150; display:none; }
-  .upload-fab:hover { background:var(--google-blue-hover); }
-
-  /* 版权 */
-  .copyright { position:fixed; right:16px; bottom:16px; font-size:12px; color:var(--text-sub); background:rgba(255,255,255,0.9); padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); z-index:200; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; }
+.topbar { height: 56px; border-bottom: 1px solid #ddd; display: flex; align-items: center; padding: 0 24px; gap: 16px; position: sticky; top: 0; background: white; z-index: 100; }
+.logo { font-size: 20px; font-weight: bold; text-decoration: none; color: #000; cursor: pointer; }
+.logo span { color: #ff0000; }
+.spacer { flex: 1; }
+.abtn { display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; margin-right: 12px; }
+.user-chip { width: 32px; height: 32px; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; }
+.user-name { color: #5f6368; }
+.btn-login-nav { background: #1a73e8; color: #fff; border: none; padding: 8px 20px; border-radius: 16px; font-size: 14px; cursor: pointer; margin-right: 8px; font-family: inherit; }
+.btn-reg-nav { background: #fff; color: #1a73e8; border: 1px solid #1a73e8; padding: 8px 20px; border-radius: 16px; font-size: 14px; cursor: pointer; font-family: inherit; }
+.btn-logout { background: none; border: 1px solid #dadce0; color: #5f6368; padding: 6px 14px; border-radius: 14px; font-size: 14px; cursor: pointer; font-family: inherit; }
+.btn-logout:hover { background: #f1f3f4; }
+.container { max-width: 680px; margin: 0 auto; padding: 32px 24px; }
+h1 { font-size: 22px; margin-bottom: 24px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: #333; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 10px 14px; font-size: 14px; outline: none; font-family: inherit; }
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: #1a73e8; }
+.type-hint { font-size: 12px; color: #999; margin-top: 4px; }
+.submit-btn { background: #1a73e8; color: #fff; border: none; padding: 12px 32px; border-radius: 24px; font-size: 15px; cursor: pointer; font-family: inherit; }
+.submit-btn:hover { background: #1557b0; }
+.back-link { display: inline-block; margin-top: 16px; font-size: 14px; color: #1a73e8; text-decoration: none; }
+.copyright { position: fixed; right: 16px; bottom: 16px; font-size: 12px; color: #5f6368; background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); z-index: 200; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="brand">
-    <img src="https://the1234556789.github.io/project-pioneer/login/project-pioneer.jpg" alt="project-pioneer">
-    <span>project-pioneer</span>
-  </div>
-  <div id="abar"></div>
+  <a class="logo" onclick="location.href='index.html'">Project<span>Pioneer</span></a>
+  <div class="spacer"></div>
+  <div class="user-area" id="abar"></div>
 </div>
 
 <div class="container">
-  <h1>发布视频</h1>
-  <form id="upform" onsubmit="return false">
-    <label>视频标题</label>
-    <input id="title" required maxlength="100" placeholder="给你的视频起个标题">
-
-    <label>视频链接（B站/直链）</label>
-    <input id="url" required placeholder="https://...">
-
+  <h1>上传视频</h1>
+  <div class="form-group">
+    <label>视频标题 *</label>
+    <input id="vtitle" placeholder="给视频起个名字">
+  </div>
+  <div class="form-group">
+    <label>视频描述</label>
+    <textarea id="vdesc" placeholder="说说这个视频的内容..."></textarea>
+  </div>
+  <div class="form-group">
+    <label>视频来源 *</label>
+    <select id="vtype" onchange="onTypeChange()">
+      <option value="local">本地视频文件</option>
+      <option value="bilibili">B站 BV号</option>
+      <option value="youtube">YouTube ID</option>
+    </select>
+    <div class="type-hint" id="typeHint">选择本地视频文件，上传后可直接播放</div>
+  </div>
+  <div class="form-group" id="localFileGroup">
+    <label>选择视频文件 *</label>
+    <input type="file" id="vfile" accept="video/*">
+  </div>
+  <div class="form-group" id="bvidGroup" style="display:none;">
+    <label>B站 BV号</label>
+    <input id="vbvid" placeholder="例如：BV1GJ411x7h7">
+  </div>
+  <div class="form-group" id="ytGroup" style="display:none;">
+    <label>YouTube 视频 ID</label>
+    <input id="vytid" placeholder="例如：dQw4w9WgXcQ">
+  </div>
+  <div class="form-group">
     <label>分类</label>
-    <select id="cat">
-      <option value="other">其他</option>
+    <select id="vcat">
+      <option value="tech">科技</option>
       <option value="music">音乐</option>
       <option value="game">游戏</option>
-      <option value="tech">科技</option>
+      <option value="life">生活</option>
+      <option value="other">其他</option>
     </select>
-
-    <label>简介</label>
-    <textarea id="desc" rows="4" placeholder="说说这个视频..."></textarea>
-
-    <label>缩略图 URL（可选）</label>
-    <input id="thumb" placeholder="https://...">
-
-    <button class="btn-primary" id="submitBtn" onclick="doSubmit()">发布</button>
-  </form>
+  </div>
+  <button class="submit-btn" onclick="doUpload()">发布视频</button>
+  <br><a class="back-link" href="index.html">← 返回首页</a>
 </div>
 
-<button class="upload-fab" id="uploadFab" onclick="location.href='https://the1234556789.github.io/project-pioneer/upload.html'">＋ 上传视频</button>
 <div class="copyright">©2024-2026 会泽工作室 版权所有</div>
-<div class="toast" id="toast"></div>
 
 <script src="https://the1234556789.github.io/project-pioneer/auth.js"></script>
 <script>
-var STORAGE_VIDEOS='pp_videos';
+const STORAGE_VIDEOS = "pp_videos";
 
-function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},3000);}
-
-AUTH.renderBar();
-
-function doSubmit(){
-  if(!AUTH.requireLogin()) return;
-  var title=document.getElementById('title').value.trim();
-  var url=document.getElementById('url').value.trim();
-  if(!title||!url){showToast('标题和链接不能为空');return;}
-  var u=AUTH.getUser();
-  var videos=JSON.parse(localStorage.getItem(STORAGE_VIDEOS)||'[]');
-  videos.unshift({title:title,url:url,author:u.username||u.email,tag:document.getElementById('cat').value,desc:document.getElementById('desc').value,thumb:document.getElementById('thumb').value,views:0,time:Date.now()});
-  localStorage.setItem(STORAGE_VIDEOS,JSON.stringify(videos));
-  showToast('发布成功！');
-  document.getElementById('submitBtn').disabled=true;
-  setTimeout(function(){location.href='https://the1234556789.github.io/project-pioneer/index.html'},1200);
+function onTypeChange(){
+  const t = gid('vtype').value;
+  gid('localFileGroup').style.display = t === 'local' ? '' : 'none';
+  gid('bvidGroup').style.display = t === 'bilibili' ? '' : 'none';
+  gid('ytGroup').style.display = t === 'youtube' ? '' : 'none';
+  const hint = gid('typeHint');
+  if (t === 'local') hint.textContent = '选择本地视频文件，上传后可直接播放';
+  else if (t === 'bilibili') hint.textContent = '填写B站视频BV号，将嵌入B站播放器';
+  else hint.textContent = '填写YouTube视频ID，将嵌入YouTube播放器';
 }
+
+function gid(id){ return document.getElementById(id); }
+
+function doUpload(){
+  if (!AUTH.getUser()){ alert('请先登录'); location.href = 'login/index.html'; return; }
+  
+  const title = gid('vtitle').value.trim();
+  if (!title){ alert('请填写视频标题'); return; }
+  
+  const type = gid('vtype').value;
+  const videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS) || "[]");
+  
+  // 生成唯一页面名
+  const pageName = Date.now().toString(36) + Math.random().toString(36).substr(2, 5) + '.html';
+  
+  const video = {
+    title: title,
+    desc: gid('vdesc').value.trim(),
+    page: pageName,
+    type: type,
+    category: gid('vcat').value,
+    up: AUTH.getUser().username,
+    plays: '0次播放',
+    date: new Date().toISOString().slice(0,10)
+  };
+  
+  if (type === 'bilibili') {
+    const bvid = gid('vbvid').value.trim();
+    if (!bvid){ alert('请填写BV号'); return; }
+    video.bvid = bvid;
+  } else if (type === 'youtube') {
+    const ytid = gid('vytid').value.trim();
+    if (!ytid){ alert('请填写YouTube视频ID'); return; }
+    video.ytid = ytid;
+  } else {
+    const fileInput = gid('vfile');
+    if (!fileInput.files.length){ alert('请选择视频文件'); return; }
+    video.videoSrc = URL.createObjectURL(fileInput.files[0]);
+  }
+  
+  videos.push(video);
+  localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
+  
+  alert('发布成功！');
+  location.href = `watch.html?page=${pageName}`;
+}
+
+function initPage(){
+  AUTH.renderBar();
+  if (!AUTH.getUser()){ alert('请先登录'); location.href = 'login/index.html'; }
+}
+initPage();
 </script>
 </body>
 </html>
