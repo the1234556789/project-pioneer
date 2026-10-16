@@ -3,218 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>发布视频 - Project Pioneer</title>
+<title>发布视频 - project-pioneer</title>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; }
-.topbar { height: 56px; border-bottom: 1px solid #ddd; display: flex; align-items: center; padding: 0 24px; gap: 16px; position: sticky; top: 0; background: white; z-index: 100; }
-.logo { font-size: 20px; font-weight: bold; text-decoration: none; color: #000; cursor: pointer; }
-.logo span { color: #ff0000; }
-.spacer { flex: 1; }
-.user-area { display: flex; align-items: center; gap: 10px; }
-.u-avatar { width: 32px; height: 32px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; text-decoration: none; cursor: pointer; }
-.u-name { font-size: 14px; cursor: pointer; }
-.u-badge { font-size: 10px; background: #fee; color: #c00; padding: 2px 6px; border-radius: 8px; }
-.btn-out { padding: 5px 12px; border: 1px solid #ccc; background: white; border-radius: 14px; cursor: pointer; font-size: 12px; }
-.cover { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
-.cover.show { display: flex; }
-.popup { background: white; border-radius: 12px; padding: 24px; width: 360px; }
-.popup h2 { margin: 0 0 16px 0; font-size: 18px; }
-.tabs { display: flex; margin-bottom: 16px; border-bottom: 1px solid #ddd; }
-.tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: #666; border-bottom: 2px solid transparent; font-size: 14px; }
-.tab.on { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: bold; }
-.page { display: none; }
-.page.on { display: block; }
-.popup input { width: 100%; padding: 10px 12px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
-.popup button.go { width: 100%; padding: 10px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
-.err { color: #c00; font-size: 12px; min-height: 16px; margin-bottom: 8px; }
-.tip { font-size: 12px; color: #1a73e8; background: #e8f0fe; padding: 8px 12px; border-radius: 8px; margin-bottom: 10px; }
-.container { max-width: 800px; margin: 0 auto; padding: 24px; }
-.form-box { background: white; border-radius: 12px; padding: 24px; }
-.form-box h2 { margin-bottom: 20px; font-size: 18px; }
-.form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: #333; }
-.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; outline: none; }
-.form-group textarea { resize: vertical; min-height: 80px; }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #1a73e8; }
-.btn-submit { padding: 12px 32px; background: #1a73e8; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 500; }
-.btn-submit:hover { background: #1558b0; }
-.toast { position: fixed; top: 70px; right: 24px; background: #323232; color: white; padding: 12px 20px; border-radius: 8px; font-size: 14px; z-index: 300; opacity: 0; transform: translateY(-10px); transition: opacity 0.3s, transform 0.3s; pointer-events: none; }
-.toast.show { opacity: 1; transform: translateY(0); }
-.footer { text-align: center; padding: 24px; color: #aaa; font-size: 12px; border-top: 1px solid #ddd; margin-top: 40px; }
+  :root { --google-blue:#1a73e8; --google-blue-hover:#1557b0; --text-main:#202124; --text-sub:#5f6368; --border-color:#dadce0; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Roboto',Arial,sans-serif; background:#f6f9fc; color:var(--text-main); }
+
+  .topbar { background:#fff; border-bottom:1px solid var(--border-color); padding:10px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+  .topbar .brand { display:flex; align-items:center; gap:10px; font-size:18px; font-weight:500; }
+  .topbar .brand img { width:32px; height:32px; border-radius:50%; object-fit:cover; }
+
+  .abtn { display:flex; align-items:center; gap:8px; text-decoration:none; font-size:14px; margin-right:12px; }
+  .user-chip { width:32px; height:32px; border-radius:50%; background:var(--google-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; }
+  .user-name { color:var(--text-sub); }
+  .btn-login-nav { background:var(--google-blue); color:#fff; border:none; padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; margin-right:8px; font-family:inherit; }
+  .btn-reg-nav { background:#fff; color:var(--google-blue); border:1px solid var(--google-blue); padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; font-family:inherit; }
+  .btn-logout { background:none; border:1px solid var(--border-color); color:var(--text-sub); padding:6px 14px; border-radius:14px; font-size:14px; cursor:pointer; font-family:inherit; }
+
+  .container { max-width:680px; margin:40px auto; background:#fff; border-radius:12px; padding:32px; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+  h1 { font-size:22px; font-weight:400; margin-bottom:24px; }
+  label { display:block; font-size:14px; font-weight:500; color:var(--text-sub); margin:18px 0 6px; }
+  input,textarea,select { width:100%; padding:12px 14px; font-size:15px; border:1px solid var(--border-color); border-radius:8px; outline:none; font-family:inherit; box-sizing:border-box; }
+  input:focus,textarea:focus,select:focus { border-color:var(--google-blue); box-shadow:0 2px 8px rgba(26,115,232,0.15); }
+  textarea { resize:vertical; min-height:100px; }
+  .btn-primary { background:var(--google-blue); color:#fff; border:none; padding:12px 32px; border-radius:20px; font-size:14px; font-weight:500; cursor:pointer; margin-top:24px; }
+  .btn-primary:hover { background:var(--google-blue-hover); }
+  .btn-primary:disabled { background:#ccc; cursor:not-allowed; }
+
+  .toast { position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#323232; color:#fff; padding:12px 24px; border-radius:8px; font-size:14px; opacity:0; pointer-events:none; transition:opacity 0.3s; z-index:999; }
+  .toast.show { opacity:1; }
+
+  /* 上传按钮 */
+  .upload-fab { position:fixed; right:24px; bottom:56px; background:var(--google-blue); color:#fff; border:none; padding:14px 24px; border-radius:24px; font-size:14px; font-weight:500; cursor:pointer; box-shadow:0 4px 12px rgba(26,115,232,0.4); z-index:150; display:none; }
+  .upload-fab:hover { background:var(--google-blue-hover); }
+
+  /* 版权 */
+  .copyright { position:fixed; right:16px; bottom:16px; font-size:12px; color:var(--text-sub); background:rgba(255,255,255,0.9); padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); z-index:200; }
 </style>
 </head>
 <body>
 
-<div class="cover" id="pop">
-  <div class="popup">
-    <h2>登录</h2>
-    <div class="tabs">
-      <div class="tab on" onclick="swTab('login')">登录</div>
-      <div class="tab" onclick="swTab('reg')">注册</div>
-    </div>
-    <div class="page on" id="pg-login">
-      <div class="err" id="e-login"></div>
-      <input id="l-user" placeholder="用户名 / 邮箱">
-      <input id="l-pw" type="password" placeholder="密码">
-      <button class="go" onclick="doLogin()">登录</button>
-    </div>
-    <div class="page" id="pg-reg">
-      <div class="err" id="e-reg"></div>
-      <input id="r-mail" placeholder="邮箱">
-      <input id="r-name" placeholder="昵称">
-      <input id="r-phone" placeholder="手机号（可选）">
-      <input id="r-pw" type="password" placeholder="密码（至少6位）">
-      <button class="go" onclick="doSend()">发送验证码</button>
-      <div class="tip" id="v-tip" style="display:none"></div>
-      <input id="r-code" placeholder="6位验证码" style="display:none">
-      <button class="go" id="r-go" onclick="doReg()" style="display:none">完成注册</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
 <div class="topbar">
-  <a class="logo" onclick="location.href='index.html'">Project<span>Pioneer</span></a>
-  <div class="spacer"></div>
-  <div class="user-area" id="abar"></div>
+  <div class="brand">
+    <img src="https://the1234556789.github.io/project-pioneer/login/project-pioneer.jpg" alt="project-pioneer">
+    <span>project-pioneer</span>
+  </div>
+  <div id="abar"></div>
 </div>
 
 <div class="container">
-  <div class="form-box">
-    <h2>发布新视频</h2>
-    <div class="form-group">
-      <label>视频标题 *</label>
-      <input id="v-title" placeholder="输入视频标题">
-    </div>
-    <div class="form-group">
-      <label>视频描述</label>
-      <textarea id="v-desc" placeholder="输入视频描述"></textarea>
-    </div>
-    <div class="form-group">
-      <label>视频类型 *</label>
-      <select id="v-type">
-        <option value="bilibili">B站嵌入</option>
-        <option value="local">本地视频</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label id="l-page-label">BVID（如 BV1GJ411x7h7）</label>
-      <input id="v-page" placeholder="BV号 或 目标页面名（如 dQw4w9WgXcQ.html）">
-    </div>
-    <div class="form-group">
-      <label>分类</label>
-      <select id="v-cat">
-        <option value="music">音乐</option>
-        <option value="tech">科技</option>
-        <option value="game">游戏</option>
-        <option value="life">生活</option>
-        <option value="other">其他</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>来源频道名</label>
-      <input id="v-up" placeholder="如：索尼音乐中国">
-    </div>
-    <button class="btn-submit" onclick="doSubmit()">发布视频</button>
-  </div>
+  <h1>发布视频</h1>
+  <form id="upform" onsubmit="return false">
+    <label>视频标题</label>
+    <input id="title" required maxlength="100" placeholder="给你的视频起个标题">
+
+    <label>视频链接（B站/直链）</label>
+    <input id="url" required placeholder="https://...">
+
+    <label>分类</label>
+    <select id="cat">
+      <option value="other">其他</option>
+      <option value="music">音乐</option>
+      <option value="game">游戏</option>
+      <option value="tech">科技</option>
+    </select>
+
+    <label>简介</label>
+    <textarea id="desc" rows="4" placeholder="说说这个视频..."></textarea>
+
+    <label>缩略图 URL（可选）</label>
+    <input id="thumb" placeholder="https://...">
+
+    <button class="btn-primary" id="submitBtn" onclick="doSubmit()">发布</button>
+  </form>
 </div>
 
-<div class="footer">Project Pioneer · 视频发布</div>
+<button class="upload-fab" id="uploadFab" onclick="location.href='https://the1234556789.github.io/project-pioneer/upload.html'">＋ 上传视频</button>
+<div class="copyright">©2024-2026 会泽工作室 版权所有</div>
+<div class="toast" id="toast"></div>
 
+<script src="https://the1234556789.github.io/project-pioneer/auth.js"></script>
 <script>
-const STORAGE_USER_KEY = "pp_user";
-const STORAGE_USERS_LIST = "pp_users";
-const STORAGE_VIDEOS = "pp_videos";
+var STORAGE_VIDEOS='pp_videos';
 
-function gid(id){ return document.getElementById(id); }
-function safeStr(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},3000);}
 
-function getLoginUser(){ const raw = localStorage.getItem(STORAGE_USER_KEY); return raw ? JSON.parse(raw) : null; }
-function saveLoginUser(u){ if(u) localStorage.setItem(STORAGE_USER_KEY, JSON.stringify(u)); else localStorage.removeItem(STORAGE_USER_KEY); renderBar(); }
-function getUsers(){ const raw = localStorage.getItem(STORAGE_USERS_LIST); return raw ? JSON.parse(raw) : []; }
-function saveUsers(list){ localStorage.setItem(STORAGE_USERS_LIST, JSON.stringify(list)); }
-
-function renderBar(){
-  const u = getLoginUser(); const abar = gid('abar');
-  if(u){ abar.innerHTML = `<a class="u-avatar" style="background:${u.color}" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">${u.name[0]}</a><span class="u-name" onclick="location.href='profile.html?name=${encodeURIComponent(u.name)}'">${safeStr(u.name)}</span>${u.type==='creator'?'<span class="u-badge">创作者</span>':''}<button class="btn-out" onclick="doLogout()">退出</button>`; }
-  else{ abar.innerHTML = `<button class="btn-login" onclick="openPop()">登录</button><button class="btn-reg" onclick="openPop();swTab('reg')">注册</button>`; }
-}
-
-function openPop(){ gid('pop').classList.add('show'); swTab('login'); }
-function closePop(){ gid('pop').classList.remove('show'); }
-function swTab(t){
-  const tabs = document.querySelectorAll('.tabs .tab'); tabs.forEach(tab => tab.classList.remove('on'));
-  if(t === 'login'){ tabs[0].classList.add('on'); gid('pg-login').style.display = 'block'; gid('pg-reg').style.display = 'none'; gid('e-login').textContent = ''; }
-  else{ tabs[1].classList.add('on'); gid('pg-reg').style.display = 'block'; gid('pg-login').style.display = 'none'; gid('e-reg').textContent = ''; }
-  gid('l-user').value = ''; gid('l-pw').value = ''; gid('r-mail').value = ''; gid('r-name').value = ''; gid('r-phone').value = ''; gid('r-pw').value = ''; gid('r-code').value = ''; gid('v-tip').style.display = 'none'; gid('r-code').style.display = 'none'; gid('r-go').style.display = 'none';
-}
-
-async function doLogin(){
-  const name = gid('l-user').value.trim(); const pw = gid('l-pw').value; const err = gid('e-login'); err.textContent = '';
-  if(!name || !pw){ err.textContent = '请填写账号密码'; return; }
-  try{ const resp = await fetch('./'+encodeURIComponent(name)+'/密码.txt',{cache:'no-store'}); if(resp.ok){ const txt = (await resp.text()).trim(); if(txt === pw){ saveLoginUser({name,color:'#cc0000',type:'creator'}); closePop(); return; }else{ err.textContent = '密码错误'; return; } } }catch(e){}
-  const all = getUsers(); const found = all.find(x => (x.mail === name || x.name === name) && x.pw === pw);
-  if(found){ saveLoginUser({name:found.name,color:found.color,type:'user'}); closePop(); }
-  else err.textContent = '账号不存在或密码错误';
-}
-
-let _vcode='', _vexp=0, _rname='', _rpw='';
-function doSend(){
-  const mail = gid('r-mail').value.trim(); const name = gid('r-name').value.trim(); const phone = gid('r-phone').value.trim(); const pw = gid('r-pw').value; const err = gid('e-reg'); err.textContent = '';
-  if(!mail || !name || !pw){ err.textContent = '请填写完整信息'; return; }
-  if(phone && !/^1[3-9]\d{9}$/.test(phone)){ err.textContent = '手机号格式不正确'; return; }
-  if(pw.length < 6){ err.textContent = '密码至少6位'; return; }
-  if(getUsers().some(x => x.mail === mail)){ err.textContent = '该邮箱已注册'; return; }
-  if(getUsers().some(x => x.name === name)){ err.textContent = '该昵称已被占用'; return; }
-  if(phone && getUsers().some(x => x.phone === phone)){ err.textContent = '该手机号已注册'; return; }
-  _vcode = String(Math.floor(100000 + Math.random() * 900000)); _vexp = Date.now() + 300000; _rname = name; _rpw = pw;
-  gid('v-tip').style.display = 'block'; gid('v-tip').textContent = '演示验证码：' + _vcode;
-  gid('r-code').style.display = 'block'; gid('r-go').style.display = 'block';
-}
-function doReg(){
-  const code = gid('r-code').value.trim(); const err = gid('e-reg');
-  if(!_vcode) return; if(Date.now() > _vexp){ err.textContent = '验证码已过期'; return; } if(code !== _vcode){ err.textContent = '验证码错误'; return; }
-  const colors = ['#065fd4','#137333','#e37400','#8e24aa','#0097a7','#cc0000']; const color = colors[Math.floor(Math.random()*colors.length)];
-  const all = getUsers(); all.push({mail:mail,name:_rname,phone:gid('r-phone').value.trim(),pw:_rpw,color}); saveUsers(all); saveLoginUser({name:_rname,color,type:'user'}); closePop();
-}
-function doLogout(){ saveLoginUser(null); }
-
-function showToast(msg){
-  const t = gid('toast'); t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
+AUTH.renderBar();
 
 function doSubmit(){
-  const u = getLoginUser();
-  if(!u){ showToast('请先登录'); openPop(); return; }
-  const title = gid('v-title').value.trim();
-  const desc = gid('v-desc').value.trim();
-  const type = gid('v-type').value;
-  const page = gid('v-page').value.trim();
-  const cat = gid('v-cat').value;
-  const up = gid('v-up').value.trim();
-  if(!title || !page){ showToast('标题和目标页面不能为空'); return; }
-  let videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS) || "[]");
-  if(videos.find(v => v.page === page)){ showToast('该页面已存在视频记录'); return; }
-  const entry = { title, desc, type, page, category: cat, up, date: new Date().toISOString().slice(0,10) };
-  if(type === 'bilibili'){ entry.bvid = page; }
-  videos.push(entry);
-  localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
+  if(!AUTH.requireLogin()) return;
+  var title=document.getElementById('title').value.trim();
+  var url=document.getElementById('url').value.trim();
+  if(!title||!url){showToast('标题和链接不能为空');return;}
+  var u=AUTH.getUser();
+  var videos=JSON.parse(localStorage.getItem(STORAGE_VIDEOS)||'[]');
+  videos.unshift({title:title,url:url,author:u.username||u.email,tag:document.getElementById('cat').value,desc:document.getElementById('desc').value,thumb:document.getElementById('thumb').value,views:0,time:Date.now()});
+  localStorage.setItem(STORAGE_VIDEOS,JSON.stringify(videos));
   showToast('发布成功！');
-  setTimeout(() => location.href = 'index.html', 1200);
+  document.getElementById('submitBtn').disabled=true;
+  setTimeout(function(){location.href='https://the1234556789.github.io/project-pioneer/index.html'},1200);
 }
-
-function initPage(){
-  renderBar();
-  gid('v-type').addEventListener('change', function(){
-    gid('l-page-label').textContent = this.value === 'bilibili' ? 'BVID（如 BV1GJ411x7h7）' : '目标页面名（如 dQw4w9WgXcQ.html）';
-    gid('v-page').placeholder = this.value === 'bilibili' ? 'BV号' : '目标页面名（如 dQw4w9WgXcQ.html）';
-  });
-  gid('pop').addEventListener('click', e => { if(e.target === gid('pop')) closePop(); });
-}
-initPage();
 </script>
 </body>
 </html>
