@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>project-pioneer</title>
+<style>
+  :root {
+    --google-blue: #1a73e8;
+    --google-blue-hover: #1557b0;
+    --text-main: #202124;
+    --text-sub: #5f6368;
+    --border-color: #dadce0;
+    --bg-color: #f6f9fc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  .card {
+    background: #fff;
+    width: 900px;
+    max-width: 95%;
+    border-radius: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    display: flex;
+    padding: 48px 56px;
+    min-height: 480px;
+  }
+
+  .left-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-right: 40px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .brand-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .title {
+    font-size: 36px;
+    font-weight: 400;
+    margin-bottom: 12px;
+    color: var(--text-main);
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--text-sub);
+    margin-bottom: 40px;
+  }
+
+  .right-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 20px;
+  }
+
+  .step { display: none; }
+  .step.active { display: block; }
+
+  .input-wrapper {
+    position: relative;
+    margin-bottom: 8px;
+  }
+
+  .input-wrapper input {
+    width: 100%;
+    padding: 22px 14px 10px;
+    font-size: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    outline: none;
+    transition: border 0.2s;
+    font-family: inherit;
+  }
+
+  .input-wrapper input:focus {
+    border: 2px solid var(--google-blue);
+    padding: 21px 13px 9px;
+  }
+
+  .input-wrapper label {
+    position: absolute;
+    left: 14px;
+    top: 16px;
+    color: #80868b;
+    font-size: 16px;
+    pointer-events: none;
+    transition: 0.2s;
+    background: #fff;
+    padding: 0 4px;
+  }
+
+  .input-wrapper input:focus ~ label,
+  .input-wrapper input:not(:placeholder-shown) ~ label {
+    top: -8px;
+    font-size: 12px;
+    color: var(--google-blue);
+  }
+
+  .forgot {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--google-blue);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .forgot:hover { text-decoration: underline; }
+
+  .privacy-hint {
+    margin-top: 32px;
+    color: var(--text-sub);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .privacy-hint a {
+    color: var(--google-blue);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .privacy-hint a:hover { text-decoration: underline; }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .btn-text {
+    color: var(--google-blue);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+  }
+  .btn-text:hover { text-decoration: underline; }
+
+  .btn-next {
+    background: var(--google-blue);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-next:hover {
+    background: var(--google-blue-hover);
+    box-shadow: 0 2px 6px rgba(26,115,232,0.3);
+  }
+
+  .btn-next:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .footer {
+    width: 900px;
+    max-width: 95%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    padding: 0 16px;
+    color: var(--text-sub);
+    font-size: 12px;
+  }
+
+  .footer-left select {
+    border: none;
+    background: transparent;
+    color: var(--text-sub);
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .footer-right a {
+    color: var(--text-sub);
+    text-decoration: none;
+    margin-left: 24px;
+  }
+
+  .footer-right a:hover { text-decoration: underline; }
+
+  .error-msg {
+    color: #d93025;
+    font-size: 13px;
+    margin-top: 8px;
+    display: none;
+  }
+
+  .error-msg.show { display: block; }
+
+  @media (max-width: 768px) {
+    .card { flex-direction: column; padding: 32px 24px; }
+    .left-panel { padding-right: 0; margin-bottom: 32px; }
+    .right-panel { padding-left: 0; }
+    .footer { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="left-panel">
+    <div class="brand">
+      <img class="brand-icon" src="https://the1234556789.github.io/project-pioneer/login/project-pioneer.jpg" alt="project-pioneer">
+    </div>
+    <div class="title" id="pageTitle">登录</div>
+    <div class="subtitle" id="pageSubtitle">继续使用 project-pioneer</div>
+  </div>
+
+  <div class="right-panel">
+    <!-- Step 1: 邮箱/电话 -->
+    <div class="step active" id="stepEmail">
+      <div class="input-wrapper">
+        <input type="text" id="emailInput" placeholder=" " autocomplete="username">
+        <label for="emailInput">电子邮件地址或电话号码</label>
+      </div>
+      <a class="forgot" href="#" onclick="alert('密码找回功能暂未开放'); return false;">忘记电子邮件地址？</a>
+
+      <div class="privacy-hint" id="privacyHint">
+        不是您自己的计算机？请使用无痕浏览窗口进行登录。<br>
+        <a href="https://support.google.com/accounts?p=signin_privatebrowsing&hl=zh-CN" id="guestModeLink" target="_blank" rel="noopener">详细了解如何使用访客模式</a>
+      </div>
+
+      <div class="actions">
+        <button class="btn-text" onclick="showStep('stepSignup')">创建账号</button>
+        <button class="btn-next" onclick="doEmailNext()">下一步</button>
+      </div>
+      <div class="error-msg" id="emailError">请输入有效的电子邮件地址或电话号码</div>
+    </div>
+
+    <!-- Step 2: 密码 -->
+    <div class="step" id="stepPassword">
+      <div style="font-size:14px; color:var(--text-sub); margin-bottom:8px;" id="emailDisplay"></div>
+      <div class="input-wrapper">
+        <input type="password" id="passwordInput" placeholder=" " autocomplete="current-password">
+        <label for="passwordInput">输入密码</label>
+      </div>
+      <a class="forgot" href="#" onclick="alert('密码找回功能暂未开放'); return false;">忘记密码？</a>
+
+      <div class="actions">
+        <button class="btn-text" onclick="showStep('stepEmail')">返回</button>
+        <button class="btn-next" onclick="doPasswordNext()">下一步</button>
+      </div>
+      <div class="error-msg" id="passwordError">密码错误，请重试</div>
+    </div>
+
+    <!-- Step 3: 注册 -->
+    <div class="step" id="stepSignup">
+      <div class="input-wrapper">
+        <input type="text" id="signupEmail" placeholder=" ">
+        <label for="signupEmail">电子邮件地址</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="password" id="signupPassword" placeholder=" ">
+        <label for="signupPassword">密码（至少8位）</label>
+      </div>
+      <div class="input-wrapper">
+        <input type="text" id="signupCode" placeholder=" " maxlength="6">
+        <label for="signupCode">验证码</label>
+      </div>
+      <button class="btn-next" id="sendCodeBtn" onclick="sendCode()" style="margin-top:8px; padding: 8px 16px; font-size:13px;">发送验证码</button>
+      <div class="actions">
+        <button class="btn-text" onclick="showStep('stepEmail')">返回登录</button>
+        <button class="btn-next" onclick="doReg()">注册</button>
+      </div>
+      <div class="error-msg" id="signupError"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-left">
+    <select onchange="changeLang(this.value)">
+      <option value="zh-CN">中文（简体）</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+  <div class="footer-right">
+    <a href="https://the1234556789.github.io/project-pioneer/help/">帮助</a>
+    <a href="#">隐私</a>
+    <a href="#">条款</a>
+  </div>
+</div>
+
+<script>
+// ===== 可配置区域 =====
+var GUEST_MODE_URL = 'https://support.google.com/accounts?p=signin_privatebrowsing&hl=zh-CN';
+// =====================
+
+document.getElementById('guestModeLink').href = GUEST_MODE_URL;
+
+// ===== 验证码 =====
+var verificationCode = '';
+var codeSent = false;
+var codeExpireTimer = null;
+var countdown = 0;
+
+function generateCode() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+function sendCode() {
+  if (countdown > 0) {
+    alert('请等待 ' + countdown + ' 秒后再重新发送');
+    return;
+  }
+
+  var mail = document.getElementById('signupEmail').value.trim();
+  if (!mail) {
+    document.getElementById('signupError').textContent = '请先输入电子邮件地址再获取验证码';
+    document.getElementById('signupError').classList.add('show');
+    return;
+  }
+
+  verificationCode = generateCode();
+  codeSent = true;
+
+  alert('【演示】验证码已发送至 ' + mail + '\n验证码：' + verificationCode + '\n（5分钟内有效）');
+  console.log('验证码:', verificationCode);
+
+  document.getElementById('signupError').classList.remove('show');
+
+  countdown = 60;
+  var btn = document.getElementById('sendCodeBtn');
+  var originalText = btn.textContent;
+  btn.disabled = true;
+  var timer = setInterval(function() {
+    btn.textContent = '重新发送 (' + countdown + 's)';
+    countdown--;
+    if (countdown < 0) {
+      clearInterval(timer);
+      btn.textContent = originalText;
+      btn.disabled = false;
+      countdown = 0;
+    }
+  }, 1000);
+
+  clearTimeout(codeExpireTimer);
+  codeExpireTimer = setTimeout(function() {
+    verificationCode = '';
+    codeSent = false;
+    alert('验证码已过期，请重新发送');
+  }, 300000);
+}
+
+// ===== 参数解析 =====
+function readAuthParams() {
+  var params = {};
+  var qs = window.location.search.substring(1);
+  if (!qs) return params;
+  qs.split('&').forEach(function(pair) {
+    var parts = pair.split('=');
+    if (parts.length === 2) {
+      params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+    }
+  });
+  return params;
+}
+
+var authParams = readAuthParams();
+
+if (authParams.service) {
+  document.getElementById('pageSubtitle').textContent = '继续使用 ' + authParams.service;
+}
+
+function showStep(stepId) {
+  document.querySelectorAll('.step').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById(stepId).classList.add('active');
+}
+
+var currentEmail = '';
+
+function doEmailNext() {
+  var email = document.getElementById('emailInput').value.trim();
+  if (!email) {
+    document.getElementById('emailError').classList.add('show');
+    return;
+  }
+  document.getElementById('emailError').classList.remove('show');
+  currentEmail = email;
+  document.getElementById('emailDisplay').textContent = email;
+  showStep('stepPassword');
+}
+
+function doPasswordNext() {
+  var pwd = document.getElementById('passwordInput').value;
+  if (!pwd) {
+    document.getElementById('passwordError').classList.add('show');
+    return;
+  }
+  document.getElementById('passwordError').classList.remove('show');
+  var next = authParams.next || authParams.continue || authParams.redirect || 'https://the1234556789.github.io/project-pioneer/login/';
+  window.location.href = next;
+}
+
+function doReg() {
+  var mail = document.getElementById('signupEmail').value.trim();
+  var pwd = document.getElementById('signupPassword').value;
+  var code = document.getElementById('signupCode').value;
+  var errEl = document.getElementById('signupError');
+
+  if (!mail) {
+    errEl.textContent = '请输入电子邮件地址';
+    errEl.classList.add('show');
+    return;
+  }
+  if (!pwd || pwd.length < 8) {
+    errEl.textContent = '密码至少8位';
+    errEl.classList.add('show');
+    return;
+  }
+  if (!code) {
+    errEl.textContent = '请输入验证码';
+    errEl.classList.add('show');
+    return;
+  }
+  if (!codeSent) {
+    errEl.textContent = '请先点击"发送验证码"获取验证码';
+    errEl.classList.add('show');
+    return;
+  }
+  if (code !== verificationCode) {
+    errEl.textContent = '验证码错误，请检查后重试';
+    errEl.classList.add('show');
+    return;
+  }
+
+  errEl.classList.remove('show');
+  var next = authParams.next || authParams.continue || authParams.redirect || 'https://the1234556789.github.io/project-pioneer/login/';
+  window.location.href = next;
+}
+
+function changeLang(lang) {
+  console.log('切换语言:', lang);
+}
+
+if (authParams.signup === '1') {
+  showStep('stepSignup');
+}
+</script>
+
+</body>
+</html>
