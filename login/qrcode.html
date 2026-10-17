@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>扫码完成注册 - project-pioneer</title>
+<style>
+  :root { --google-blue:#1a73e8; --google-blue-hover:#1557b0; --text-main:#202124; --text-sub:#5f6368; --border-color:#dadce0; --bg-color:#f6f9fc; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Roboto','Segoe UI',Arial,sans-serif; background:var(--bg-color); color:var(--text-main); display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-size:14px; }
+
+  .card { background:#fff; width:900px; max-width:95%; border-radius:28px; box-shadow:0 4px 20px rgba(0,0,0,0.05); display:flex; padding:48px 56px; min-height:480px; }
+  .left-panel { flex:1; display:flex; flex-direction:column; justify-content:flex-start; padding-right:40px; }
+  .brand { display:flex; align-items:center; gap:12px; margin-bottom:24px; }
+  .brand-icon { width:40px; height:40px; border-radius:50%; object-fit:cover; }
+  .title { font-size:36px; font-weight:400; margin-bottom:12px; }
+  .subtitle { font-size:15px; color:var(--text-sub); margin-bottom:40px; line-height:1.6; }
+
+  .right-panel { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding-left:20px; }
+  .step { display:none; width:100%; }
+  .step.active { display:block; }
+
+  .qr-box { width:260px; height:260px; border:1px solid var(--border-color); border-radius:16px; margin:0 auto 20px; padding:16px; background:#fff; display:flex; align-items:center; justify-content:center; }
+  .qr-box canvas, .qr-box img { width:100%!important; height:100%!important; }
+  .scan-title { font-size:18px; font-weight:500; margin-bottom:8px; text-align:center; }
+  .scan-desc { font-size:13px; color:var(--text-sub); text-align:center; line-height:1.7; margin-bottom:24px; }
+  .scan-tip { font-size:12px; color:#80868b; text-align:center; margin-top:16px; }
+  .status-line { font-size:14px; color:var(--text-main); text-align:center; margin-bottom:8px; }
+  .spinner { width:18px; height:18px; border:2px solid #e8eaed; border-top-color:var(--google-blue); border-radius:50%; display:inline-block; vertical-align:-4px; margin-right:8px; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .done-icon { color:#1e8e3e; font-size:20px; font-weight:700; }
+  .manual-link { display:block; margin:24px auto 0; text-align:center; color:var(--google-blue); text-decoration:none; font-size:14px; font-weight:500; }
+  .manual-link:hover { text-decoration:underline; }
+
+  .actions { display:flex; justify-content:flex-end; align-items:center; gap:24px; margin-top:40px; }
+  .btn-text { color:var(--google-blue); text-decoration:none; font-weight:500; font-size:14px; background:none; border:none; cursor:pointer; font-family:inherit; padding:0; }
+  .btn-text:hover { text-decoration:underline; }
+  .btn-next { background:var(--google-blue); color:#fff; border:none; padding:12px 28px; border-radius:20px; font-size:14px; font-weight:500; cursor:pointer; transition:background 0.2s,box-shadow 0.2s; }
+  .btn-next:hover { background:var(--google-blue-hover); box-shadow:0 2px 6px rgba(26,115,232,0.3); }
+
+  .footer { width:900px; max-width:95%; display:flex; justify-content:space-between; margin-top:16px; padding:0 16px; color:var(--text-sub); font-size:12px; }
+  .copyright { position:fixed; right:16px; bottom:16px; font-size:12px; color:var(--text-sub); background:rgba(255,255,255,0.9); padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); z-index:200; }
+
+  @media(max-width:768px){ .card{flex-direction:column;padding:32px 24px} .left-panel{padding-right:0;margin-bottom:32px} .right-panel{padding-left:0} }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="left-panel">
+    <div class="brand">
+      <img class="brand-icon" src="project-pioneer.jpg" alt="project-pioneer">
+    </div>
+    <div class="title" data-i18n="title">确认注册</div>
+    <div class="subtitle" data-i18n-html="true" data-i18n="subtitle">
+      为了账号安全，请使用<br>
+      <strong>project-pioneer 手机客户端</strong><br>
+      扫描右侧二维码完成最终确认。
+    </div>
+    <div class="scan-desc" style="text-align:left;" data-i18n-html="true" data-i18n="steps">
+      ① 打开手机上的 project-pioneer App<br>
+      ② 点击右上角「扫一扫」<br>
+      ③ 对准二维码扫描<br>
+      ④ 在手机上点击「确认注册」
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <!-- 等待扫码 -->
+    <div class="step active" id="stepScan">
+      <div class="qr-box" id="qrBox"></div>
+      <div class="scan-title" data-i18n="scan_title">请扫描二维码</div>
+      <div class="status-line"><span class="spinner"></span><span data-i18n="waiting">正在等待手机确认…</span></div>
+      <div class="scan-tip"><span id="qrExpireText" data-i18n="qr_expire">二维码有效时间：5:00</span></div>
+      <a class="manual-link" id="manualLink" href="#" data-i18n="manual">手机无法扫码？点此在浏览器中直接确认 →</a>
+    </div>
+
+    <!-- 已确认 -->
+    <div class="step" id="stepDone">
+      <div style="font-size:64px;text-align:center;margin-bottom:16px;">✅</div>
+      <div class="scan-title" data-i18n="done_title">注册已确认</div>
+      <div class="scan-desc" data-i18n="done_desc">您已成功完成注册确认，正在为您跳转…</div>
+    </div>
+
+    <!-- 已过期 -->
+    <div class="step" id="stepExpire">
+      <div style="font-size:64px;text-align:center;margin-bottom:16px;">⏰</div>
+      <div class="scan-title" data-i18n="expire_title">二维码已过期</div>
+      <div class="scan-desc" data-i18n="expire_desc">二维码有效期为 5 分钟，请返回重新获取。</div>
+      <div class="actions" style="justify-content:center;">
+        <button class="btn-next" onclick="location.href='index.html?signup=1'" data-i18n="re_register">重新注册</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-left">
+    <select id="langSelect" onchange="I18N.setLang(this.value,'qrcode')"></select>
+  </div>
+  <div>
+    <a href="https://the1234556789.github.io/project-pioneer/help/" style="color:var(--text-sub);text-decoration:none;margin-left:24px;" data-i18n="help">帮助</a>
+    <a href="#" style="color:var(--text-sub);text-decoration:none;margin-left:24px;" data-i18n="privacy_link">隐私</a>
+    <a href="#" style="color:var(--text-sub);text-decoration:none;margin-left:24px;" data-i18n="terms">条款</a>
+  </div>
+</div>
+
+<div class="copyright">©2024-2026 会泽工作室 版权所有</div>
+
+<script src="auth.js"></script>
+<script src="lang.js"></script>
+<script>
+function showStep(id){document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+
+// 解析注册参数（由 login 页带过来）
+var params={};
+var qs=location.search.substring(1);
+if(qs) qs.split('&').forEach(function(p){var x=p.split('=');if(x.length===2)params[decodeURIComponent(x[0])]=decodeURIComponent(x[1]);});
+
+// 兜底：没带邮箱就回注册页
+if(!params.email){location.href='index.html?signup=1';}
+
+// 二维码内容：带一个一次性 token + 邮箱，模拟扫码协议
+var token=Math.random().toString(36).slice(2)+Date.now().toString(36);
+var qrData=JSON.stringify({act:'confirm_signup',email:params.email,pwd:params.pwd,code:params.code,token:token,from:'project-pioneer'});
+
+// 生成二维码（纯 canvas，无第三方依赖）
+function drawQR(text){
+  // 使用简化的 QR 编码：此处若想真正可用，可引入 qrcode.min.js；当前用占位样式兜底
+  var box=document.getElementById('qrBox');
+  // 尝试动态加载 qrcode 库
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+  s.onload=function(){
+    try{
+      var qr=qrcode(0,'M');qr.addData(text);qr.make();
+      box.innerHTML=qr.createImgTag(8,12);
+    }catch(e){drawFallback(box,text);}
+  };
+  s.onerror=function(){drawFallback(box,text);};
+  document.head.appendChild(s);
+}
+function drawFallback(box,text){
+  // 无法加载库时的占位（网格图案）
+  var c=document.createElement('canvas');c.width=228;c.height=228;
+  var ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,228,228);
+  var seed=0;for(var i=0;i<text.length;i++)seed=(seed*31+text.charCodeAt(i))>>>0;
+  function rnd(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+  var n=21;var cell=228/n;
+  for(var y=0;y<n;y++)for(var x=0;x<n;x++){ctx.fillStyle=rnd()>0.5?'#202124':'#fff';ctx.fillRect(x*cell,y*cell,cell,cell);}
+  ctx.strokeStyle='#1a73e8';ctx.lineWidth=8;
+  ctx.strokeRect(4,4,52,52);ctx.strokeRect(172,4,52,52);ctx.strokeRect(4,172,52,52);
+  box.innerHTML='';box.appendChild(c);
+}
+
+drawQR(qrData);
+
+// 倒计时
+var expireSec=300;
+window._expireSec=expireSec;
+function renderExpire(sec){
+  var m=Math.floor(sec/60),s2=sec%60;
+  var el=document.getElementById('qrExpireText');
+  if(el) el.textContent=I18N.t('qrcode','qr_expire',{m:m,s:(s2<10?'0':'')+s2});
+}
+renderExpire(expireSec);
+var cd=setInterval(function(){
+  expireSec--;
+  window._expireSec=expireSec;
+  renderExpire(expireSec);
+  if(expireSec<=0){clearInterval(cd);showStep('stepExpire');}
+},1000);
+
+/* 页面初始化：应用当前语言（含倒计时文案） */
+I18N.apply('qrcode');
+
+// 模拟手机扫码确认：真实场景下应由手机端回调后端接口，此处前端用定时器模拟轮询
+// 1.5 秒后自动"已确认"（演示用），生产环境替换为对后端的轮询
+setTimeout(function(){
+  clearInterval(cd);
+  showStep('stepDone');
+  // 完成注册落库
+  if(window.AUTH){AUTH.register(params.email,params.pwd);}
+  var next=params.next||params.continue||params.redirect||'https://the1234556789.github.io/project-pioneer/';
+  setTimeout(function(){location.href=next;},1500);
+},1500);
+
+// 手动确认兜底
+document.getElementById('manualLink').addEventListener('click',function(e){
+  e.preventDefault();
+  clearInterval(cd);
+  if(window.AUTH){AUTH.register(params.email,params.pwd);}
+  var next=params.next||params.continue||params.redirect||'https://the1234556789.github.io/project-pioneer/';
+  location.href=next;
+});
+</script>
+</body>
+</html>
