@@ -270,13 +270,11 @@ var I18N = (function(){
   }
 
   function apply(page) {
-    // 填充下拉框
     var sel = document.getElementById('langSelect');
     if (sel) {
       sel.innerHTML = '<option value="zh-CN">中文（简体）</option><option value="en">English</option><option value="ru">Русский</option>';
       sel.value = current;
     }
-    // 文本节点
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
       var key = el.getAttribute('data-i18n');
       var html = el.getAttribute('data-i18n-html');
@@ -284,7 +282,6 @@ var I18N = (function(){
       if (html === 'true') el.innerHTML = text;
       else el.textContent = text;
     });
-    // 占位符
     document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
       el.placeholder = t(page || 'login', el.getAttribute('data-i18n-placeholder'));
     });
@@ -292,7 +289,6 @@ var I18N = (function(){
 
   function raw(page, key) { return (LANGS[current] && LANGS[current][key]) || LANGS['zh-CN'][key] || key; }
 
-  // 初始化
   var saved = localStorage.getItem('pp_lang');
   var browser = navigator.language || navigator.userLanguage || '';
   if (saved && LANGS[saved]) current = saved;
@@ -305,35 +301,39 @@ var I18N = (function(){
 
 // ============ 内嵌 AUTH（localStorage 模拟） ============
 var AUTH = (function(){
-  function getUsers() { return JSON.parse(localStorage.getItem('pp_users') || '[]'); }
+  function getUsers() { return JSON.parse(localStorage.getItem('pp_users') || '{}'); }
   function saveUsers(users) { localStorage.setItem('pp_users', JSON.stringify(users)); }
 
   function register(email, pwd) {
     if (!email || !pwd) return false;
-    var users = getUsers();
-    var exists = users.find(function(u) { return u.email === email; });
-    if (exists) return true; // 已注册
-    users.push({ email: email, password: pwd, registeredAt: new Date().toISOString() });
-    saveUsers(users);
+    // 和 auth.js 对齐：pp_users 是对象格式
+    var users = JSON.parse(localStorage.getItem('pp_users') || '{}');
+    if (users[email]) return true; // 已注册
+    var username = email.split('@')[0];
+    users[email] = { password: pwd, username: username };
+    localStorage.setItem('pp_users', JSON.stringify(users));
+    // auth.js 读的键是 pp_user
+    localStorage.setItem('pp_user', JSON.stringify({ email: email, username: username }));
     return true;
   }
 
   function login(email, pwd) {
-    var users = getUsers();
-    var user = users.find(function(u) { return u.email === email && u.password === pwd; });
-    if (user) {
-      localStorage.setItem('pp_current_user', JSON.stringify({ email: email, loginAt: new Date().toISOString() }));
+    var users = JSON.parse(localStorage.getItem('pp_users') || '{}');
+    var user = users[email];
+    if (user && user.password === pwd) {
+      // auth.js 读的键是 pp_user
+      localStorage.setItem('pp_user', JSON.stringify({ email: email, username: user.username || email.split('@')[0] }));
       return true;
     }
     return false;
   }
 
   function logout() {
-    localStorage.removeItem('pp_current_user');
+    localStorage.removeItem('pp_user');
   }
 
   function getCurrentUser() {
-    var raw = localStorage.getItem('pp_current_user');
+    var raw = localStorage.getItem('pp_user');
     return raw ? JSON.parse(raw) : null;
   }
 
