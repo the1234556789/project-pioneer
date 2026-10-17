@@ -233,12 +233,14 @@ function showStep(id){
 document.getElementById('manualLink').addEventListener('click',function(e){
   e.preventDefault();
   clearInterval(cd);
-  // 落库
-  var users = JSON.parse(localStorage.getItem('pp_users') || '[]');
-  var exists = users.find(function(u){ return u.email === params.email; });
-  if(!exists) users.push({email:params.email,password:params.pwd,code:params.code,registeredAt:new Date().toISOString()});
-  localStorage.setItem('pp_users',JSON.stringify(users));
-  localStorage.setItem('pp_current_user',JSON.stringify({email:params.email,loginAt:new Date().toISOString()}));
+  // 落库（和 auth.js 对齐：对象格式 + pp_user 键）
+  var users = JSON.parse(localStorage.getItem('pp_users') || '{}');
+  if (!users[params.email]) {
+    var username = (params.email || '').split('@')[0];
+    users[params.email] = { password: params.pwd, username: username };
+    localStorage.setItem('pp_users', JSON.stringify(users));
+  }
+  localStorage.setItem('pp_user', JSON.stringify({ email: params.email, username: (params.email || '').split('@')[0] }));
   showStep('stepDone');
   var next = params.next || params.continue || params.redirect || 'https://the1234556789.github.io/project-pioneer/';
   setTimeout(function(){ location.href = next; }, 1500);
