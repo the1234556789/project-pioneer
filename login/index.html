@@ -46,14 +46,7 @@
   .error-msg { color:#d93025; font-size:13px; margin-top:8px; display:none; }
   .error-msg.show { display:block; }
 
-  /* 右上角导航 */
-  .abar-wrap { position:fixed; top:16px; right:24px; z-index:100; }
-  .abtn { display:flex; align-items:center; gap:8px; text-decoration:none; font-size:14px; margin-right:12px; }
-  .user-chip { width:32px; height:32px; border-radius:50%; background:var(--google-blue); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:500; }
-  .user-name { color:var(--text-sub); }
-  .btn-login-nav { background:var(--google-blue); color:#fff; border:none; padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; margin-right:8px; font-family:inherit; }
-  .btn-reg-nav { background:#fff; color:var(--google-blue); border:1px solid var(--google-blue); padding:8px 20px; border-radius:16px; font-size:14px; cursor:pointer; font-family:inherit; }
-  .btn-logout { background:none; border:1px solid var(--border-color); color:var(--text-sub); padding:6px 14px; border-radius:14px; font-size:14px; cursor:pointer; font-family:inherit; }
+  .copyright { position:fixed; right:16px; bottom:16px; font-size:12px; color:var(--text-sub); background:rgba(255,255,255,0.9); padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); z-index:200; }
 
   /* 验证码弹窗 */
   .code-modal-mask { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index:9999; }
@@ -61,7 +54,6 @@
   .code-modal { background:#fff; border-radius:16px; padding:32px; max-width:420px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.2); animation:modalIn 0.25s ease-out; }
   @keyframes modalIn { from{transform:scale(0.9);opacity:0} to{transform:scale(1);opacity:1} }
   .modal-icon { font-size:48px; margin-bottom:12px; }
-  .code-modal h3 { font-size:18px; font-weight:500; margin-bottom:8px; }
   .code-hint { font-size:13px; color:var(--text-sub); margin-bottom:4px; }
   .code-display { font-size:40px; font-weight:700; letter-spacing:12px; color:var(--google-blue); background:#e8f0fe; padding:18px 28px; border-radius:12px; margin:16px auto; cursor:pointer; transition:background 0.2s,transform 0.1s; user-select:all; display:inline-block; border:2px dashed transparent; }
   .code-display:hover { background:#d2e3fc; border-color:var(--google-blue); }
@@ -78,16 +70,10 @@
   .copy-toast.show { display:block; animation:fadeIn 0.3s; }
   @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
-  /* 版权 */
-  .copyright { position:fixed; right:16px; bottom:16px; font-size:12px; color:var(--text-sub); background:rgba(255,255,255,0.9); padding:6px 12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); z-index:200; }
-
   @media(max-width:768px){ .card{flex-direction:column;padding:32px 24px} .left-panel{padding-right:0;margin-bottom:32px} .right-panel{padding-left:0} .footer{flex-direction:column;gap:12px} }
 </style>
 </head>
 <body>
-
-<!-- 右上角登录态 -->
-<div class="abar-wrap"><span id="abar"></span></div>
 
 <div class="card">
   <div class="left-panel">
@@ -95,20 +81,20 @@
       <img class="brand-icon" src="project-pioneer.jpg" alt="project-pioneer">
     </div>
     <div class="title" id="pageTitle" data-i18n="title_login">登录</div>
-    <div class="subtitle" id="pageSubtitle">继续使用 {{service}}</div>
+    <div class="subtitle" id="pageSubtitle">继续使用 project-pioneer</div>
   </div>
 
   <div class="right-panel">
-    <!-- Step 1 -->
+    <!-- Step 1: 登录-邮箱 -->
     <div class="step active" id="stepEmail">
       <div class="input-wrapper">
         <input type="text" id="emailInput" placeholder=" " autocomplete="username">
         <label for="emailInput" data-i18n="lbl_email">电子邮件地址或电话号码</label>
       </div>
-      <a class="forgot" href="#" onclick="alert(I18N.raw('login','recover_off'));return false;" data-i18n="forgot_email">忘记电子邮件地址？</a>
-      <div class="privacy-hint" id="privacyHint">
+      <a class="forgot" href="#" onclick="showAlert(I18N.t('login','recover_off'));return false;" data-i18n="forgot_email">忘记电子邮件地址？</a>
+      <div class="privacy-hint">
         不是您自己的计算机？请使用无痕浏览窗口进行登录。<br>
-        <a href="https://the1234556789.github.io/project-pioneer/help/" id="guestModeLink" target="_blank" rel="noopener">详细了解如何使用访客模式</a>
+        <a href="https://the1234556789.github.io/project-pioneer/help/" target="_blank" rel="noopener">详细了解如何使用访客模式</a>
       </div>
       <div class="actions">
         <button class="btn-text" onclick="showStep('stepSignupEmail')" data-i18n="create_account">创建账号</button>
@@ -117,14 +103,14 @@
       <div class="error-msg" id="emailError" data-i18n="err_email">请输入有效的电子邮件地址或电话号码</div>
     </div>
 
-    <!-- Step 2 -->
+    <!-- Step 2: 登录-密码 -->
     <div class="step" id="stepPassword">
       <div style="font-size:14px;color:var(--text-sub);margin-bottom:8px;" id="emailDisplay"></div>
       <div class="input-wrapper">
         <input type="password" id="passwordInput" placeholder=" " autocomplete="current-password">
         <label for="passwordInput" data-i18n="lbl_password">输入密码</label>
       </div>
-      <a class="forgot" href="#" onclick="alert(I18N.raw('login','recover_off'));return false;" data-i18n="forgot_pwd">忘记密码？</a>
+      <a class="forgot" href="#" onclick="showAlert(I18N.t('login','recover_off'));return false;" data-i18n="forgot_pwd">忘记密码？</a>
       <div class="actions">
         <button class="btn-text" onclick="showStep('stepEmail')" data-i18n="back">返回</button>
         <button class="btn-next" onclick="doPasswordNext()" data-i18n="next">下一步</button>
@@ -132,7 +118,7 @@
       <div class="error-msg" id="passwordError" data-i18n="err_password">密码错误，请重试</div>
     </div>
 
-    <!-- Step 3 注册-邮箱 -->
+    <!-- Step 3: 注册-邮箱 -->
     <div class="step" id="stepSignupEmail">
       <div class="subtitle" style="margin-bottom:24px;" data-i18n="s1_title">第一步：输入你的邮箱或电话号码</div>
       <div class="input-wrapper">
@@ -146,7 +132,7 @@
       <div class="error-msg" id="signupEmailError"></div>
     </div>
 
-    <!-- Step 4 注册-密码 -->
+    <!-- Step 4: 注册-密码 -->
     <div class="step" id="stepSignupPassword">
       <div style="font-size:14px;color:var(--text-sub);margin-bottom:4px;" id="signupEmailDisplay"></div>
       <div class="subtitle" style="margin-bottom:24px;font-size:14px;" data-i18n="s2_title">第二步：设置你的密码</div>
@@ -165,7 +151,7 @@
       <div class="error-msg" id="signupPasswordError"></div>
     </div>
 
-    <!-- Step 5 注册-验证码 -->
+    <!-- Step 5: 注册-验证码 -->
     <div class="step" id="stepSignupCode">
       <div class="subtitle" style="margin-bottom:24px;" data-i18n="s3_title">第三步：输入邮箱收到的验证码</div>
       <div class="input-wrapper">
@@ -180,7 +166,7 @@
       <div class="error-msg" id="signupCodeError"></div>
     </div>
 
-    <!-- Step 6 注册-扫码确认 -->
+    <!-- Step 6: 注册-扫码确认 -->
     <div class="step" id="stepSignupQr">
       <div class="subtitle" style="margin-bottom:24px;" data-i18n="s4_title">第四步：扫码完成注册确认</div>
       <div style="font-size:14px;color:var(--text-sub);margin-bottom:16px;line-height:1.7;" data-i18n-html="true" data-i18n="qr_desc">
@@ -227,49 +213,189 @@
   </div>
 </div>
 
-<script src="auth.js"></script>
-<script src="lang.js"></script>
 <script>
-/* 把 URL 参数暴露给 lang.js 使用 */
-window.AUTH_PARAMS=authParams;
+// ============ 内嵌 I18N（中文/英文/俄文） ============
+var I18N = (function(){
+  var LANGS = {
+    'zh-CN': {
+      'title_login':'登录','lbl_email':'电子邮件地址或电话号码','lbl_password':'输入密码','lbl_pwd':'输入密码（至少8位）','lbl_pwd2':'确认密码','lbl_code':'验证码',
+      'forgot_email':'忘记电子邮件地址？','forgot_pwd':'忘记密码？','create_account':'创建账号','next':'下一步','back':'返回','prev':'上一步',
+      'err_email':'请输入有效的电子邮件地址或电话号码','err_password':'密码错误，请重试',
+      's1_title':'第一步：输入你的邮箱或电话号码','s2_title':'第二步：设置你的密码','s3_title':'第三步：输入邮箱收到的验证码','s4_title':'第四步：扫码完成注册确认',
+      'send_code':'发送验证码','resend':'重新发送({n}s)','qr_desc':'请使用 <strong>project-pioneer 手机客户端</strong> 扫描二维码完成最终确认。','qr_demo_hint':'演示模式下，点击下方按钮模拟手机扫码确认','open_qr':'打开扫码确认页面 →',
+      'modal_title':'验证码已发送','modal_hint':'以下是您的注册验证码（同时已模拟发送到邮箱）：','click_hint':'👆 点击上方验证码即可快速复制',
+      'copy':'复制验证码','close_modal':'我知道了','toast':'✓ 已复制到剪贴板，快去粘贴吧！','valid_for':'有效时间：{m}分{s}秒','expired':'验证码已过期','copied':'已复制',
+      'recover_off':'此功能暂未开放','need_email':'请先输入邮箱','invalid_email':'请输入有效的邮箱或电话号码','pwd_short':'密码至少8位','pwd_mismatch':'两次密码不一致',
+      'need_code':'请输入验证码','need_send':'请先发送验证码','code_expired':'验证码已过期，请重新发送','code_wrong':'验证码错误','wait_resend':'请等待 {n} 秒后重新发送',
+      'help':'帮助','privacy_link':'隐私','terms':'条款'
+    },
+    'en': {
+      'title_login':'Sign in','lbl_email':'Email or phone','lbl_password':'Enter your password','lbl_pwd':'Password (at least 8 chars)','lbl_pwd2':'Confirm password','lbl_code':'Verification code',
+      'forgot_email':'Forgot email?','forgot_pwd':'Forgot password?','create_account':'Create account','next':'Next','back':'Back','prev':'Previous',
+      'err_email':'Enter a valid email or phone number','err_password':'Wrong password, try again',
+      's1_title':'Step 1: Enter your email or phone','s2_title':'Step 2: Set your password','s3_title':'Step 3: Enter the verification code','s4_title':'Step 4: Scan QR to confirm',
+      'send_code':'Send code','resend':'Resend ({n}s)','qr_desc':'Use the <strong>project-pioneer mobile app</strong> to scan the QR code.','qr_demo_hint':'Demo mode: click below to simulate scanning','open_qr':'Open QR confirmation page →',
+      'modal_title':'Verification Code Sent','modal_hint':'Your code (also simulated as sent to email):','click_hint':'👆 Click the code above to copy',
+      'copy':'Copy code','close_modal':"I'm done",'toast':'✓ Copied to clipboard!','valid_for':'Valid for: {m}m {s}s','expired':'Code expired','copied':'Copied',
+      'recover_off':'This feature is not available','need_email':'Please enter email first','invalid_email':'Enter a valid email or phone','pwd_short':'Password must be at least 8 characters','pwd_mismatch':'Passwords do not match',
+      'need_code':'Enter verification code','need_send':'Send code first','code_expired':'Code expired, please resend','code_wrong':'Wrong code','wait_resend':'Wait {n}s to resend',
+      'help':'Help','privacy_link':'Privacy','terms':'Terms'
+    },
+    'ru': {
+      'title_login':'Вход','lbl_email':'Электронная почта или телефон','lbl_password':'Введите пароль','lbl_pwd':'Пароль (минимум 8 символов)','lbl_pwd2':'Подтвердите пароль','lbl_code':'Код подтверждения',
+      'forgot_email':'Забыли email?','forgot_pwd':'Забыли пароль?','create_account':'Создать аккаунт','next':'Далее','back':'Назад','prev':'Назад',
+      'err_email':'Введите корректный email или телефон','err_password':'Неверный пароль, попробуйте снова',
+      's1_title':'Шаг 1: Введите email или телефон','s2_title':'Шаг 2: Установите пароль','s3_title':'Шаг 3: Введите код из письма','s4_title':'Шаг 4: Отсканируйте QR для подтверждения',
+      'send_code':'Отправить код','resend':'Повторить ({n}с)','qr_desc':'Используйте <strong>мобильное приложение project-pioneer</strong> для сканирования QR-кода.','qr_demo_hint':'Демо-режим: нажмите ниже для имитации сканирования','open_qr':'Открыть страницу подтверждения →',
+      'modal_title':'Код отправлен','modal_hint':'Ваш код (также отправлен на email):','click_hint':'👆 Нажмите на код выше, чтобы скопировать',
+      'copy':'Копировать код','close_modal':'Готово','toast':'✓ Скопировано в буфер обмена!','valid_for':'Действителен: {m}м {s}с','expired':'Код истек','copied':'Скопировано',
+      'recover_off':'Эта функция недоступна','need_email':'Сначала введите email','invalid_email':'Введите корректный email или телефон','pwd_short':'Пароль должен быть не менее 8 символов','pwd_mismatch':'Пароли не совпадают',
+      'need_code':'Введите код','need_send':'Сначала отправьте код','code_expired':'Код истек, отправьте снова','code_wrong':'Неверный код','wait_resend':'Подождите {n}с для повторной отправки',
+      'help':'Справка','privacy_link':'Конфиденциальность','terms':'Условия'
+    }
+  };
 
-var GUEST_MODE_URL='https://support.google.com/accounts?p=signin_privatebrowsing&hl={{lang}}';
-if(document.getElementById('guestModeLink')) document.getElementById('guestModeLink').href=GUEST_MODE_URL.replace('{{lang}}',I18N.current);
+  var current = 'zh-CN';
 
-// 渲染登录态
-AUTH.renderBar();
+  function t(page, key, vars) {
+    var val = (LANGS[current] && LANGS[current][key]) || (LANGS['zh-CN'][key]) || key;
+    if (vars) { for (var k in vars) val = val.replace('{' + k + '}', vars[k]); }
+    return val;
+  }
 
-// ===== 验证码 =====
-var verificationCode='';
-var codeSent=false;
-var codeExpireTimer=null;
-var countdown=0;
-var modalCountdownTimer=null;
+  function setLang(lang, page) {
+    current = lang;
+    localStorage.setItem('pp_lang', lang);
+    apply(page);
+  }
 
-function generateCode(){return Math.floor(100000+Math.random()*900000).toString();}
+  function apply(page) {
+    // 填充下拉框
+    var sel = document.getElementById('langSelect');
+    if (sel) {
+      sel.innerHTML = '<option value="zh-CN">中文（简体）</option><option value="en">English</option><option value="ru">Русский</option>';
+      sel.value = current;
+    }
+    // 文本节点
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      var html = el.getAttribute('data-i18n-html');
+      var text = t(page || 'login', key);
+      if (html === 'true') el.innerHTML = text;
+      else el.textContent = text;
+    });
+    // 占位符
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+      el.placeholder = t(page || 'login', el.getAttribute('data-i18n-placeholder'));
+    });
+  }
 
-function showCodeModal(code){
-  document.getElementById('codeDisplay').textContent=code;
-  document.getElementById('codeModalMask').classList.add('show');
-  document.getElementById('copyToast').classList.remove('show');
-  var btnCopy=document.getElementById('btnCopy');
-  btnCopy.classList.remove('copied');
-  btnCopy.innerHTML='<span>📋</span> 复制验证码';
+  function raw(page, key) { return (LANGS[current] && LANGS[current][key]) || LANGS['zh-CN'][key] || key; }
+
+  // 初始化
+  var saved = localStorage.getItem('pp_lang');
+  var browser = navigator.language || navigator.userLanguage || '';
+  if (saved && LANGS[saved]) current = saved;
+  else if (browser.startsWith('en')) current = 'en';
+  else if (browser.startsWith('ru')) current = 'ru';
+  else current = 'zh-CN';
+
+  return { t: t, setLang: setLang, apply: apply, current: current, raw: raw };
+})();
+
+// ============ 内嵌 AUTH（localStorage 模拟） ============
+var AUTH = (function(){
+  function getUsers() { return JSON.parse(localStorage.getItem('pp_users') || '[]'); }
+  function saveUsers(users) { localStorage.setItem('pp_users', JSON.stringify(users)); }
+
+  function register(email, pwd) {
+    if (!email || !pwd) return false;
+    var users = getUsers();
+    var exists = users.find(function(u) { return u.email === email; });
+    if (exists) return true; // 已注册
+    users.push({ email: email, password: pwd, registeredAt: new Date().toISOString() });
+    saveUsers(users);
+    return true;
+  }
+
+  function login(email, pwd) {
+    var users = getUsers();
+    var user = users.find(function(u) { return u.email === email && u.password === pwd; });
+    if (user) {
+      localStorage.setItem('pp_current_user', JSON.stringify({ email: email, loginAt: new Date().toISOString() }));
+      return true;
+    }
+    return false;
+  }
+
+  function logout() {
+    localStorage.removeItem('pp_current_user');
+  }
+
+  function getCurrentUser() {
+    var raw = localStorage.getItem('pp_current_user');
+    return raw ? JSON.parse(raw) : null;
+  }
+
+  function renderBar() {
+    var abar = document.getElementById('abar');
+    if (!abar) return;
+    var user = getCurrentUser();
+    if (user) {
+      abar.innerHTML = '<a class="abtn" href="https://the1234556789.github.io/project-pioneer/"><span class="user-chip">' + user.email.charAt(0).toUpperCase() + '</span><span class="user-name">' + user.email + '</span></a><button class="btn-logout" onclick="AUTH.logout();location.reload()">退出</button>';
+    } else {
+      abar.innerHTML = '<button class="btn-login-nav" onclick="location.href=\'index.html\'">登录</button><button class="btn-reg-nav" onclick="location.href=\'index.html?signup=1\'">注册</button>';
+    }
+  }
+
+  return { register: register, login: login, logout: logout, getCurrentUser: getCurrentUser, renderBar: renderBar };
+})();
+
+// ============ 弹窗 ============
+function showAlert(msg) {
+  var mask = document.createElement('div');
+  mask.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:99999;';
+  mask.innerHTML = '<div style="background:#fff;border-radius:16px;padding:32px;max-width:400px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.2);"><div style="font-size:48px;margin-bottom:12px;">ℹ️</div><div style="font-size:15px;color:#202124;margin-bottom:24px;line-height:1.6;">' + msg + '</div><button onclick="this.closest(\'div\').parentElement.remove()" style="background:#1a73e8;color:#fff;border:none;padding:10px 28px;border-radius:18px;font-size:14px;cursor:pointer;">确定</button></div>';
+  document.body.appendChild(mask);
 }
 
-function closeCodeModal(){document.getElementById('codeModalMask').classList.remove('show');}
+// ============ 业务逻辑 ============
+function showStep(stepId){
+  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(stepId).classList.add('active');
+}
+
+var currentEmail = '';
+var signupEmail = '';
+var signupPassword = '';
+var verificationCode = '';
+var codeSent = false;
+var countdown = 0;
+var codeExpireTimer = null;
+var modalCountdownTimer = null;
+
+function generateCode(){ return Math.floor(100000+Math.random()*900000).toString(); }
+
+function showCodeModal(code){
+  document.getElementById('codeDisplay').textContent = code;
+  document.getElementById('codeModalMask').classList.add('show');
+  document.getElementById('copyToast').classList.remove('show');
+  var btnCopy = document.getElementById('btnCopy');
+  if(btnCopy){ btnCopy.classList.remove('copied'); btnCopy.innerHTML = '<span>📋</span> ' + I18N.raw('login','copy'); }
+}
+
+function closeCodeModal(){ document.getElementById('codeModalMask').classList.remove('show'); }
 
 function doCopyCode(){
   if(!verificationCode) return;
-  var done=function(){showCopySuccess();};
   if(navigator.clipboard){
-    navigator.clipboard.writeText(verificationCode).then(done).catch(function(){fallbackCopy();done();});
-  }else{fallbackCopy();done();}
+    navigator.clipboard.writeText(verificationCode).then(showCopySuccess).catch(function(){fallbackCopy();showCopySuccess();});
+  }else{ fallbackCopy(); showCopySuccess(); }
 }
 
 function fallbackCopy(){
-  var el=document.getElementById('codeDisplay');
-  var range=document.createRange();
+  var el = document.getElementById('codeDisplay');
+  var range = document.createRange();
   range.selectNodeContents(el);
   window.getSelection().removeAllRanges();
   window.getSelection().addRange(range);
@@ -279,168 +405,131 @@ function fallbackCopy(){
 
 function showCopySuccess(){
   document.getElementById('copyToast').classList.add('show');
-  var btnCopy=document.getElementById('btnCopy');
-  btnCopy.classList.add('copied');
-  btnCopy.innerHTML='<span>✓</span> '+I18N.raw('login','copied');
-  setTimeout(function(){document.getElementById('copyToast').classList.remove('show');},2500);
+  var btnCopy = document.getElementById('btnCopy');
+  if(btnCopy){ btnCopy.classList.add('copied'); btnCopy.innerHTML = '<span>✓</span> ' + I18N.raw('login','copied'); }
+  setTimeout(function(){ document.getElementById('copyToast').classList.remove('show'); }, 2500);
 }
 
 function startModalCountdown(){
-  var expireSec=300;
-  var cdEl=document.getElementById('modalCountdown');
-  cdEl.textContent=I18N.t('login','valid_for',{m:Math.floor(expireSec/60),s:expireSec%60});
+  var expireSec = 300;
+  var cdEl = document.getElementById('modalCountdown');
+  cdEl.textContent = I18N.t('login','valid_for',{m:Math.floor(expireSec/60),s:expireSec%60});
   clearInterval(modalCountdownTimer);
-  modalCountdownTimer=setInterval(function(){
+  modalCountdownTimer = setInterval(function(){
     expireSec--;
-    if(expireSec<=0){
-      clearInterval(modalCountdownTimer);
-      cdEl.textContent=I18N.raw('login','expired');
-      verificationCode='';codeSent=false;return;
-    }
-    cdEl.textContent=I18N.t('login','valid_for',{m:Math.floor(expireSec/60),s:expireSec%60});
+    if(expireSec<=0){ clearInterval(modalCountdownTimer); cdEl.textContent = I18N.raw('login','expired'); verificationCode=''; codeSent=false; return; }
+    cdEl.textContent = I18N.t('login','valid_for',{m:Math.floor(expireSec/60),s:expireSec%60});
   },1000);
 }
 
 function sendCode(){
-  if(countdown>0){showSignupTip(I18N.t('login','wait_resend',{n:countdown}));return;}
-  var mail=document.getElementById('signupEmail').value.trim();
-  if(!mail){
-    document.getElementById('signupEmailError').textContent=I18N.raw('login','need_email');
-    document.getElementById('signupEmailError').classList.add('show');return;
-  }
-  verificationCode=generateCode();
-  codeSent=true;
+  if(countdown>0){ showSignupTip(I18N.t('login','wait_resend',{n:countdown})); return; }
+  var mail = document.getElementById('signupEmail').value.trim();
+  var errEl = document.getElementById('signupEmailError');
+  if(!mail){ errEl.textContent = I18N.raw('login','need_email'); errEl.classList.add('show'); return; }
+  verificationCode = generateCode();
+  codeSent = true;
   showCodeModal(verificationCode);
   startModalCountdown();
-  document.getElementById('signupError').classList.remove('show');
 
-  countdown=60;
-  var btn=document.getElementById('sendCodeBtn');
-  btn.disabled=true;
-  /* 把当前倒计时秒数暴露给 lang.js，方便切语言时保持文案 */
-  window._countdown=countdown;
-  var btnTimer=setInterval(function(){
+  countdown = 60;
+  var btn = document.getElementById('sendCodeBtn');
+  btn.disabled = true;
+  var btnTimer = setInterval(function(){
     countdown--;
-    window._countdown=countdown;
-    if(countdown<0){
-      clearInterval(btnTimer);
-      btn.textContent=I18N.raw('login','send_code');
-      btn.disabled=false;
-      window._countdown=0;
-    }else{
-      btn.textContent=I18N.t('login','resend',{n:countdown});
-    }
+    if(countdown<=0){ clearInterval(btnTimer); btn.textContent = I18N.raw('login','send_code'); btn.disabled = false; }
+    else btn.textContent = I18N.t('login','resend',{n:countdown});
   },1000);
 
   clearTimeout(codeExpireTimer);
-  codeExpireTimer=setTimeout(function(){verificationCode='';codeSent=false;},300000);
+  codeExpireTimer = setTimeout(function(){ verificationCode=''; codeSent=false; }, 300000);
 }
 
-// ===== 参数解析 =====
-function readAuthParams(){
-  var params={};
-  var qs=window.location.search.substring(1);
-  if(!qs) return params;
-  qs.split('&').forEach(function(pair){
-    var parts=pair.split('=');
-    if(parts.length===2) params[decodeURIComponent(parts[0])]=decodeURIComponent(parts[1]);
-  });
-  return params;
-}
-var authParams=readAuthParams();
-if(authParams.service) document.getElementById('pageSubtitle').textContent='继续使用 '+authParams.service;
+// 参数解析
+var authParams = {};
+(function(){
+  var qs = window.location.search.substring(1);
+  if(qs) qs.split('&').forEach(function(p){ var x=p.split('='); if(x.length===2) authParams[decodeURIComponent(x[0])]=decodeURIComponent(x[1]); });
+})();
 
-function showStep(stepId){
-  document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});
-  document.getElementById(stepId).classList.add('active');
-}
-
-var currentEmail='';
+if(authParams.service) document.getElementById('pageSubtitle').textContent = '继续使用 ' + authParams.service;
 
 function doEmailNext(){
-  var email=document.getElementById('emailInput').value.trim();
-  if(!email){document.getElementById('emailError').classList.add('show');return;}
+  var email = document.getElementById('emailInput').value.trim();
+  if(!email){ document.getElementById('emailError').classList.add('show'); return; }
   document.getElementById('emailError').classList.remove('show');
-  currentEmail=email;
-  document.getElementById('emailDisplay').textContent=email;
+  currentEmail = email;
+  document.getElementById('emailDisplay').textContent = email;
   showStep('stepPassword');
 }
 
 function doPasswordNext(){
-  var email=currentEmail;
-  var pwd=document.getElementById('passwordInput').value;
-  if(!pwd){document.getElementById('passwordError').classList.add('show');return;}
-  if(AUTH.login(email,pwd)){
+  var pwd = document.getElementById('passwordInput').value;
+  if(!pwd){ document.getElementById('passwordError').classList.add('show'); return; }
+  if(AUTH.login(currentEmail, pwd)){
     document.getElementById('passwordError').classList.remove('show');
-    var next=authParams.next||authParams.continue||authParams.redirect||'https://the1234556789.github.io/project-pioneer/';
-    location.href=next;
-  }else{
-    document.getElementById('passwordError').textContent=I18N.raw('login','pwd_error');
+    var next = authParams.next || authParams.continue || authParams.redirect || 'https://the1234556789.github.io/project-pioneer/';
+    location.href = next;
+  } else {
+    document.getElementById('passwordError').textContent = I18N.raw('login','err_password');
     document.getElementById('passwordError').classList.add('show');
   }
 }
 
-// ===== 注册多步流程 =====
-var signupEmail='';
-var signupPassword='';
-
 function doSignupEmailNext(){
-  var mail=document.getElementById('signupEmail').value.trim();
-  var errEl=document.getElementById('signupEmailError');
-  if(!mail){errEl.textContent=I18N.raw('login','invalid_email');errEl.classList.add('show');return;}
-  // 简单格式校验：邮箱或手机号
-  var emailRe=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var phoneRe=/^\d{6,}$/;
-  if(!emailRe.test(mail)&&!phoneRe.test(mail)){errEl.textContent=I18N.raw('login','invalid_email');errEl.classList.add('show');return;}
+  var mail = document.getElementById('signupEmail').value.trim();
+  var errEl = document.getElementById('signupEmailError');
+  var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var phoneRe = /^\d{6,}$/;
+  if(!mail || (!emailRe.test(mail) && !phoneRe.test(mail))){ errEl.textContent = I18N.raw('login','invalid_email'); errEl.classList.add('show'); return; }
   errEl.classList.remove('show');
-  signupEmail=mail;
-  document.getElementById('signupEmailDisplay').textContent=mail;
+  signupEmail = mail;
+  document.getElementById('signupEmailDisplay').textContent = mail;
   showStep('stepSignupPassword');
 }
 
 function doSignupPasswordNext(){
-  var pwd=document.getElementById('signupPassword').value;
-  var pwd2=document.getElementById('signupPassword2').value;
-  var errEl=document.getElementById('signupPasswordError');
-  if(!pwd||pwd.length<8){errEl.textContent=I18N.raw('login','pwd_short');errEl.classList.add('show');return;}
-  if(pwd!==pwd2){errEl.textContent=I18N.raw('login','pwd_mismatch');errEl.classList.add('show');return;}
+  var pwd = document.getElementById('signupPassword').value;
+  var pwd2 = document.getElementById('signupPassword2').value;
+  var errEl = document.getElementById('signupPasswordError');
+  if(!pwd || pwd.length<8){ errEl.textContent = I18N.raw('login','pwd_short'); errEl.classList.add('show'); return; }
+  if(pwd !== pwd2){ errEl.textContent = I18N.raw('login','pwd_mismatch'); errEl.classList.add('show'); return; }
   errEl.classList.remove('show');
-  signupPassword=pwd;
+  signupPassword = pwd;
   showStep('stepSignupCode');
 }
 
 function doSignupCodeNext(){
-  var code=document.getElementById('signupCode').value;
-  var errEl=document.getElementById('signupCodeError');
-  if(!code){errEl.textContent=I18N.raw('login','need_code');errEl.classList.add('show');return;}
-  if(!codeSent){errEl.textContent=I18N.raw('login','need_send');errEl.classList.add('show');return;}
-  if(!verificationCode){errEl.textContent=I18N.raw('login','code_expired');errEl.classList.add('show');return;}
-  if(code!==verificationCode){errEl.textContent=I18N.raw('login','code_wrong');errEl.classList.add('show');return;}
+  var code = document.getElementById('signupCode').value;
+  var errEl = document.getElementById('signupCodeError');
+  if(!code){ errEl.textContent = I18N.raw('login','need_code'); errEl.classList.add('show'); return; }
+  if(!codeSent){ errEl.textContent = I18N.raw('login','need_send'); errEl.classList.add('show'); return; }
+  if(!verificationCode){ errEl.textContent = I18N.raw('login','code_expired'); errEl.classList.add('show'); return; }
+  if(code !== verificationCode){ errEl.textContent = I18N.raw('login','code_wrong'); errEl.classList.add('show'); return; }
   errEl.classList.remove('show');
   showStep('stepSignupQr');
 }
 
-// 跳转到扫码确认页，携带注册信息（同域场景；跨域部署时用 sessionStorage 透传）
 function goScan(){
-  var base='qrcode.html';
-  var next=authParams.next||authParams.continue||authParams.redirect||'';
-  var qs='?email='+encodeURIComponent(signupEmail)+'&pwd='+encodeURIComponent(signupPassword)+'&code='+encodeURIComponent(verificationCode);
-  if(next) qs+='&continue='+encodeURIComponent(next);
-  location.href=base+qs;
+  var base = 'qrcode.html';
+  var next = authParams.next || authParams.continue || authParams.redirect || '';
+  var qs = '?email=' + encodeURIComponent(signupEmail) + '&pwd=' + encodeURIComponent(signupPassword) + '&code=' + encodeURIComponent(verificationCode);
+  if(next) qs += '&continue=' + encodeURIComponent(next);
+  location.href = base + qs;
 }
 
-/* 页面初始化时应用当前语言 */
-I18N.apply('login');
-if(authParams.signup==='1') showStep('stepSignupEmail');
-
-// 注册流程内的轻量提示（沿用验证码步骤的 error-msg 元素）
 function showSignupTip(msg){
-  var el=document.getElementById('signupCodeError');
-  if(!el){alert(msg);return;}
-  el.textContent=msg;
+  var el = document.getElementById('signupCodeError');
+  if(!el){ showAlert(msg); return; }
+  el.textContent = msg;
   el.classList.add('show');
-  setTimeout(function(){el.classList.remove('show');},2500);
+  setTimeout(function(){ el.classList.remove('show'); }, 2500);
 }
+
+// 初始化
+AUTH.renderBar();
+I18N.apply('login');
+if(authParams.signup === '1') showStep('stepSignupEmail');
 </script>
 </body>
 </html>
