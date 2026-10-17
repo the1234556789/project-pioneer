@@ -28,7 +28,6 @@
   .status-line { font-size:14px; color:var(--text-main); text-align:center; margin-bottom:8px; }
   .spinner { width:18px; height:18px; border:2px solid #e8eaed; border-top-color:var(--google-blue); border-radius:50%; display:inline-block; vertical-align:-4px; margin-right:8px; animation:spin 0.8s linear infinite; }
   @keyframes spin { to{transform:rotate(360deg)} }
-  .done-icon { color:#1e8e3e; font-size:20px; font-weight:700; }
   .manual-link { display:block; margin:24px auto 0; text-align:center; color:var(--google-blue); text-decoration:none; font-size:14px; font-weight:500; }
   .manual-link:hover { text-decoration:underline; }
 
@@ -53,15 +52,10 @@
     </div>
     <div class="title" data-i18n="title">确认注册</div>
     <div class="subtitle" data-i18n-html="true" data-i18n="subtitle">
-      为了账号安全，请使用<br>
-      <strong>project-pioneer 手机客户端</strong><br>
-      扫描右侧二维码完成最终确认。
+      为了账号安全，请使用<br><strong>project-pioneer 手机客户端</strong><br>扫描右侧二维码完成最终确认。
     </div>
     <div class="scan-desc" style="text-align:left;" data-i18n-html="true" data-i18n="steps">
-      ① 打开手机上的 project-pioneer App<br>
-      ② 点击右上角「扫一扫」<br>
-      ③ 对准二维码扫描<br>
-      ④ 在手机上点击「确认注册」
+      ① 打开手机上的 project-pioneer App<br>② 点击右上角「扫一扫」<br>③ 对准二维码扫描<br>④ 在手机上点击「确认注册」
     </div>
   </div>
 
@@ -107,92 +101,151 @@
 
 <div class="copyright">©2024-2026 会泽工作室 版权所有</div>
 
-<script src="auth.js"></script>
-<script src="lang.js"></script>
 <script>
-function showStep(id){document.querySelectorAll('.step').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
-
-// 解析注册参数（由 login 页带过来）
-var params={};
-var qs=location.search.substring(1);
-if(qs) qs.split('&').forEach(function(p){var x=p.split('=');if(x.length===2)params[decodeURIComponent(x[0])]=decodeURIComponent(x[1]);});
-
-// 兜底：没带邮箱就回注册页
-if(!params.email){location.href='index.html?signup=1';}
-
-// 二维码内容：带一个一次性 token + 邮箱，模拟扫码协议
-var token=Math.random().toString(36).slice(2)+Date.now().toString(36);
-var qrData=JSON.stringify({act:'confirm_signup',email:params.email,pwd:params.pwd,code:params.code,token:token,from:'project-pioneer'});
-
-// 生成二维码（纯 canvas，无第三方依赖）
-function drawQR(text){
-  // 使用简化的 QR 编码：此处若想真正可用，可引入 qrcode.min.js；当前用占位样式兜底
-  var box=document.getElementById('qrBox');
-  // 尝试动态加载 qrcode 库
-  var s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
-  s.onload=function(){
-    try{
-      var qr=qrcode(0,'M');qr.addData(text);qr.make();
-      box.innerHTML=qr.createImgTag(8,12);
-    }catch(e){drawFallback(box,text);}
+// ============ 内嵌 I18N ============
+var I18N = (function(){
+  var LANGS = {
+    'zh-CN': {
+      'title':'确认注册','subtitle':'为了账号安全，请使用<br><strong>project-pioneer 手机客户端</strong><br>扫描右侧二维码完成最终确认。',
+      'steps':'① 打开手机上的 project-pioneer App<br>② 点击右上角「扫一扫」<br>③ 对准二维码扫描<br>④ 在手机上点击「确认注册」',
+      'scan_title':'请扫描二维码','waiting':'正在等待手机确认…','qr_expire':'二维码有效时间：{m}:{s2}',
+      'manual':'手机无法扫码？点此在浏览器中直接确认 →','done_title':'注册已确认','done_desc':'您已成功完成注册确认，正在为您跳转…',
+      'expire_title':'二维码已过期','expire_desc':'二维码有效期为 5 分钟，请返回重新获取。','re_register':'重新注册',
+      'help':'帮助','privacy_link':'隐私','terms':'条款'
+    },
+    'en': {
+      'title':'Confirm Registration','subtitle':'For security, please use<br><strong>project-pioneer mobile app</strong><br>to scan the QR code.',
+      'steps':'① Open project-pioneer App<br>② Tap "Scan"<br>③ Scan the QR code<br>④ Tap "Confirm" on phone',
+      'scan_title':'Scan QR Code','waiting':'Waiting for phone confirmation…','qr_expire':'QR valid for: {m}:{s2}',
+      'manual':'Cannot scan? Confirm in browser →','done_title':'Registration Confirmed','done_desc':'You have successfully confirmed registration. Redirecting…',
+      'expire_title':'QR Code Expired','expire_desc':'QR code is valid for 5 minutes. Please go back to retry.','re_register':'Register Again',
+      'help':'Help','privacy_link':'Privacy','terms':'Terms'
+    },
+    'ru': {
+      'title':'Подтверждение регистрации','subtitle':'Для безопасности используйте<br><strong>приложение project-pioneer</strong><br>для сканирования QR-кода.',
+      'steps':'① Откройте приложение project-pioneer<br>② Нажмите «Сканировать»<br>③ Отсканируйте QR-код<br>④ Нажмите «Подтвердить» на телефоне',
+      'scan_title':'Отсканируйте QR-код','waiting':'Ожидание подтверждения…','qr_expire':'Срок действия: {m}:{s2}',
+      'manual':'Не удается отсканировать? Подтвердить в браузере →','done_title':'Регистрация подтверждена','done_desc':'Вы успешно подтвердили регистрацию. Перенаправление…',
+      'expire_title':'Срок действия истек','expire_desc':'QR-код действителен 5 минут. Вернитесь назад.','re_register':'Зарегистрироваться снова',
+      'help':'Справка','privacy_link':'Конфиденциальность','terms':'Условия'
+    }
   };
-  s.onerror=function(){drawFallback(box,text);};
+
+  var current = 'zh-CN';
+  var saved = localStorage.getItem('pp_lang');
+  var browser = navigator.language || navigator.userLanguage || '';
+  if (saved && LANGS[saved]) current = saved;
+  else if (browser.startsWith('en')) current = 'en';
+  else if (browser.startsWith('ru')) current = 'ru';
+
+  function t(page, key, vars) {
+    var val = (LANGS[current] && LANGS[current][key]) || LANGS['zh-CN'][key] || key;
+    if (vars) { for (var k in vars) val = val.replace('{' + k + '}', vars[k]); }
+    return val;
+  }
+
+  function setLang(lang, page) {
+    current = lang;
+    localStorage.setItem('pp_lang', lang);
+    apply(page);
+  }
+
+  function apply(page) {
+    var sel = document.getElementById('langSelect');
+    if (sel) {
+      sel.innerHTML = '<option value="zh-CN">中文（简体）</option><option value="en">English</option><option value="ru">Русский</option>';
+      sel.value = current;
+    }
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      var html = el.getAttribute('data-i18n-html');
+      var text = t(page || 'qrcode', key);
+      if (html === 'true') el.innerHTML = text;
+      else el.textContent = text;
+    });
+  }
+
+  function raw(page, key) { return (LANGS[current] && LANGS[current][key]) || LANGS['zh-CN'][key] || key; }
+
+  return { t: t, setLang: setLang, apply: apply, current: current, raw: raw };
+})();
+
+// ============ 解析参数 ============
+var params = {};
+(function(){
+  var qs = location.search.substring(1);
+  if(qs) qs.split('&').forEach(function(p){ var x=p.split('='); if(x.length===2) params[decodeURIComponent(x[0])]=decodeURIComponent(x[1]); });
+})();
+
+if(!params.email){ location.href='index.html?signup=1'; }
+
+// ============ 生成二维码（canvas 纯前端） ============
+function drawQR(text){
+  var box = document.getElementById('qrBox');
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+  s.onload = function(){
+    try{
+      var qr = qrcode(0,'M'); qr.addData(text); qr.make();
+      box.innerHTML = qr.createImgTag(8,12);
+    }catch(e){ drawFallback(box,text); }
+  };
+  s.onerror = function(){ drawFallback(box,text); };
   document.head.appendChild(s);
 }
+
 function drawFallback(box,text){
-  // 无法加载库时的占位（网格图案）
-  var c=document.createElement('canvas');c.width=228;c.height=228;
-  var ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,228,228);
-  var seed=0;for(var i=0;i<text.length;i++)seed=(seed*31+text.charCodeAt(i))>>>0;
-  function rnd(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
-  var n=21;var cell=228/n;
-  for(var y=0;y<n;y++)for(var x=0;x<n;x++){ctx.fillStyle=rnd()>0.5?'#202124':'#fff';ctx.fillRect(x*cell,y*cell,cell,cell);}
-  ctx.strokeStyle='#1a73e8';ctx.lineWidth=8;
-  ctx.strokeRect(4,4,52,52);ctx.strokeRect(172,4,52,52);ctx.strokeRect(4,172,52,52);
-  box.innerHTML='';box.appendChild(c);
+  var c = document.createElement('canvas'); c.width=228; c.height=228;
+  var ctx = c.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,228,228);
+  var seed=0; for(var i=0;i<text.length;i++) seed=(seed*31+text.charCodeAt(i))>>>0;
+  function rnd(){ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; }
+  var n=21; var cell=228/n;
+  for(var y=0;y<n;y++) for(var x=0;x<n;x++){ ctx.fillStyle=rnd()>0.5?'#202124':'#fff'; ctx.fillRect(x*cell,y*cell,cell,cell); }
+  ctx.strokeStyle='#1a73e8'; ctx.lineWidth=8;
+  ctx.strokeRect(4,4,52,52); ctx.strokeRect(172,4,52,52); ctx.strokeRect(4,172,52,52);
+  box.innerHTML=''; box.appendChild(c);
 }
 
+var token = Math.random().toString(36).slice(2) + Date.now().toString(36);
+var qrData = JSON.stringify({act:'confirm_signup',email:params.email,pwd:params.pwd,code:params.code,token:token,from:'project-pioneer'});
 drawQR(qrData);
 
-// 倒计时
-var expireSec=300;
-window._expireSec=expireSec;
+// ============ 倒计时 ============
+var expireSec = 300;
 function renderExpire(sec){
-  var m=Math.floor(sec/60),s2=sec%60;
-  var el=document.getElementById('qrExpireText');
-  if(el) el.textContent=I18N.t('qrcode','qr_expire',{m:m,s:(s2<10?'0':'')+s2});
+  var m = Math.floor(sec/60), s2 = sec%60;
+  var el = document.getElementById('qrExpireText');
+  if(el) el.textContent = I18N.t('qrcode','qr_expire',{m:m,s2:(s2<10?'0':'')+s2});
 }
 renderExpire(expireSec);
-var cd=setInterval(function(){
+var cd = setInterval(function(){
   expireSec--;
-  window._expireSec=expireSec;
   renderExpire(expireSec);
-  if(expireSec<=0){clearInterval(cd);showStep('stepExpire');}
+  if(expireSec<=0){ clearInterval(cd); showStep('stepExpire'); }
 },1000);
 
-/* 页面初始化：应用当前语言（含倒计时文案） */
-I18N.apply('qrcode');
+function showStep(id){
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+}
 
-// 模拟手机扫码确认：真实场景下应由手机端回调后端接口，此处前端用定时器模拟轮询
-// 1.5 秒后自动"已确认"（演示用），生产环境替换为对后端的轮询
-setTimeout(function(){
-  clearInterval(cd);
-  showStep('stepDone');
-  // 完成注册落库
-  if(window.AUTH){AUTH.register(params.email,params.pwd);}
-  var next=params.next||params.continue||params.redirect||'https://the1234556789.github.io/project-pioneer/';
-  setTimeout(function(){location.href=next;},1500);
-},1500);
-
-// 手动确认兜底
+// ============ 手动确认 ============
 document.getElementById('manualLink').addEventListener('click',function(e){
   e.preventDefault();
   clearInterval(cd);
-  if(window.AUTH){AUTH.register(params.email,params.pwd);}
-  var next=params.next||params.continue||params.redirect||'https://the1234556789.github.io/project-pioneer/';
-  location.href=next;
+  // 落库
+  var users = JSON.parse(localStorage.getItem('pp_users') || '[]');
+  var exists = users.find(function(u){ return u.email === params.email; });
+  if(!exists) users.push({email:params.email,password:params.pwd,code:params.code,registeredAt:new Date().toISOString()});
+  localStorage.setItem('pp_users',JSON.stringify(users));
+  localStorage.setItem('pp_current_user',JSON.stringify({email:params.email,loginAt:new Date().toISOString()}));
+  showStep('stepDone');
+  var next = params.next || params.continue || params.redirect || 'https://the1234556789.github.io/project-pioneer/';
+  setTimeout(function(){ location.href = next; }, 1500);
 });
+
+// 初始化
+I18N.apply('qrcode');
 </script>
 </body>
 </html>
