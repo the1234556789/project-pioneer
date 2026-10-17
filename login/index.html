@@ -92,10 +92,10 @@
 <div class="card">
   <div class="left-panel">
     <div class="brand">
-      <img class="brand-icon" src="https://the1234556789.github.io/project-pioneer/login/project-pioneer.jpg" alt="project-pioneer">
+      <img class="brand-icon" src="project-pioneer.jpg" alt="project-pioneer">
     </div>
-    <div class="title" id="pageTitle">登录</div>
-    <div class="subtitle" id="pageSubtitle">继续使用 project-pioneer</div>
+    <div class="title" id="pageTitle" data-i18n="title_login">登录</div>
+    <div class="subtitle" id="pageSubtitle">继续使用 {{service}}</div>
   </div>
 
   <div class="right-panel">
@@ -103,18 +103,18 @@
     <div class="step active" id="stepEmail">
       <div class="input-wrapper">
         <input type="text" id="emailInput" placeholder=" " autocomplete="username">
-        <label for="emailInput">电子邮件地址或电话号码</label>
+        <label for="emailInput" data-i18n="lbl_email">电子邮件地址或电话号码</label>
       </div>
-      <a class="forgot" href="#" onclick="alert('密码找回功能暂未开放');return false;">忘记电子邮件地址？</a>
+      <a class="forgot" href="#" onclick="alert(I18N.raw('login','recover_off'));return false;" data-i18n="forgot_email">忘记电子邮件地址？</a>
       <div class="privacy-hint" id="privacyHint">
         不是您自己的计算机？请使用无痕浏览窗口进行登录。<br>
         <a href="https://the1234556789.github.io/project-pioneer/help/" id="guestModeLink" target="_blank" rel="noopener">详细了解如何使用访客模式</a>
       </div>
       <div class="actions">
-        <button class="btn-text" onclick="showStep('stepSignupEmail')">创建账号</button>
-        <button class="btn-next" onclick="doEmailNext()">下一步</button>
+        <button class="btn-text" onclick="showStep('stepSignupEmail')" data-i18n="create_account">创建账号</button>
+        <button class="btn-next" onclick="doEmailNext()" data-i18n="next">下一步</button>
       </div>
-      <div class="error-msg" id="emailError">请输入有效的电子邮件地址或电话号码</div>
+      <div class="error-msg" id="emailError" data-i18n="err_email">请输入有效的电子邮件地址或电话号码</div>
     </div>
 
     <!-- Step 2 -->
@@ -122,26 +122,26 @@
       <div style="font-size:14px;color:var(--text-sub);margin-bottom:8px;" id="emailDisplay"></div>
       <div class="input-wrapper">
         <input type="password" id="passwordInput" placeholder=" " autocomplete="current-password">
-        <label for="passwordInput">输入密码</label>
+        <label for="passwordInput" data-i18n="lbl_password">输入密码</label>
       </div>
-      <a class="forgot" href="#" onclick="alert('密码找回功能暂未开放');return false;">忘记密码？</a>
+      <a class="forgot" href="#" onclick="alert(I18N.raw('login','recover_off'));return false;" data-i18n="forgot_pwd">忘记密码？</a>
       <div class="actions">
-        <button class="btn-text" onclick="showStep('stepEmail')">返回</button>
-        <button class="btn-next" onclick="doPasswordNext()">下一步</button>
+        <button class="btn-text" onclick="showStep('stepEmail')" data-i18n="back">返回</button>
+        <button class="btn-next" onclick="doPasswordNext()" data-i18n="next">下一步</button>
       </div>
-      <div class="error-msg" id="passwordError">密码错误，请重试</div>
+      <div class="error-msg" id="passwordError" data-i18n="err_password">密码错误，请重试</div>
     </div>
 
     <!-- Step 3 注册-邮箱 -->
     <div class="step" id="stepSignupEmail">
-      <div class="subtitle" style="margin-bottom:24px;">第一步：输入你的邮箱或电话号码</div>
+      <div class="subtitle" style="margin-bottom:24px;" data-i18n="s1_title">第一步：输入你的邮箱或电话号码</div>
       <div class="input-wrapper">
         <input type="text" id="signupEmail" placeholder=" " autocomplete="username">
-        <label for="signupEmail">电子邮件地址或电话号码</label>
+        <label for="signupEmail" data-i18n="lbl_email">电子邮件地址或电话号码</label>
       </div>
       <div class="actions">
-        <button class="btn-text" onclick="showStep('stepEmail')">返回登录</button>
-        <button class="btn-next" onclick="doSignupEmailNext()">下一步</button>
+        <button class="btn-text" onclick="showStep('stepEmail')" data-i18n="back">返回登录</button>
+        <button class="btn-next" onclick="doSignupEmailNext()" data-i18n="next">下一步</button>
       </div>
       <div class="error-msg" id="signupEmailError"></div>
     </div>
@@ -149,49 +149,49 @@
     <!-- Step 4 注册-密码 -->
     <div class="step" id="stepSignupPassword">
       <div style="font-size:14px;color:var(--text-sub);margin-bottom:4px;" id="signupEmailDisplay"></div>
-      <div class="subtitle" style="margin-bottom:24px;font-size:14px;">第二步：设置你的密码</div>
+      <div class="subtitle" style="margin-bottom:24px;font-size:14px;" data-i18n="s2_title">第二步：设置你的密码</div>
       <div class="input-wrapper">
         <input type="password" id="signupPassword" placeholder=" " autocomplete="new-password">
-        <label for="signupPassword">输入密码（至少8位）</label>
+        <label for="signupPassword" data-i18n="lbl_pwd">输入密码（至少8位）</label>
       </div>
       <div class="input-wrapper">
         <input type="password" id="signupPassword2" placeholder=" " autocomplete="new-password">
-        <label for="signupPassword2">确认密码</label>
+        <label for="signupPassword2" data-i18n="lbl_pwd2">确认密码</label>
       </div>
       <div class="actions">
-        <button class="btn-text" onclick="showStep('stepSignupEmail')">上一步</button>
-        <button class="btn-next" onclick="doSignupPasswordNext()">下一步</button>
+        <button class="btn-text" onclick="showStep('stepSignupEmail')" data-i18n="prev">上一步</button>
+        <button class="btn-next" onclick="doSignupPasswordNext()" data-i18n="next">下一步</button>
       </div>
       <div class="error-msg" id="signupPasswordError"></div>
     </div>
 
     <!-- Step 5 注册-验证码 -->
     <div class="step" id="stepSignupCode">
-      <div class="subtitle" style="margin-bottom:24px;">第三步：输入邮箱收到的验证码</div>
+      <div class="subtitle" style="margin-bottom:24px;" data-i18n="s3_title">第三步：输入邮箱收到的验证码</div>
       <div class="input-wrapper">
         <input type="text" id="signupCode" placeholder=" " maxlength="6">
-        <label for="signupCode">验证码</label>
+        <label for="signupCode" data-i18n="lbl_code">验证码</label>
       </div>
-      <button class="btn-next" id="sendCodeBtn" onclick="sendCode()" style="margin-top:8px;padding:8px 16px;font-size:13px;">发送验证码</button>
+      <button class="btn-next" id="sendCodeBtn" onclick="sendCode()" style="margin-top:8px;padding:8px 16px;font-size:13px;" data-i18n="send_code">发送验证码</button>
       <div class="actions">
-        <button class="btn-text" onclick="showStep('stepSignupPassword')">上一步</button>
-        <button class="btn-next" onclick="doSignupCodeNext()">下一步</button>
+        <button class="btn-text" onclick="showStep('stepSignupPassword')" data-i18n="prev">上一步</button>
+        <button class="btn-next" onclick="doSignupCodeNext()" data-i18n="next">下一步</button>
       </div>
       <div class="error-msg" id="signupCodeError"></div>
     </div>
 
     <!-- Step 6 注册-扫码确认 -->
     <div class="step" id="stepSignupQr">
-      <div class="subtitle" style="margin-bottom:24px;">第四步：扫码完成注册确认</div>
-      <div style="font-size:14px;color:var(--text-sub);margin-bottom:16px;line-height:1.7;">
+      <div class="subtitle" style="margin-bottom:24px;" data-i18n="s4_title">第四步：扫码完成注册确认</div>
+      <div style="font-size:14px;color:var(--text-sub);margin-bottom:16px;line-height:1.7;" data-i18n-html="true" data-i18n="qr_desc">
         请使用 <strong>project-pioneer 手机客户端</strong> 扫描二维码完成最终确认。
       </div>
       <div style="background:#e8f0fe;border-radius:12px;padding:20px;text-align:center;">
-        <div style="font-size:13px;color:var(--text-sub);margin-bottom:12px;">演示模式下，点击下方按钮模拟手机扫码确认</div>
-        <button class="btn-next" onclick="goScan()">打开扫码确认页面 →</button>
+        <div style="font-size:13px;color:var(--text-sub);margin-bottom:12px;" data-i18n="qr_demo_hint">演示模式下，点击下方按钮模拟手机扫码确认</div>
+        <button class="btn-next" onclick="goScan()" data-i18n="open_qr">打开扫码确认页面 →</button>
       </div>
       <div class="actions">
-        <button class="btn-text" onclick="showStep('stepSignupCode')">上一步</button>
+        <button class="btn-text" onclick="showStep('stepSignupCode')" data-i18n="prev">上一步</button>
       </div>
     </div>
   </div>
@@ -199,15 +199,12 @@
 
 <div class="footer">
   <div class="footer-left">
-    <select onchange="changeLang(this.value)">
-      <option value="zh-CN">中文（简体）</option>
-      <option value="en">English</option>
-    </select>
+    <select id="langSelect" onchange="I18N.setLang(this.value,'login')"></select>
   </div>
   <div class="footer-right">
-    <a href="https://the1234556789.github.io/project-pioneer/help/">帮助</a>
-    <a href="#">隐私</a>
-    <a href="#">条款</a>
+    <a href="https://the1234556789.github.io/project-pioneer/help/" data-i18n="help">帮助</a>
+    <a href="#" data-i18n="privacy_link">隐私</a>
+    <a href="#" data-i18n="terms">条款</a>
   </div>
 </div>
 
@@ -217,23 +214,27 @@
 <div class="code-modal-mask" id="codeModalMask">
   <div class="code-modal">
     <div class="modal-icon">📧</div>
-    <h3>验证码已发送</h3>
-    <div class="code-hint">以下是您的注册验证码（同时已模拟发送到邮箱）：</div>
+    <h3 data-i18n="modal_title">验证码已发送</h3>
+    <div class="code-hint" data-i18n="modal_hint">以下是您的注册验证码（同时已模拟发送到邮箱）：</div>
     <div class="code-display" id="codeDisplay" onclick="doCopyCode()" title="点击复制验证码">------</div>
-    <div class="click-hint">👆 点击上方验证码即可快速复制</div>
+    <div class="click-hint" data-i18n="click_hint">👆 点击上方验证码即可快速复制</div>
     <div class="countdown" id="modalCountdown"></div>
     <div class="modal-actions">
-      <button class="btn-copy" id="btnCopy" onclick="doCopyCode()"><span>📋</span> 复制验证码</button>
-      <button class="btn-close-modal" onclick="closeCodeModal()">我知道了</button>
+      <button class="btn-copy" id="btnCopy" onclick="doCopyCode()"><span>📋</span> <span data-i18n="copy">复制验证码</span></button>
+      <button class="btn-close-modal" onclick="closeCodeModal()" data-i18n="close_modal">我知道了</button>
     </div>
-    <div class="copy-toast" id="copyToast">✓ 已复制到剪贴板，快去粘贴吧！</div>
+    <div class="copy-toast" id="copyToast" data-i18n="toast">✓ 已复制到剪贴板，快去粘贴吧！</div>
   </div>
 </div>
 
-<script src="https://the1234556789.github.io/project-pioneer/auth.js"></script>
+<script src="auth.js"></script>
+<script src="lang.js"></script>
 <script>
-var GUEST_MODE_URL='https://support.google.com/accounts?p=signin_privatebrowsing&hl=zh-CN';
-document.getElementById('guestModeLink').href=GUEST_MODE_URL;
+/* 把 URL 参数暴露给 lang.js 使用 */
+window.AUTH_PARAMS=authParams;
+
+var GUEST_MODE_URL='https://support.google.com/accounts?p=signin_privatebrowsing&hl={{lang}}';
+if(document.getElementById('guestModeLink')) document.getElementById('guestModeLink').href=GUEST_MODE_URL.replace('{{lang}}',I18N.current);
 
 // 渲染登录态
 AUTH.renderBar();
@@ -280,32 +281,32 @@ function showCopySuccess(){
   document.getElementById('copyToast').classList.add('show');
   var btnCopy=document.getElementById('btnCopy');
   btnCopy.classList.add('copied');
-  btnCopy.innerHTML='<span>✓</span> 已复制';
+  btnCopy.innerHTML='<span>✓</span> '+I18N.raw('login','copied');
   setTimeout(function(){document.getElementById('copyToast').classList.remove('show');},2500);
 }
 
 function startModalCountdown(){
   var expireSec=300;
   var cdEl=document.getElementById('modalCountdown');
-  cdEl.textContent='⏱ 有效期剩余：'+Math.floor(expireSec/60)+'分'+(expireSec%60)+'秒';
+  cdEl.textContent=I18N.t('login','valid_for',{m:Math.floor(expireSec/60),s:expireSec%60});
   clearInterval(modalCountdownTimer);
   modalCountdownTimer=setInterval(function(){
     expireSec--;
     if(expireSec<=0){
       clearInterval(modalCountdownTimer);
-      cdEl.textContent='❌ 验证码已过期，请重新发送';
+      cdEl.textContent=I18N.raw('login','expired');
       verificationCode='';codeSent=false;return;
     }
-    cdEl.textContent='⏱ 有效期剩余：'+Math.floor(expireSec/60)+'分'+(expireSec%60)+'秒';
+    cdEl.textContent=I18N.t('login','valid_for',{m:Math.floor(expireSec/60),s:expireSec%60});
   },1000);
 }
 
 function sendCode(){
-  if(countdown>0){showSignupTip('请等待 '+countdown+' 秒后再重新发送');return;}
+  if(countdown>0){showSignupTip(I18N.t('login','wait_resend',{n:countdown}));return;}
   var mail=document.getElementById('signupEmail').value.trim();
   if(!mail){
-    document.getElementById('signupError').textContent='请先输入电子邮件地址再获取验证码';
-    document.getElementById('signupError').classList.add('show');return;
+    document.getElementById('signupEmailError').textContent=I18N.raw('login','need_email');
+    document.getElementById('signupEmailError').classList.add('show');return;
   }
   verificationCode=generateCode();
   codeSent=true;
@@ -315,12 +316,20 @@ function sendCode(){
 
   countdown=60;
   var btn=document.getElementById('sendCodeBtn');
-  var originalText=btn.textContent;
   btn.disabled=true;
+  /* 把当前倒计时秒数暴露给 lang.js，方便切语言时保持文案 */
+  window._countdown=countdown;
   var btnTimer=setInterval(function(){
-    btn.textContent='重新发送 ('+countdown+'s)';
     countdown--;
-    if(countdown<0){clearInterval(btnTimer);btn.textContent=originalText;btn.disabled=false;countdown=0;}
+    window._countdown=countdown;
+    if(countdown<0){
+      clearInterval(btnTimer);
+      btn.textContent=I18N.raw('login','send_code');
+      btn.disabled=false;
+      window._countdown=0;
+    }else{
+      btn.textContent=I18N.t('login','resend',{n:countdown});
+    }
   },1000);
 
   clearTimeout(codeExpireTimer);
@@ -366,7 +375,7 @@ function doPasswordNext(){
     var next=authParams.next||authParams.continue||authParams.redirect||'https://the1234556789.github.io/project-pioneer/';
     location.href=next;
   }else{
-    document.getElementById('passwordError').textContent='邮箱或密码错误';
+    document.getElementById('passwordError').textContent=I18N.raw('login','pwd_error');
     document.getElementById('passwordError').classList.add('show');
   }
 }
@@ -378,11 +387,11 @@ var signupPassword='';
 function doSignupEmailNext(){
   var mail=document.getElementById('signupEmail').value.trim();
   var errEl=document.getElementById('signupEmailError');
-  if(!mail){errEl.textContent='请输入电子邮件地址或电话号码';errEl.classList.add('show');return;}
+  if(!mail){errEl.textContent=I18N.raw('login','invalid_email');errEl.classList.add('show');return;}
   // 简单格式校验：邮箱或手机号
   var emailRe=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var phoneRe=/^\d{6,}$/;
-  if(!emailRe.test(mail)&&!phoneRe.test(mail)){errEl.textContent='请输入有效的电子邮件地址或电话号码';errEl.classList.add('show');return;}
+  if(!emailRe.test(mail)&&!phoneRe.test(mail)){errEl.textContent=I18N.raw('login','invalid_email');errEl.classList.add('show');return;}
   errEl.classList.remove('show');
   signupEmail=mail;
   document.getElementById('signupEmailDisplay').textContent=mail;
@@ -393,8 +402,8 @@ function doSignupPasswordNext(){
   var pwd=document.getElementById('signupPassword').value;
   var pwd2=document.getElementById('signupPassword2').value;
   var errEl=document.getElementById('signupPasswordError');
-  if(!pwd||pwd.length<8){errEl.textContent='密码至少8位';errEl.classList.add('show');return;}
-  if(pwd!==pwd2){errEl.textContent='两次输入的密码不一致';errEl.classList.add('show');return;}
+  if(!pwd||pwd.length<8){errEl.textContent=I18N.raw('login','pwd_short');errEl.classList.add('show');return;}
+  if(pwd!==pwd2){errEl.textContent=I18N.raw('login','pwd_mismatch');errEl.classList.add('show');return;}
   errEl.classList.remove('show');
   signupPassword=pwd;
   showStep('stepSignupCode');
@@ -403,24 +412,25 @@ function doSignupPasswordNext(){
 function doSignupCodeNext(){
   var code=document.getElementById('signupCode').value;
   var errEl=document.getElementById('signupCodeError');
-  if(!code){errEl.textContent='请输入验证码';errEl.classList.add('show');return;}
-  if(!codeSent){errEl.textContent='请先点击「发送验证码」';errEl.classList.add('show');return;}
-  if(!verificationCode){errEl.textContent='验证码已过期，请重新发送';errEl.classList.add('show');return;}
-  if(code!==verificationCode){errEl.textContent='验证码错误';errEl.classList.add('show');return;}
+  if(!code){errEl.textContent=I18N.raw('login','need_code');errEl.classList.add('show');return;}
+  if(!codeSent){errEl.textContent=I18N.raw('login','need_send');errEl.classList.add('show');return;}
+  if(!verificationCode){errEl.textContent=I18N.raw('login','code_expired');errEl.classList.add('show');return;}
+  if(code!==verificationCode){errEl.textContent=I18N.raw('login','code_wrong');errEl.classList.add('show');return;}
   errEl.classList.remove('show');
   showStep('stepSignupQr');
 }
 
 // 跳转到扫码确认页，携带注册信息（同域场景；跨域部署时用 sessionStorage 透传）
 function goScan(){
-  var base='https://the1234556789.github.io/project-pioneer/qrcode.html';
+  var base='qrcode.html';
   var next=authParams.next||authParams.continue||authParams.redirect||'';
   var qs='?email='+encodeURIComponent(signupEmail)+'&pwd='+encodeURIComponent(signupPassword)+'&code='+encodeURIComponent(verificationCode);
   if(next) qs+='&continue='+encodeURIComponent(next);
   location.href=base+qs;
 }
 
-function changeLang(v){}
+/* 页面初始化时应用当前语言 */
+I18N.apply('login');
 if(authParams.signup==='1') showStep('stepSignupEmail');
 
 // 注册流程内的轻量提示（沿用验证码步骤的 error-msg 元素）
