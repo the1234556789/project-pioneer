@@ -30,6 +30,21 @@ h1 { font-size: 22px; margin-bottom: 24px; }
 .submit-btn:hover { background: #1557b0; }
 .back-link { display: inline-block; margin-top: 16px; font-size: 14px; color: #1a73e8; text-decoration: none; }
 .copyright { position: fixed; right: 16px; bottom: 16px; font-size: 12px; color: #5f6368; background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); z-index: 200; }
+
+/* 内置弹窗 */
+.modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity .2s ease; }
+.modal-mask.show { opacity: 1; visibility: visible; }
+.modal-box { background: #fff; width: 360px; max-width: calc(100% - 48px); border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.18); transform: translateY(12px) scale(.98); transition: transform .2s ease; overflow: hidden; }
+.modal-mask.show .modal-box { transform: translateY(0) scale(1); }
+.modal-body { padding: 24px 24px 12px; }
+.modal-title { font-size: 17px; font-weight: 600; color: #202124; margin-bottom: 8px; }
+.modal-msg { font-size: 14px; color: #5f6368; line-height: 1.6; word-break: break-all; }
+.modal-foot { padding: 16px 24px 20px; display: flex; justify-content: flex-end; gap: 10px; }
+.modal-btn { border: none; padding: 9px 22px; border-radius: 18px; font-size: 14px; cursor: pointer; font-family: inherit; transition: background .15s ease; }
+.modal-btn.primary { background: #1a73e8; color: #fff; }
+.modal-btn.primary:hover { background: #1557b0; }
+.modal-btn.ghost { background: #fff; color: #5f6368; border: 1px solid #dadce0; }
+.modal-btn.ghost:hover { background: #f1f3f4; }
 </style>
 </head>
 <body>
@@ -87,10 +102,77 @@ h1 { font-size: 22px; margin-bottom: 24px; }
 
 <div class="copyright">©2024-2026 会泽工作室 版权所有</div>
 
+<!-- 内置弹窗容器 -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal-box" role="dialog" aria-modal="true">
+    <div class="modal-body">
+      <div class="modal-title" id="modalTitle">提示</div>
+      <div class="modal-msg" id="modalMsg"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="modal-btn ghost" id="modalCancel">取消</button>
+      <button class="modal-btn primary" id="modalOk">确定</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://the1234556789.github.io/project-pioneer/auth.js"></script>
 <script>
 const STORAGE_VIDEOS = "pp_videos";
 
+/* ============ 内置弹窗组件 ============ */
+const modalMask   = document.getElementById('modalMask');
+const modalTitle  = document.getElementById('modalTitle');
+const modalMsg    = document.getElementById('modalMsg');
+const modalOk     = document.getElementById('modalOk');
+const modalCancel = document.getElementById('modalCancel');
+
+let okCallback = null;
+let cancelCallback = null;
+
+// 显示弹窗：type 可为 'alert'(仅确定) 或 'confirm'(确定+取消)
+function showModal({ title = '提示', message = '', type = 'alert', okText = '确定', cancelText = '取消', onOk = null, onCancel = null }){
+  modalTitle.textContent = title;
+  modalMsg.textContent = message;
+  modalOk.textContent = okText;
+  okCallback = onOk;
+  cancelCallback = onCancel;
+
+  if (type === 'confirm') {
+    modalCancel.style.display = '';
+    modalCancel.textContent = cancelText;
+  } else {
+    modalCancel.style.display = 'none';
+  }
+
+  modalMask.classList.add('show');
+}
+
+function hideModal(){
+  modalMask.classList.remove('show');
+}
+
+modalOk.addEventListener('click', () => {
+  hideModal();
+  if (typeof okCallback === 'function') okCallback();
+});
+modalCancel.addEventListener('click', () => {
+  hideModal();
+  if (typeof cancelCallback === 'function') cancelCallback();
+});
+// 点击遮罩不关闭，避免误触；按 Esc 关闭（等同取消）
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modalMask.classList.contains('show')) {
+    hideModal();
+    if (typeof cancelCallback === 'function') cancelCallback();
+  }
+});
+
+/* 便捷封装 */
+function showAlert(message, onOk){ showModal({ message, type: 'alert', onOk }); }
+function showConfirm(message, onOk, onCancel){ showModal({ message, type: 'confirm', onOk, onCancel }); }
+
+/* ============ 页面逻辑 ============ */
 function onTypeChange(){
   const t = gid('vtype').value;
   gid('localFileGroup').style.display = t === 'local' ? '' : 'none';
@@ -104,18 +186,23 @@ function onTypeChange(){
 
 function gid(id){ return document.getElementById(id); }
 
+const LOGIN_URL = 'https://the1234556789.github.io/project-pioneer/login/?continue=https%3A%2F%2Fthe1234556789.github.io%2Fproject-pioneer%2Findex.html';
+
 function doUpload(){
-  if (!AUTH.getUser()){ alert('请先登录'); location.href = 'login/index.html'; return; }
-  
+  if (!AUTH.getUser()){
+    showConfirm('请先登录后再发布视频', () => { location.href = LOGIN_URL; });
+    return;
+  }
+
   const title = gid('vtitle').value.trim();
-  if (!title){ alert('请填写视频标题'); return; }
-  
+  if (!title){ showAlert('请填写视频标题'); return; }
+
   const type = gid('vtype').value;
   const videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS) || "[]");
-  
+
   // 生成唯一页面名
   const pageName = Date.now().toString(36) + Math.random().toString(36).substr(2, 5) + '.html';
-  
+
   const video = {
     title: title,
     desc: gid('vdesc').value.trim(),
@@ -126,31 +213,32 @@ function doUpload(){
     plays: '0次播放',
     date: new Date().toISOString().slice(0,10)
   };
-  
+
   if (type === 'bilibili') {
     const bvid = gid('vbvid').value.trim();
-    if (!bvid){ alert('请填写BV号'); return; }
+    if (!bvid){ showAlert('请填写BV号'); return; }
     video.bvid = bvid;
   } else if (type === 'youtube') {
     const ytid = gid('vytid').value.trim();
-    if (!ytid){ alert('请填写YouTube视频ID'); return; }
+    if (!ytid){ showAlert('请填写YouTube视频ID'); return; }
     video.ytid = ytid;
   } else {
     const fileInput = gid('vfile');
-    if (!fileInput.files.length){ alert('请选择视频文件'); return; }
+    if (!fileInput.files.length){ showAlert('请选择视频文件'); return; }
     video.videoSrc = URL.createObjectURL(fileInput.files[0]);
   }
-  
+
   videos.push(video);
   localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
-  
-  alert('发布成功！');
-  location.href = `watch.html?page=${pageName}`;
+
+  showAlert('发布成功！', () => { location.href = `watch.html?page=${pageName}`; });
 }
 
 function initPage(){
   AUTH.renderBar();
-  if (!AUTH.getUser()){ alert('请先登录'); location.href = 'login/index.html'; }
+  if (!AUTH.getUser()){
+    showConfirm('请先登录后再上传视频', () => { location.href = LOGIN_URL; });
+  }
 }
 initPage();
 </script>
