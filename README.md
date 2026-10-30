@@ -1,4 +1,4 @@
-# Project Pioneer1
+# Project Pioneer
 <p align="center">
 <img width="860" src="preview.jpg">
 </p>
