@@ -131,9 +131,8 @@ function matchKeyword(v, kw){
 function renderFilters(){
   const bar = gid('filterBar');
   if (!bar) return;
-  const videos = loadVideos();
-  const order = ['all', 'tech', 'music', 'game', 'life', 'other'];
-  const cats = order.filter(c => c === 'all' || videos.some(v => v.category === c));
+  // 固定展示全部六个分类，即使当前没有对应视频也保留按钮
+  const cats = ['all', 'tech', 'music', 'game', 'life', 'other'];
   bar.innerHTML = '';
   cats.forEach(c => {
     const btn = document.createElement('button');
