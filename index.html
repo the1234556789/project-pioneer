@@ -24,6 +24,7 @@ body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; p
 .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 .filter-btn { padding: 6px 16px; border: 1px solid #ddd; background: white; border-radius: 16px; cursor: pointer; font-size: 13px; }
 .filter-btn.on { background: #000; color: white; border-color: #000; }
+.empty-hint { grid-column: 1 / -1; text-align: center; padding: 70px 0; color: #999; font-size: 14px; line-height: 1.8; }
 .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .video-card { background: white; border-radius: 10px; overflow: hidden; cursor: pointer; transition: box-shadow 0.2s; }
 .video-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
@@ -45,7 +46,7 @@ body { font-family: Arial, "Microsoft YaHei", sans-serif; background: #f9f9f9; p
 
 <div class="topbar">
   <a class="logo" onclick="location.href='index.html'">Project<span>Pioneer</span></a>
-  <input class="search-box" placeholder="搜索视频...">
+  <input class="search-box" id="searchBox" placeholder="搜索视频..." autocomplete="off">
   <div class="spacer"></div>
   <div class="user-area" id="abar"></div>
 </div>
@@ -101,16 +102,104 @@ function initDefaultVideo(){
   localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
 }
 
+// ── 搜索与筛选状态 ──
+const state = { keyword: '', category: 'all' };
+
+const CATEGORY_LABELS = {
+  all: '全部', tech: '科技', music: '音乐', game: '游戏', life: '生活', other: '其他'
+};
+
+function loadVideos(){
+  try {
+    const list = JSON.parse(localStorage.getItem(STORAGE_VIDEOS) || '[]');
+    return Array.isArray(list) ? list : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+// 关键词按空格拆词，每个词都要命中（标题、UP主、简介、BV号、分类都参与）
+function matchKeyword(v, kw){
+  if (!kw) return true;
+  const hay = [
+    v.title, v.up, v.author, v.desc, v.bvid, v.ytid,
+    CATEGORY_LABELS[v.category] || ''
+  ].filter(Boolean).join(' ').toLowerCase();
+  return kw.split(/\s+/).filter(Boolean).every(w => hay.indexOf(w) !== -1);
+}
+
+function renderFilters(){
+  const bar = gid('filterBar');
+  if (!bar) return;
+  const videos = loadVideos();
+  const order = ['all', 'tech', 'music', 'game', 'life', 'other'];
+  const cats = order.filter(c => c === 'all' || videos.some(v => v.category === c));
+  bar.innerHTML = '';
+  cats.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (state.category === c ? ' on' : '');
+    btn.textContent = CATEGORY_LABELS[c] || c;
+    btn.onclick = () => { state.category = c; renderFilters(); renderVideos(); };
+    bar.appendChild(btn);
+  });
+}
+
+function buildCard(v){
+  const card = document.createElement('div');
+  card.className = 'video-card';
+  card.onclick = () => { location.href = 'watch.html?page=' + encodeURIComponent(v.page); };
+  const isBili = v.type === 'bilibili' && v.bvid;
+  card.innerHTML =
+    '<div class="vthumb">' +
+      (isBili
+        ? '<iframe src="https://player.bilibili.com/player.html?bvid=' + encodeURIComponent(v.bvid) + '&page=1&autoplay=0&danmaku=0&as_wide=1&high_quality=0" scrolling="no" frameborder="0" allowfullscreen></iframe>'
+        : '<div style="width:100%;height:100%;background:#333;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">本地视频</div>') +
+    '</div>' +
+    '<div class="vinfo">' +
+      '<div class="vtitle">' + safeStr(v.title) + '</div>' +
+      '<div class="vauthor">' + safeStr(v.up || v.author || '未知') + '</div>' +
+      '<div class="vstats">' + safeStr(v.plays || '') + ' ' + safeStr(v.date || '') + '</div>' +
+    '</div>';
+  return card;
+}
+
 function renderVideos(){
   const grid = gid('vgrid');
-  const videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS) || "[]");
+  if (!grid) return;
+  const list = loadVideos().filter(v =>
+    (state.category === 'all' || v.category === state.category) && matchKeyword(v, state.keyword)
+  );
+
   grid.innerHTML = '';
-  videos.forEach(v => {
-    const card = document.createElement('div'); card.className = 'video-card';
-    card.onclick = () => location.href = `watch.html?page=${v.page}`;
-    const isBili = v.type === 'bilibili' && v.bvid;
-    card.innerHTML = `<div class="vthumb">${isBili ? `<iframe src="https://player.bilibili.com/player.html?bvid=${v.bvid}&page=1&autoplay=0&danmaku=0&as_wide=1&high_quality=0" scrolling="no" frameborder="0" allowfullscreen></iframe>` : `<div style="width:100%;height:100%;background:#333;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;">本地视频</div>`}</div><div class="vinfo"><div class="vtitle">${safeStr(v.title)}</div><div class="vauthor">${safeStr(v.up || v.author || '未知')}</div><div class="vstats">${safeStr(v.plays || '')} ${v.date || ''}</div></div>`;
-    grid.appendChild(card);
+  if (list.length === 0) {
+    const hint = document.createElement('div');
+    hint.className = 'empty-hint';
+    hint.textContent = state.keyword
+      ? '没有找到与“' + state.keyword + '”相关的视频'
+      : '这个分类下还没有视频';
+    grid.appendChild(hint);
+    return;
+  }
+  list.forEach(v => grid.appendChild(buildCard(v)));
+}
+
+function setupSearch(){
+  const box = gid('searchBox');
+  if (!box) return;
+  box.value = state.keyword;
+  box.addEventListener('input', () => {
+    state.keyword = box.value.trim().toLowerCase();
+    renderVideos();
+  });
+  box.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      box.value = '';
+      state.keyword = '';
+      renderVideos();
+    } else if (e.key === 'Enter') {
+      state.keyword = box.value.trim().toLowerCase();
+      renderVideos();
+    }
   });
 }
 
@@ -118,6 +207,8 @@ function initPage(){
   initDefaultVideo();
   AUTH.renderBar();
   if (AUTH.getUser()){ gid('uploadFab').style.display = 'block'; }
+  renderFilters();
+  setupSearch();
   renderVideos();
 }
 initPage();
