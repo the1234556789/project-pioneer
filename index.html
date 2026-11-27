@@ -86,20 +86,20 @@ function initDefaultVideo(){
   }
 
   // ── 视频2：Rickroll（B站）──
-  if (!videos.find(v => v.page === "mDoW4d864GJ.html")) {
-    videos.push({
-      title: "project-pioneer网页版",
-      desc: "下载地址（客户端）：https://gitee.com/Wanderlust-Code/ProjectPioneer/releases
-网页源代码下载：https://github.com/the1234556789/project-pioneer/archive/refs/heads/main.zip",
-      page: "BV1GZJb6RExT.html",
-      type: "bilibili",
-      bvid: "BV1GZJb6RExT",
-      category: "local",
-      up: "会泽工作室",
-      plays: "153次观看",
-      date: "2026-10-17 00:43:54"
-    });
-  }
+if (!videos.find(v => v.page === "BV1GZJb6RExT.html")) {
+  videos.push({
+    title: "project-pioneer网页版",
+    desc: "下载地址（客户端）：https://gitee.com/Wanderlust-Code/ProjectPioneer/releases\n网页源代码下载：https://github.com/the1234556789/project-pioneer/archive/refs/heads/main.zip",
+    page: "BV1GZJb6RExT.html",
+    type: "bilibili",
+    bvid: "BV1GZJb6RExT",
+    category: "local",
+    up: "会泽工作室",
+    plays: "153次观看",
+    date: "2026-10-17 00:43:54"
+  });
+}
+
   // ── 视频3：自制短片（本地）──
   if (!videos.find(v => v.page === "dQw4w9WgXcQ.html")) {
     videos.push({
