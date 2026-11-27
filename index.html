@@ -70,51 +70,50 @@ function safeStr(s){ const d=document.createElement('div'); d.textContent=s; ret
 function initDefaultVideo(){
   let videos = JSON.parse(localStorage.getItem(STORAGE_VIDEOS) || "[]");
 
-// ── 默认视频数据初始化 ──
-if (!videos.find(v => v.page === "BV1ieWo6SE5m.html")) {
-  videos.push({
-    title: "我的世界-刷怪塔",
-    desc: "由于我懒得等着刷怪所以直接放上刷怪蛋，想退出居然。。。。",
-    page: "BV1ieWo6SE5m.html",
-    type: "bilibili",
-    bvid: "BV1ieWo6SE5m",
-    category: "game",
-    up: "会泽工作室",
-    plays: "137次观看",
-    date: "2026-11-12 22:58:03"
-  });
+  if (!videos.find(v => v.page === "BV1ieWo6SE5m.html")) {
+    videos.push({
+      title: "我的世界-刷怪塔",
+      desc: "由于我懒得等着刷怪所以直接放上刷怪蛋，想退出居然。。。。",
+      page: "BV1ieWo6SE5m.html",
+      type: "bilibili",
+      bvid: "BV1ieWo6SE5m",
+      category: "game",
+      up: "会泽工作室",
+      plays: "137次观看",
+      date: "2026-11-12 22:58:03"
+    });
+  }
+
+  if (!videos.find(v => v.page === "BV1GZJb6RExT.html")) {
+    videos.push({
+      title: "project-pioneer网页版",
+      desc: "下载地址（客户端）：https://gitee.com/Wanderlust-Code/ProjectPioneer/releases\n网页源代码下载：https://github.com/the1234556789/project-pioneer/archive/refs/heads/main.zip",
+      page: "BV1GZJb6RExT.html",
+      type: "bilibili",
+      bvid: "BV1GZJb6RExT",
+      category: "local",
+      up: "会泽工作室",
+      plays: "153次观看",
+      date: "2026-10-17 00:43:54"
+    });
+  }
+
+  if (!videos.find(v => v.page === "dQw4w9WgXcQ.html")) {
+    videos.push({
+      title: "自制短片 - 项目完整演示",
+      desc: "开发mc启动器",
+      page: "dQw4w9WgXcQ.html",
+      type: "local",
+      category: "tech",
+      up: "the1234556789",
+      plays: "1000.9万次播放",
+      date: "2026-07-31"
+    });
+  }
+
+  localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
 }
 
-if (!videos.find(v => v.page === "BV1GZJb6RExT.html")) {
-  videos.push({
-    title: "project-pioneer网页版",
-    desc: "下载地址（客户端）：https://gitee.com/Wanderlust-Code/ProjectPioneer/releases\n网页源代码下载：https://github.com/the1234556789/project-pioneer/archive/refs/heads/main.zip",
-    page: "BV1GZJb6RExT.html",
-    type: "bilibili",
-    bvid: "BV1GZJb6RExT",
-    category: "local",
-    up: "会泽工作室",
-    plays: "153次观看",
-    date: "2026-10-17 00:43:54"
-  });
-}
-
-if (!videos.find(v => v.page === "dQw4w9WgXcQ.html")) {
-  videos.push({
-    title: "自制短片 - 项目完整演示",
-    desc: "开发mc启动器",
-    page: "dQw4w9WgXcQ.html",
-    type: "local",
-    category: "tech",
-    up: "the1234556789",
-    plays: "1000.9万次播放",
-    date: "2026-07-31"
-  });
-}
-
-localStorage.setItem(STORAGE_VIDEOS, JSON.stringify(videos));
-
-// ── 搜索与筛选状态 ──
 const state = { keyword: '', category: 'all' };
 
 const CATEGORY_LABELS = {
@@ -130,7 +129,6 @@ function loadVideos(){
   }
 }
 
-// 关键词按空格拆词，每个词都要命中（标题、UP主、简介、BV号、分类都参与）
 function matchKeyword(v, kw){
   if (!kw) return true;
   const hay = [
@@ -143,7 +141,6 @@ function matchKeyword(v, kw){
 function renderFilters(){
   const bar = gid('filterBar');
   if (!bar) return;
-  // 固定展示全部六个分类，即使当前没有对应视频也保留按钮
   const cats = ['all', 'tech', 'music', 'game', 'life', 'other'];
   bar.innerHTML = '';
   cats.forEach(c => {
